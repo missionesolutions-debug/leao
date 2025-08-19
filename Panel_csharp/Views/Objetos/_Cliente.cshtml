@@ -1,0 +1,2 @@
+﻿@await Html.PartialAsync("~/Views/Components/_SelectField.cshtml",
+							 new Painel.Models.Components.TextField("Cliente", "ClienteId", Model.ClienteId > 0 ? Model.ClienteId.ToString() : "", "", "required", "", "", "form-select", 12))

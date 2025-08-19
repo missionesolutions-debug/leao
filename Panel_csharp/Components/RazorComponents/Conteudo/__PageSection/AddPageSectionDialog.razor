@@ -1,0 +1,53 @@
+﻿@* @using Framework.Data.Models.Conteudo
+@using Framework.Repositories
+@using MudBlazor
+@inject IDialogService DialogService
+@inject IRepository<PageSection> PageSectionRepository
+<EditForm Model="newSection" OnValidSubmit="HandleValidSubmit">
+    <MudDialog>
+        <DialogContent>
+            Nova Seção
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <MudTextField T="string" @bind-Value="newSection.NameValue" Label="Name Value" FullWidth required />
+            <MudTextField T="string" @bind-Value="newSection.KeyValue" Label="Key Value" FullWidth required />
+            <MudSwitch T="bool" @bind-Checked="newSection.Ativo" Label="Ativo" />
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Adicionar</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+
+@code {
+    [Parameter] public PageSection newSection { get; set; } = new PageSection();
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (newSection.Id == 0)
+            {
+                newSection.DataCadastro = DateTime.Now;
+                newSection.DataEdicao = DateTime.Now;
+
+                await PageSectionRepository.SaveObjAsync(newSection); // Salvar nova seção
+            }
+            MudDialog.Close(DialogResult.Ok(newSection));
+        }
+        catch (Exception ex)
+        {
+            // Log the error or handle it according to your needs
+            Console.WriteLine("Error saving PageSection: " + ex.Message);
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+} *@

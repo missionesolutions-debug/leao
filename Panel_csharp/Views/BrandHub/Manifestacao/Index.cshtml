@@ -1,0 +1,445 @@
+﻿@model Panel.Models.BrandsHub.ManifestacaoRequestModel
+
+@{
+    ViewData["Title"] = "Petição de Manifestação à Oposição do Registro de Marca";
+}
+
+@if (ViewBag.Prompt != null)
+{
+
+    <div class="nk-content">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="nk-block">
+                        <div class="card">
+                            <div class="card-inner">
+
+                                <!-- Abas -->
+                                <ul class="nav nav-tabs" id="oposicaoTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="peticao-tab" data-bs-toggle="tab" href="#peticao" role="tab" aria-controls="peticao" aria-selected="true">Petição Gerada</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="historico-tab" data-bs-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico do Chat</a>
+                                    </li>
+                                </ul>
+
+                                <!-- Conteúdo das abas -->
+                                <div class="tab-content pt-4" id="oposicaoTabsContent">
+                                    <!-- Aba 1: Petição -->
+                                    <div class="tab-pane fade show active" id="peticao" role="tabpanel" aria-labelledby="peticao-tab">
+                                        <h4 class="nk-block-title page-title">Petição de Manifestação à Oposição</h4>
+                                        <p class="text-muted mb-4">Revise o conteúdo abaixo. Caso deseje, você pode adicionar observações e reenviar para gerar um novo conteúdo baseado nisso.</p>
+
+                                        <!-- Conteúdo do prompt -->
+                                        <div id="prompt-box" class="border rounded p-3 mb-3">
+                                            @Html.Raw(ViewBag.Prompt.Replace("```html", "").Replace("```", ""))
+                                        </div>
+
+                                        <!-- Formulário de observações -->
+                                        <form asp-action="ManifestacaoRepost" asp-controller="BrandHub" method="post">
+                                            <input type="hidden" name="PromptAnterior" value="@ViewBag.Prompt" />
+                                            <input type="hidden" name="ChatIAId" value="@ViewBag.ChatId" />
+
+                                            <div class="form-group">
+                                                <label for="Observacoes">Observações adicionais</label>
+                                                <textarea class="form-control" name="Observacoes" rows="5" style="min-height:215px" placeholder="Inclua sugestões, correções ou informações complementares..."></textarea>
+                                                <small class="text-muted">Essas observações serão consideradas para gerar um novo conteúdo.</small>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary mt-3">Reenviar com Observações</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Aba 2: Histórico -->
+                                    <div class="tab-pane fade" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                        <div id="chat-history" class="">
+                                            <h4 class="nk-block-title page-title">Oráculo Leão</h4>
+                                            <!-- Campo oculto para manter o chatIAId -->
+                                            <input type="hidden" id="chatIAId" value="@ViewBag.ChatIAId" />
+
+                                            <div id="chat-box" class="border rounded p-3 mb-3">
+                                                <!-- Renderiza as mensagens já existentes -->
+                                                @foreach (var msg in Model.ListMessages.messageChatResponses.Where(b => b.IsChatAnswer == true))
+                                                {
+                                                    // Converte o timestamp Unix para data legível
+                                                    var unixTime = 0L;
+                                                    long.TryParse(msg.Time, out unixTime);
+                                                    var formattedTime = DateTimeOffset.FromUnixTimeSeconds(unixTime)
+                                                    .LocalDateTime.ToString("dd MMM, yyyy h:mm tt");
+                                                    <div class="message @(msg.IsChatAnswer ? "bot" : "user")">
+                                                        <strong>@(msg.IsChatAnswer ? "Oráculo Leão:" : "Você:")</strong> @Html.Raw(msg.Message)
+                                                        <br /><small class="text-muted" style="font-size: 0.8em;">@formattedTime</small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- tab-content -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    <div class="nk-content ">
+
+        <div class="nk-content-inner">
+            <div class="nk-block-head">
+                <div class="nk-block-between">
+                    <div class="nk-block-head-content">
+                        <h4 class="nk-block-title fw-normal">Manifestação à Oposição</h4>
+                        <div class="nk-block-des">
+                            <nav>
+                                <ul class="breadcrumb breadcrumb-arrow">
+                                    <li class="breadcrumb-item"><a href="~/">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="~/">Hub de Marcas</a></li>
+                                    <li class="breadcrumb-item"><a href="/brandhub?typed=manifestacao">Manifestações à Oposição</a></li>
+                                    <li class="breadcrumb-item active">Manifestação à Oposição</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="nk-content-body">
+
+                <div class="nk-block">
+                    <div class="card">
+                        <div class="card-inner">
+                            <h4 class="nk-block-title page-title">Petição de Manifestação à Oposição ao Registro de Marca</h4>
+                            <p class="text-muted mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+
+                            <form action="/BrandHub/Manifestacao" method="post">
+                                <div id="task-type-container" class="row">
+
+                                    <!-- Número do Registro -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoNumero">Número do Registro</label>
+                                            <input type="text" class="round-borders form-control" id="ProcessoNumero" name="ProcessoNumero" required>
+                                            <div class="field-help-text">Número do processo administrativo em 9 dígitos do registro.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Data do Depósito (opcional) -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoDataDeposito">Data do Depósito</label>
+                                            <input type="date" class="round-borders form-control" id="ProcessoDataDeposito" name="ProcessoDataDeposito">
+                                            <div class="field-help-text">Data do protocolo do registro (DD/MM/AAAA).</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Marca Registrada -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoMarca">Marca Registrada</label>
+                                            <input type="text" class="round-borders form-control" id="ProcessoMarca" name="ProcessoMarca" required>
+                                            <div class="field-help-text">Sinal distintivo objeto do registro.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Classe do Registro -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoClasse">Classe do Registro</label>
+                                            <input type="text" class="round-borders form-control" id="ProcessoClasse" name="ProcessoClasse" required>
+                                            <div class="field-help-text">Classificação Internacional Nice vigente à época da concessão.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Especificação do Registro -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoEspecificacao">Especificação do Registro</label>
+                                            <textarea class="round-borders form-control" id="ProcessoEspecificacao" name="ProcessoEspecificacao" required></textarea>
+                                            <div class="field-help-text">Lista completa dos produtos/serviços protegidos.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Titular do Registro -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="ProcessoTitular">Titular do Registro</label>
+                                            <input type="text" class="round-borders form-control" id="ProcessoTitular" name="ProcessoTitular" required>
+                                            <div class="field-help-text">Denominação completa do titular.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- RPI da Oposição -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoRpi">RPI da Oposição</label>
+                                            <input type="text" class="round-borders form-control" id="OposicaoRpi" name="OposicaoRpi" required>
+                                            <div class="field-help-text">Número da RPI que publicou a oposição.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Data da Oposição -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoDataRpi">Data da Oposição</label>
+                                            <input type="date" class="round-borders form-control" id="OposicaoDataRpi" name="OposicaoDataRpi" required>
+                                            <div class="field-help-text">Data da publicação da oposição (DD/MM/AAAA).</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Opoente -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoOpoente">Opoente</label>
+                                            <input type="text" class="round-borders form-control" id="OposicaoOpoente" name="OposicaoOpoente" required>
+                                            <div class="field-help-text">Nome do requerente da oposição.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Marca da Oposição -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoMarca">Marca da Oposição</label>
+                                            <input type="text" class="round-borders form-control" id="OposicaoMarca" name="OposicaoMarca">
+                                            <div class="field-help-text">Caso aplicável, a marca apresentada na oposição.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Processo da Oposição -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoProcesso">Processo da Oposição</label>
+                                            <input type="text" class="round-borders form-control" id="OposicaoProcesso" name="OposicaoProcesso">
+                                            <div class="field-help-text">Número do processo da oposição, se houver.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fundamento da Oposição -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OposicaoFundamento">Fundamento da Oposição</label>
+                                            <input type="text" class="round-borders form-control" id="OposicaoFundamento" name="OposicaoFundamento" required>
+                                            <div class="field-help-text">Fundamento legal alegado pela oposição.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tipo de Conflito Alegado -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="TipoConflitoAlegado">Tipo de Conflito Alegado</label>
+                                            <input type="text" class="round-borders form-control" id="TipoConflitoAlegado" name="TipoConflitoAlegado">
+                                            <div class="field-help-text">Ex.: Confusão entre marcas.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tipo de Reprodução Alegada -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="TipoReproducaoAlegada">Tipo de Reprodução Alegada</label>
+                                            <input type="text" class="round-borders form-control" id="TipoReproducaoAlegada" name="TipoReproducaoAlegada">
+                                            <div class="field-help-text">Ex.: Reprodução parcial ou imitação.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Análise Mercadológica Defesa -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="AnaliseMercadologicaDefesa">Análise Mercadológica Defesa</label>
+                                            <textarea class="round-borders form-control" id="AnaliseMercadologicaDefesa" name="AnaliseMercadologicaDefesa"></textarea>
+                                            <div class="field-help-text">Argumentos mercadológicos para demonstrar a distintividade.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Distintividade Fonética -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaDistintividadeFonetica">Distintividade Fonética</label>
+                                            <textarea class="round-borders form-control" id="DefesaDistintividadeFonetica" name="DefesaDistintividadeFonetica"></textarea>
+                                            <div class="field-help-text">Argumentos relativos à sonoridade e pronúncia.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Distintividade Ideológica -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaDistintividadeIdeologica">Distintividade Ideológica</label>
+                                            <textarea class="round-borders form-control" id="DefesaDistintividadeIdeologica" name="DefesaDistintividadeIdeologica"></textarea>
+                                            <div class="field-help-text">Argumentos sobre a identidade e conceito.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Distintividade Visual -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaDistintividadeVisual">Distintividade Visual</label>
+                                            <textarea class="round-borders form-control" id="DefesaDistintividadeVisual" name="DefesaDistintividadeVisual"></textarea>
+                                            <div class="field-help-text">Descrição dos elementos visuais que diferenciam as marcas.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Especialidade Segmento -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaEspecialidadeSegmento">Especialidade Segmento</label>
+                                            <input type="text" class="round-borders form-control" id="DefesaEspecialidadeSegmento" name="DefesaEspecialidadeSegmento">
+                                            <div class="field-help-text">Informações sobre o segmento de mercado.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Especialidade Público -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaEspecialidadePublico">Especialidade Público</label>
+                                            <input type="text" class="round-borders form-control" id="DefesaEspecialidadePublico" name="DefesaEspecialidadePublico">
+                                            <div class="field-help-text">Informações sobre o público-alvo.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Especialidade Canais -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaEspecialidadeCanais">Especialidade Canais</label>
+                                            <input type="text" class="round-borders form-control" id="DefesaEspecialidadeCanais" name="DefesaEspecialidadeCanais">
+                                            <div class="field-help-text">Informações sobre os canais de comercialização.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Coexistência -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaCoexistencia">Coexistência</label>
+                                            <textarea class="round-borders form-control" id="DefesaCoexistencia" name="DefesaCoexistencia"></textarea>
+                                            <div class="field-help-text">Informações sobre registros anteriores ou coexistência de marcas.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Decisões Anteriores -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="DefesaDecisoesAnteriores">Decisões Anteriores</label>
+                                            <textarea class="round-borders form-control" id="DefesaDecisoesAnteriores" name="DefesaDecisoesAnteriores"></textarea>
+                                            <div class="field-help-text">Citações de decisões anteriores relevantes.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Uso Anterior -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="UsoAnterior">Uso Anterior de Boa-Fé</label>
+                                            <textarea class="round-borders form-control" id="UsoAnterior" name="UsoAnterior"></textarea>
+                                            <div class="field-help-text">Informações sobre o uso anterior da marca.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Outros Registros -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="OutrosRegistros">Outros Registros</label>
+                                            <textarea class="round-borders form-control" id="OutrosRegistros" name="OutrosRegistros"></textarea>
+                                            <div class="field-help-text">Registros anteriores ou similares que possam ser citados.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Má Fé -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="MaFe">Má Fé</label>
+                                            <textarea class="round-borders form-control" id="MaFe" name="MaFe"></textarea>
+                                            <div class="field-help-text">Elementos que evidenciam intenção de aproveitamento parasitário.</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Enviar Manifestação</button>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+@if (ViewBag.Prompt != null)
+{
+    <style>
+
+        /* Caixa de chat */
+        #chat-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Estilo base das mensagens */
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            max-width: 70%;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+            /* Mensagens do usuário */
+            .message.user {
+                background-color: #dcf8c6;
+                text-align: right;
+                float: right;
+                border-bottom-right-radius: 0;
+                clear: both;
+            }
+
+            /* Mensagens do ChatBot */
+            .message.bot {
+                background-color: #f1f0f0;
+                text-align: left;
+                float: left;
+                border-bottom-left-radius: 0;
+                clear: both;
+            }
+
+            /* Limpeza dos floats após cada mensagem */
+            .message::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+        /* Indicador de "digitando" */
+        .typing {
+            font-style: italic;
+            color: #888;
+        }
+
+    </style>
+
+    @section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#oposicaoTabs a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            });
+        });
+    </script>
+    }
+}
+

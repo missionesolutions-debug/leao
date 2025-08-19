@@ -1,0 +1,38 @@
+﻿	<div class="card card-bordered">
+		<div class="card-inner">
+			<div class="row g-gs">
+				<div class="col-sm-12 ">
+					<h5>Search Engine Optimization </h5>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-sm-12 ">
+						<label for=""><span class="nk-menu-icon"><em class="icon ni ni-eye"></em></span> Snippet Preview</label>
+					</div>
+					<div class="col-sm-12 ">
+						<div class="google-snippet">
+							<h3><a href="javascript:void(0);" class="page-title">@(Model.PageTitle == null ? "Título da Página" : Model.PageTitle)</a></h3>
+							<span data-domain="http://meudominio.com.br/" data-route="suapagina/">http://meudominio.com.br/suapagina/@(Model.Url == null ? "post" : Model.Url)</span>
+							<p>@(Model.MetaDescription == null ? "Snippet Preview - Meta Description" : Model.MetaDescription)</p>
+						</div>
+					</div>
+				</div>
+
+				@await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+					new Painel.Models.Components.TextField("SEO Title", "PageTitle", Model.PageTitle, "", "required", "", "text", "", 12))
+
+
+				@await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+					new Painel.Models.Components.TextField("Slug/Url", "Url", Model.Url, "", "required", "Campo gerado automaticamente a partir do nome/título - <span class=\"sp-snip\">ao preencher manualmente, não colocar espaços e acentos.</span>", "text", "", 12))
+
+
+				@await Html.PartialAsync("~/Views/Components/_TextArea.cshtml",
+					new Painel.Models.Components.TextField("Meta Description", "MetaDescription", Model.MetaDescription, "", "required", "Preencha com até 160 caracteres.", "text", "", 12))
+
+
+				@await Html.PartialAsync("~/Views/Components/_ImageUpload.cshtml",
+					new Painel.Models.Components.TextField("MetaImage", "MetaImage", Model.MetaImage, "", "", "", "text", "", 4))
+
+			</div>
+		</div>
+	</div>

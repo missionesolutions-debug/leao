@@ -1,0 +1,100 @@
+﻿@model List<Data.Models.PainelConfig.Menu>
+
+
+<li class="nk-menu-item">
+	<a href="~/home" class="nk-menu-link">
+		<span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
+		<span class="nk-menu-text">Início</span>
+	</a>
+</li>
+
+
+@foreach (var item in Model.Where(b => b.Ativo == true).OrderByDescending(b => b.Ordem))
+{
+	if (item.Page != null && item.Page.Where(b => b.Ativo == true).Count() > 0)
+	{
+		<li class="nk-menu-heading">
+			<h6 class="overline-title text-primary-alt">@item.Nome</h6>
+		</li>
+
+		foreach (var obj in item.Page.Where(b => b.Ativo == true).OrderBy(b => b.Nome).ToList())
+		{
+			List<String> Roles = obj.RoleGate.Split(",").ToList();
+
+			bool skip = false;
+
+			foreach (var roleUser in Roles)
+			{
+				if (skip == false)
+				{
+					if (User.IsInRole(roleUser))
+					{
+						<li class="nk-menu-item">
+							<a href="@obj.Route" class="nk-menu-link">
+								<span class="nk-menu-icon">@Html.Raw(obj.SVGIcon)</span>
+								<span class="nk-menu-text">@obj.Nome</span>
+							</a>
+						</li>
+
+						skip = true;
+					}
+				}
+			}
+
+			@*if (obj.RoleGate != null && User.IsInRole(obj.RoleGate))
+			{
+				<li class="nk-menu-item">
+					<a href="@obj.Route" class="nk-menu-link">
+						<span class="nk-menu-icon">@Html.Raw(obj.SVGIcon)</span>
+						<span class="nk-menu-text">@obj.Nome</span>
+					</a>
+				</li>
+			}*@
+
+
+		}
+	}
+}
+
+
+
+
+@*<li class="nk-menu-heading">
+		<h6 class="overline-title text-primary-alt">Pessoa</h6>
+	</li>
+	<li class="nk-menu-item">
+		<a href="/clientes" class="nk-menu-link">
+			<span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+			<span class="nk-menu-text">Clientes</span>
+		</a>
+	</li>
+	<li class="nk-menu-heading">
+		<h6 class="overline-title text-primary-alt">Business</h6>
+	</li>
+	<li class="nk-menu-item">
+		<a href="/hospedagens" class="nk-menu-link">
+			<span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+			<span class="nk-menu-text">Hospedagens</span>
+		</a>
+	</li>
+	<li class="nk-menu-item">
+		<a href="/hostservers" class="nk-menu-link">
+			<span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+			<span class="nk-menu-text">Host Servers</span>
+		</a>
+	</li>
+	<li class="nk-menu-heading">
+		<h6 class="overline-title text-primary-alt">Configurations</h6>
+	</li>
+	<li class="nk-menu-item">
+		<a href="/pages" class="nk-menu-link">
+			<span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+			<span class="nk-menu-text">Pages</span>
+		</a>
+	</li>
+	<li class="nk-menu-item">
+		<a href="/usuarios" class="nk-menu-link">
+			<span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+			<span class="nk-menu-text">Usuários</span>
+		</a>
+	</li>*@

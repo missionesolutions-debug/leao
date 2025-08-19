@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Leão Adv</title>
+
+	<!-- StyleSheets  -->
+	<link rel="stylesheet" href="/assets/css/dashlite.css?ver=2.8.0">
+	<link id="skin-default" rel="stylesheet" href="/assets/css/theme.css?ver=2.8.0">
+
+	@RenderSection("Styles", required: false)
+</head>
+<body class="nk-body bg-white npc-default pg-auth">
+	<div class="nk-app-root">
+
+		@RenderBody()
+
+	</div>
+		@RenderSection("Scripts", required: false)
+</body>
+</html>

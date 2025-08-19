@@ -1,0 +1,36 @@
+﻿@namespace Panel.Components.RazorComponents.Dialogs
+@using MudBlazor
+@inject NavigationManager NavigationManager
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6">Tem certeza de que deseja excluir a seção "@PageSectionTitulo"?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Error" OnClick="@ConfirmDelete">Excluir</MudButton>
+        <MudButton OnClick="@Cancel">Cancelar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public int PageSectionId { get; set; }
+    [Parameter] public string PageSectionTitulo { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+    }
+
+    private void ConfirmDelete()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}
