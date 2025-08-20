@@ -1,0 +1,37 @@
+﻿
+<div class="modal fade show" id="modalForm" aria-modal="true" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Novo Usuário</h5>
+				<a href="#" class="close" data-dismiss="modal" aria-label="Close">
+					<em class="icon ni ni-cross"></em>
+				</a>
+			</div>
+			<div class="modal-body">
+				<form action="/projects/setusertask" class="form-validate is-alter" method="post" novalidate="novalidate">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="projectid" id="projectid" value="@Model.Id" />
+					<input type="hidden" name="jobtaskId" id="jobtaskId" value="" />
+
+					<div class="row">
+
+						@await Html.PartialAsync("~/Views/Components/_SelectField.cshtml",
+							new Painel.Models.Components.TextField("Usuário", "UsuarioId", "", "", "required", "", "", "form-select", 12))
+
+					</div>
+					<div class="row" style="margin-top:10px">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<button type="submit" class="btn btn-lg btn-success  text-md-center">Criar Novo Projeto</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer bg-light">
+				<span class="sub-text">Os projetos serão criados com as respectivas tarefas a serem executadas</span>
+			</div>
+		</div>
+	</div>
+</div>

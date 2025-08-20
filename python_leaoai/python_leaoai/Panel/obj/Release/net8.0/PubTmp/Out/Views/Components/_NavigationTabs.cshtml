@@ -1,0 +1,114 @@
+﻿@model Painel.Models.Components.ContentConfig
+<ul class="nav nav-tabs">
+
+	@if (Model.NavTabsConfig is not null && Model.NavTabsConfig.ShowTabs is true)
+	{
+
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowContentDetailItem == false ? "": "display:none;")">
+			<a class="nav-link active" data-toggle="tab" href="javascript:void(0);">
+				<em class="icon ni ni-property"></em><span>Conteúdo</span>
+			</a>
+		</li>
+
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowContentDetailItem == true ? "" : "display:none;")">
+			<a class="nav-link" href="@Model.Post/@Model.Id">
+				<em class="icon ni ni-property"></em><span>Conteúdo</span>
+			</a>
+		</li>
+
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowImageItem == true ? "" : "display:none;")">
+			<a class="nav-link" href="/imagens?tab=@Model.Table&id=@Model.Id">
+				<em class="icon ni ni-img"></em>
+				<span>Imagens</span>
+			</a>
+		</li>
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowFileItem == true ? "" : "display:none;")">
+			<a class="nav-link" href="/arquivos?tab=@Model.Table&id=@Model.Id">
+				<em class="icon ni ni-files"></em>
+				<span>Arquivos</span>
+			</a>
+		</li>
+
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowUsersJobTask == true ? "" : "display:none;")">
+			<a class="nav-link" href="/jobtasks/usuarios/@Model.Id">
+				<em class="icon ni ni-task"></em>
+				<span>Usuários</span>
+			</a>
+		</li>
+
+		<li class="nav-item" style="@(Model.NavTabsConfig.ShowJobTasksItem == true ? "" : "display:none;")">
+			<a class="nav-link" href="/projects/tasks/@Model.Id">
+				<em class="icon ni ni-task"></em>
+				<span>Tarefas</span>
+			</a>
+		</li>
+
+		if (Model.DetailRoute != null && Model.DetailRoute.Length > 5)
+		{
+			<li class="nav-item">
+				<a class="nav-link" href="@Model.DetailRoute/@Model.Id">
+					<em class="icon ni ni-search"></em>
+					<span>Visualizar Post</span>
+				</a>
+			</li>
+		}
+
+	}
+	else
+	{
+		@if (Model.IsContentTime == true)
+		{
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="javascript:void(0);">
+					<em class="icon ni ni-property"></em><span>Conteúdo</span>
+				</a>
+			</li>
+		}
+		else
+		{
+			<li class="nav-item">
+				<a class="nav-link" href="@Model.Post/@Model.Id">
+					<em class="icon ni ni-property"></em><span>Conteúdo</span>
+				</a>
+			</li>
+		}
+
+
+		@if (Model.Id > 0)
+		{
+			@*<li class="nav-item">
+					<a class="nav-link" href="/imagens?tab=@Model.Table&id=@Model.Id">
+						<em class="icon ni ni-img"></em>
+						<span>Imagens</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/arquivos?tab=@Model.Table&id=@Model.Id">
+						<em class="icon ni ni-files"></em>
+						<span>Arquivos</span>
+					</a>
+				</li>*@
+
+
+			@*<li class="nav-item">
+					<a class="nav-link" href="/projects/tasks/@Model.Id">
+						<em class="icon ni ni-task"></em>
+						<span>Tarefas</span>
+					</a>
+				</li>*@
+
+			if (Model.DetailRoute != null && Model.DetailRoute.Length > 5)
+			{
+				<li class="nav-item">
+					<a class="nav-link" href="@Model.DetailRoute/@Model.Id">
+						<em class="icon ni ni-search"></em>
+						<span>Visualizar Post</span>
+					</a>
+				</li>
+			}
+		}
+	}
+
+
+
+</ul>

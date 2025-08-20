@@ -1,0 +1,14 @@
+﻿@model Painel.Models.Components.TextField
+
+<div class="col-lg-@Model.Col">
+	<div class="form-group">
+		<label class="form-label" for="@Model.Name">@Model.Label</label>
+		<div class="form-control-wrap">
+			<textarea class="form-control @Model.Class" id="@Model.Name" name="@Model.Name" @Model.Required aria-describedby="small-@Model.Name" placeholder="@Model.Placeholder">@Model.Value</textarea>
+			@if (Model.Obs != "")
+			{
+				<small id="small-@Model.Name" class="form-text text-muted">@Html.Raw(Model.Obs)</small>
+			}
+		</div>
+	</div>
+</div>

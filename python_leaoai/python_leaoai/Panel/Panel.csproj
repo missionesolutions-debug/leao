@@ -1,0 +1,342 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName></SccProjectName>
+    <SccProvider></SccProvider>
+    <SccAuxPath></SccAuxPath>
+    <SccLocalPath></SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	  <TargetFramework>net8.0</TargetFramework>
+	  <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Builders\Business\**" />
+    <Compile Remove="Controllers\Api\**" />
+    <Compile Remove="Controllers\Business\**" />
+    <Compile Remove="Models\Pages\Business\**" />
+    <Compile Remove="Models\Pessoa\**" />
+    <Compile Remove="Views\Dashboard\**" />
+    <Compile Remove="Views\_Business\**" />
+    <Compile Remove="Views\_Main\**" />
+    <Content Remove="Builders\Business\**" />
+    <Content Remove="Controllers\Api\**" />
+    <Content Remove="Controllers\Business\**" />
+    <Content Remove="Models\Pages\Business\**" />
+    <Content Remove="Models\Pessoa\**" />
+    <Content Remove="Views\Dashboard\**" />
+    <Content Remove="Views\_Business\**" />
+    <Content Remove="Views\_Main\**" />
+    <EmbeddedResource Remove="Builders\Business\**" />
+    <EmbeddedResource Remove="Controllers\Api\**" />
+    <EmbeddedResource Remove="Controllers\Business\**" />
+    <EmbeddedResource Remove="Models\Pages\Business\**" />
+    <EmbeddedResource Remove="Models\Pessoa\**" />
+    <EmbeddedResource Remove="Views\Dashboard\**" />
+    <EmbeddedResource Remove="Views\_Business\**" />
+    <EmbeddedResource Remove="Views\_Main\**" />
+    <None Remove="Builders\Business\**" />
+    <None Remove="Controllers\Api\**" />
+    <None Remove="Controllers\Business\**" />
+    <None Remove="Models\Pages\Business\**" />
+    <None Remove="Models\Pessoa\**" />
+    <None Remove="Views\Dashboard\**" />
+    <None Remove="Views\_Business\**" />
+    <None Remove="Views\_Main\**" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="Framework.Tools" />
+		<!-- Adicione outros namespaces que deseja usar globalmente -->
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (2)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (2)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (3)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (3)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (4)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Albums - Cópia (4)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (2)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (2)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (3)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (3)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (4)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (4)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (5)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (5)\Index.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (6)\Create.cshtml" />
+    <Content Remove="Views\_Catalogo\Cursos - Cópia (6)\Index.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (2)\Create.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (2)\Index.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (3)\Create.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (3)\Index.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (4)\Create.cshtml" />
+    <Content Remove="Views\_Conteudo\Depoimentos - Cópia (4)\Index.cshtml" />
+  </ItemGroup>
+
+ 
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+    <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+    <PackageReference Include="MudBlazor" Version="7.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+    <None Include="Components\RazorComponents\Core\RazorCheckField.razor" />
+    <None Include="Components\RazorComponents\Components\RazorFileUpload.razor" />
+    <None Include="Components\RazorComponents\Core\RazorFormActions.razor" />
+    <None Include="Components\RazorComponents\Core\RazorTextArea.razor" />
+    <None Include="Components\RazorComponents\Core\RazorTextField.razor" />
+    <None Include="Views\Components\_Alerts.cshtml" />
+    <None Include="Views\Components\_FormActions.cshtml" />
+    <None Include="Views\Components\_ImageUpload.cshtml" />
+    <None Include="Views\Components\_MultiSelectField.cshtml" />
+    <None Include="Views\Components\_SelectField.cshtml" />
+    <None Include="Views\Components\_SelectListItem.cshtml" />
+    <None Include="Views\Components\_TextArea.cshtml" />
+    <None Include="Views\Components\_TextCheck.cshtml" />
+    <None Include="Views\Components\_TextField.cshtml" />
+    <None Include="Views\Home\Tasks.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Login\AccessDenied.cshtml" />
+    <None Include="Views\Login\Authentication.cshtml" />
+    <None Include="Views\Login\_Layout.cshtml" />
+    <None Include="Views\Objetos\_Ativo.cshtml" />
+    <None Include="Views\Objetos\_Cliente.cshtml" />
+    <None Include="Views\Objetos\_ImagemAlt.cshtml" />
+    <None Include="Views\Objetos\_ThumbnailAlt.cshtml" />
+    <None Include="Views\Objetos\_Nome.cshtml" />
+    <None Include="Views\Objetos\_Subtitulo.cshtml" />
+    <None Include="Views\Objetos\_Titulo.cshtml" />
+    <None Include="Views\Shared\Contents\_BreadCrumbList.cshtml" />
+    <None Include="Views\Shared\Contents\_HeadContentCreate.cshtml" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\Structure\_BreadCrumbList.cshtml" />
+    <None Include="Views\Shared\_LayoutBlazor.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Views\_Catalogo\Equipes\Create.cshtml" />
+    <None Include="Views\_Catalogo\Equipes\Index.cshtml" />
+    <None Include="Views\_Conteudo\Paginas\Create.cshtml" />
+    <None Include="Views\_Conteudo\Paginas\Index.cshtml" />
+    <None Include="Views\_Core\Arquivos\Index.cshtml" />
+    <None Include="Views\_Core\Arquivos\Modals\_Rename.cshtml" />
+    <None Include="Views\_Core\Arquivos\_FileItem.cshtml" />
+    <None Include="Views\_Core\Imagens\Index.cshtml" />
+    <None Include="Views\_Core\Imagens\Modals\_Rename.cshtml" />
+    <None Include="Views\_Core\Imagens\_FileItem.cshtml" />
+    <None Include="Views\_PainelConfig\Menus\Create.cshtml" />
+    <None Include="Views\_PainelConfig\Menus\Index.cshtml" />
+    <None Include="Views\_PainelConfig\Pages\Create.cshtml" />
+    <None Include="Views\_PainelConfig\Pages\Index.cshtml" />
+    <None Include="Views\_Pessoa\Clientes\Create.cshtml" />
+    <None Include="Views\_Pessoa\Clientes\Index.cshtml" />
+    <None Include="Views\_Pessoa\Usuarios\Create.cshtml" />
+    <None Include="Views\_Pessoa\Usuarios\Index.cshtml" />
+    <None Include="Views\_Propriedade\SubCategorias\Create.cshtml" />
+    <None Include="Views\_Propriedade\SubCategorias\Index.cshtml" />
+    <None Include="Views\_Propriedade\Categorias\Create.cshtml" />
+    <None Include="Views\_Propriedade\Categorias\Index.cshtml" />
+    <None Include="Views\_Propriedade\TipoCategorias\Create.cshtml" />
+    <None Include="Views\_Propriedade\TipoCategorias\Index.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\assets\fonts\bootstrap-icons.woff2" />
+    <None Include="wwwroot\assets\fonts\DMSans-Bold.woff2" />
+    <None Include="wwwroot\assets\fonts\DMSans-Medium.woff2" />
+    <None Include="wwwroot\assets\fonts\DMSans-Regular.woff2" />
+    <None Include="wwwroot\assets\fonts\fa-brands-400.svg" />
+    <None Include="wwwroot\assets\fonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\assets\fonts\fa-regular-400.svg" />
+    <None Include="wwwroot\assets\fonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\assets\fonts\fa-solid-900.svg" />
+    <None Include="wwwroot\assets\fonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\assets\fonts\Nioicon.svg" />
+    <None Include="wwwroot\assets\fonts\summernote.woff2" />
+    <None Include="wwwroot\assets\fonts\themify.svg" />
+    <None Include="wwwroot\assets\js\apps\calendar.js" />
+    <None Include="wwwroot\assets\js\apps\chats.js" />
+    <None Include="wwwroot\assets\js\apps\file-manager.js" />
+    <None Include="wwwroot\assets\js\apps\inbox.js" />
+    <None Include="wwwroot\assets\js\apps\kanban.js" />
+    <None Include="wwwroot\assets\js\apps\messages.js" />
+    <None Include="wwwroot\assets\js\bundle.js" />
+    <None Include="wwwroot\assets\js\charts\chart-analytics.js" />
+    <None Include="wwwroot\assets\js\charts\chart-ecommerce.js" />
+    <None Include="wwwroot\assets\js\charts\chart-lms.js" />
+    <None Include="wwwroot\assets\js\charts\chart-sales.js" />
+    <None Include="wwwroot\assets\js\charts\chart-widgets.js" />
+    <None Include="wwwroot\assets\js\editors.js" />
+    <None Include="wwwroot\assets\js\example-chart.js" />
+    <None Include="wwwroot\assets\js\example-listbox.js" />
+    <None Include="wwwroot\assets\js\example-sweetalert.js" />
+    <None Include="wwwroot\assets\js\example-toastr.js" />
+    <None Include="wwwroot\assets\js\example-tree.js" />
+    <None Include="wwwroot\assets\js\libs\datatable-btns.js" />
+    <None Include="wwwroot\assets\js\libs\dual-listbox.js" />
+    <None Include="wwwroot\assets\js\libs\editors\quill.js" />
+    <None Include="wwwroot\assets\js\libs\editors\summernote.js" />
+    <None Include="wwwroot\assets\js\libs\editors\tinymce.js" />
+    <None Include="wwwroot\assets\js\libs\fullcalendar.js" />
+    <None Include="wwwroot\assets\js\libs\jkanban.js" />
+    <None Include="wwwroot\assets\js\libs\jqvmap.js" />
+    <None Include="wwwroot\assets\js\libs\jstree.js" />
+    <None Include="wwwroot\assets\js\libs\tagify.js" />
+    <None Include="wwwroot\assets\js\scripts.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
+    <None Include="wwwroot\lib\chosen\chosen.jquery.js" />
+    <None Include="wwwroot\lib\chosen\chosen.jquery.min.js" />
+    <None Include="wwwroot\lib\chosen\chosen.proto.js" />
+    <None Include="wwwroot\lib\chosen\chosen.proto.min.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\init.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\init.proto.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\jquery-1.12.4.min.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\jquery-3.2.1.min.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\prism.js" />
+    <None Include="wwwroot\lib\chosen\docsupport\prototype-1.7.0.0.js" />
+    <None Include="wwwroot\lib\chosen\LICENSE.md" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\LICENSE.md" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\scripts\ckeditor5\ckeditor.js" />
+    <None Include="wwwroot\scripts\ckeditor5\ckeditor.js.map" />
+    <None Include="wwwroot\scripts\ckeditor5\LICENSE.md" />
+    <None Include="wwwroot\scripts\ckeditor5\README.md" />
+    <None Include="wwwroot\scripts\ckeditor5\sample\img\github.svg" />
+    <None Include="wwwroot\scripts\ckeditor5\sample\img\logo.svg" />
+    <None Include="wwwroot\scripts\ckeditor5\startckeditor.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\af.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ar.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ast.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\az.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\bg.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\bn.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\bs.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ca.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\cs.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\da.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\de-ch.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\de.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\el.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\en-au.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\en-gb.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\eo.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\es.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\et.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\eu.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\fa.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\fi.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\fr.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\gl.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\gu.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\he.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\hi.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\hr.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\hu.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\id.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\it.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ja.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\jv.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\km.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\kn.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ko.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ku.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\lt.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\lv.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ms.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\nb.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ne.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\nl.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\no.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\oc.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\pl.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\pt-br.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\pt.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ro.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ru.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\si.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sk.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sl.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sq.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sr-latn.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sr.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\sv.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\th.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\tk.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\tr.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\tt.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ug.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\uk.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\ur.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\uz.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\vi.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\zh-cn.js" />
+    <None Include="wwwroot\scripts\ckeditor5\translations\zh.js" />
+    <None Include="wwwroot\scripts\dropdowns.js" />
+    <None Include="wwwroot\scripts\Jquery\jquery.mask.min.js" />
+    <None Include="wwwroot\scripts\main.js" />
+    <None Include="wwwroot\scripts\mask.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Objetos\Propriedade\_Cor.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

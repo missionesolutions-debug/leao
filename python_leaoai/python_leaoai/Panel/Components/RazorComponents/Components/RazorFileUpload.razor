@@ -1,0 +1,92 @@
+﻿@using System.IO
+@using Framework.Infrastructure
+@using Microsoft.AspNetCore.Http
+@inject BlobService blobService
+
+<div class="col-lg-@Model.Col">
+	<div class="form-group">
+		<label class="form-label" for="@(Model.Id ?? Model.Name)">@Model.Label</label>
+	
+		<div class="form-control-wrap custom-file">
+			<InputFile OnChange="Upload" type="file" class="custom-file-input" disabled="@disabled"/>
+			<label class="form-label custom-file-label" for="@(Model.Id ?? Model.Name)">Escolha o arquivo</label>
+			<input type="hidden" id="@(Model.Id ?? Model.Name)" name="@Model.Name" value="@Model.Value" />
+			@if (Model.Obs != "")
+			{
+				<small id="small-@(Model.Id ?? Model.Name)" class="form-text text-muted">@Model.Obs</small>
+			}
+		</div>
+
+		<div class="card img-detail @displayImage">
+			@if (Model.Value?.EndsWith("jpg") == true 
+			|| Model.Value?.EndsWith("png") == true 
+			|| Model.Value?.EndsWith("jpeg") == true 
+			|| Model.Value?.EndsWith("webp") == true)
+			{
+				<img src="@(Model.Value)" alt="100%x280" data-holder-rendered="true">
+			}
+			else
+			{
+				<iframe src="@Model.Value" >
+					O seu navegador não suporta a exibição de DOCX.
+				</iframe>
+			}
+			<div class="card-body">
+				<button @onclick="Delete" type="button" title="Excluir" class="btn-danger btn btn-sm btn-grid" data-id="@(Model.Id ?? Model.Name)" data-toggle="tooltip" data-title="Excluir" >
+					<i class="fa fa-trash"></i> Remover Imagem
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@code {
+	[Parameter]
+	public TextField Model { get; set; }
+
+	bool disabled { get { return Model.Value != null; } }
+	string displayImage { get { return Model.Value != null ? "d-block" : "d-none"; } }
+
+	[Parameter]
+	public EventCallback<string> ValueChanged { get; set; }
+
+	private Dictionary<string, object> AdditionalAttributes => new Dictionary<string, object>
+	{
+		{ "name", Model.Name },
+		{ "accept", Model.Accept}
+	};
+
+	private async Task Upload(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+
+		using var stream = new MemoryStream();
+		await file.OpenReadStream(100 * 1024 * 1024).CopyToAsync(stream);
+		stream.Position = 0;
+
+		var formFile = new FormFile(stream, 0, file.Size, file.Name, file.Name)
+			{
+				Headers = new HeaderDictionary(),
+				ContentType = file.ContentType
+			};
+
+		Uri uri = await blobService.UploadBlobAsync(formFile);
+
+		Model.Value = uri.ToString();
+		await ValueChanged.InvokeAsync(Model.Value);
+	}
+
+	private async Task Delete()
+	{
+		if (string.IsNullOrWhiteSpace(Model.Value)) return ;
+
+		Uri uri = new Uri(Model.Value);
+		string fileName = Path.GetFileName(uri.LocalPath);
+
+		bool result = await blobService.DeleteBlobFromStorage(fileName);
+
+		Model.Value = null;
+		await ValueChanged.InvokeAsync(Model.Value);
+	}
+}

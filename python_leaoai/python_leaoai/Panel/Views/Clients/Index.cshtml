@@ -1,0 +1,50 @@
+﻿@model Panel.Models.Pages.Factory.ClientPage
+@using Painel.Models.Components
+@{
+    ContentConfig bread = Model.ContentConfig;
+    ViewData["Title"] = "Clientes";
+}
+
+@await Html.PartialAsync("~/Views/Components/_Alerts.cshtml")
+
+<div class="nk-block nk-block-lg">
+    @await Html.PartialAsync("~/Views/Shared/Structure/_BreadCrumbList.cshtml", bread)
+    <div class="card card-preview">
+        <div class="card-inner">
+            <table class="datatable-init-export nowrap table" data-export-title="Export">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email Relatório</th>
+                        <th>% Caixas Abertas</th>
+                        <th>% Caixas Montadas</th>
+                        <th width="10%">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Clients)
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td>@item.Email</td>
+                            <td>@item.PorcentagemCaixas</td>
+                            <td>@item.PorcentagemCaixasMontadas</td>
+                            <td>
+                                <a href="@Url.Action("Create", "Clients", new { id = item.Id })" class="btn btn-icon btn-sm btn-primary" title="Editar Registro">
+                                    <em class="icon ni ni-edit"></em>
+                                </a>
+                                <form method="post" style="display:inline;" action="@Url.Action("Delete", "Clients")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-icon btn-sm btn-danger" title="Deletar Registro">
+                                        <em class="icon ni ni-trash"></em>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

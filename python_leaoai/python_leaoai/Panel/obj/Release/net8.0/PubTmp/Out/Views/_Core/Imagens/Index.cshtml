@@ -1,0 +1,125 @@
+﻿@model Painel.Models.Pages.Core.ImagemPage
+
+@using Painel.Models.Components
+@{
+	ContentConfig bread = Model.ContentConfig;
+	bread.Id = Model.Id;
+	if (Model.Tab is not null)
+	{
+		bread.Table = Model.Tab;
+		bread.Post = bread.Post.Replace("imagens", Model.Tab.ToLower());
+	}
+	if (Model.Tab is null)
+	{
+		bread.Table = "";
+		bread.NavTabs = false;
+	}
+	bread.NavTabsConfig.ShowContentDetailItem = false;
+}
+@{
+	ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+
+@await Html.PartialAsync("~/Views/Components/_Alerts.cshtml")
+
+<div class="nk-block nk-block-lg">
+
+	@await Html.PartialAsync("~/Views/Shared/Structure/_HeadContent.cshtml", bread)
+
+	@if (bread.NavTabs == true)
+	{
+		@await Html.PartialAsync("~/Views/Shared/Structure/_NavTabs.cshtml", bread)
+	}
+
+	<div class="tab-content">
+		<div class="tab-pane active" id="tabItem5">
+			<form action="/imagens/Upload" method="post" enctype="multipart/form-data">
+
+				<div class="row g-gs">
+					<div class="col-lg-12">
+						<div class="card card-bordered">
+							<div class="card-inner">
+
+								<input type="hidden" name="Id" value="@Model.Id" />
+								<input type="hidden" name="Tab" value="@Model.Tab" />
+
+								@Html.ValidationSummary(true)
+								@Html.AntiForgeryToken()
+
+								<div class="row g-gs">
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="form-control-wrap">
+												<div class="custom-file">
+													<input type="file" multiple class="custom-file-input" id="customMultipleFiles" name="files" accept="image/png, image/gif, image/jpeg, image/webp, image/jpg">
+													<label class="custom-file-label" for="customMultipleFiles">Selecione as imagens</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<div class="form-group">
+											<button type="submit" style="width:100% !important;text-align:center !important;display:block !important;" class="btn btn-lg btn-success">Enviar</button>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+
+@if (Model.Imagems != null && Model.Imagems.Count > 0)
+{
+	<div class="nk--body">
+		<div class="nk-block">
+			<div class="row g-gs">
+				@foreach (var item in Model.Imagems.OrderByDescending(b=> b.Id))
+				{
+					@await Html.PartialAsync("~/Views/_Core/Imagens/_FileItem.cshtml", item)
+				}
+			</div>
+		</div>
+	</div>
+}
+
+@if (Model.Imagems != null && Model.Imagems.Count == 0)
+{
+	<div class="nk-fmg-body">
+		<div class="nk-fmg-body-content">
+			<div class="nk-fmg-listing nk-block">
+				<div class="nk-files nk-files-view-grid">
+					<div class="nk-files-group">
+						<h6 class="title">Arquivos</h6>
+						<p>Nenhum arquivo registrado.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+@await Html.PartialAsync("~/Views/_Core/Imagens/Modals/_Rename.cshtml", bread)
+
+
+@section scripts{
+	<script>
+		$('.btn-open-imagem-edit').click(function () {
+			$('#modalForm').modal('show');
+			$("#RenameId").val($(this).data('id'));
+			$("#imgDestaque").attr('src', $(this).data('ddd'));
+			$("#Titulo").val($(this).data('name'));
+			$("#DescriptionFile").val($(this).data('DescriptionFile'));
+			$("#FileTags").val($(this).data('tags'));
+			$("#Alt").val($(this).data('alt'));
+		});				
+	</script>
+}

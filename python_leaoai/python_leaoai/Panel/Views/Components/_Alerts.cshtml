@@ -1,0 +1,84 @@
+﻿@if (Context.Request.Query.Count > 0)
+{
+	if (Context.Request.Query["result"] == "ArquivoSuccess")
+	{
+		<div class="alert alert-pro alert-success alert-dismissible">
+			<div class="alert-text">
+				<h6>Arquivo(s) criado(s) com Sucesso!</h6>
+				<p>Para editar o registro criado, clique nos itens abaixo. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "ArquivoFailed")
+	{
+		<div class="alert alert-pro alert-danger alert-dismissible">
+			<div class="alert-text">
+				<h6>Um ou mais arquivo(s) não foram criado(s) com Sucesso!</h6>
+				<p>Para editar o registro criado, clique nos itens abaixo.</p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "CriadoComSucesso")
+	{
+		<div class="alert alert-pro alert-success alert-dismissible">
+			<div class="alert-text">
+				<h6>Registro criado com Sucesso!</h6>
+				<p>Para editar o registro criado, clique no link de edição na listagem abaixo. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "EditadoComSucesso")
+	{
+		<div class="alert alert-pro alert-success alert-dismissible">
+			<div class="alert-text">
+				<h6>Registro editado com Sucesso!</h6>
+				<p>Para editar o registro novamente, clique no link de edição na listagem abaixo. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "UsuarioExistente")
+	{
+		<div class="alert alert-pro alert-primary alert-dismissible">
+			<div class="alert-text">
+				<h6>Usuário já está cadastrado!</h6>
+				<p>Este usuário já faz parte deste registro. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "UsuarioNotFoundOnDeleteIntersect")
+	{
+		<div class="alert alert-pro alert-danger alert-dismissible">
+			<div class="alert-text">
+				<h6>Usuário não foi encontrado!</h6>
+				<p>Não encontramos o usuário ao tentar remover ele do registro. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "ErroAoInserirItem")
+	{
+		<div class="alert alert-pro alert-danger alert-dismissible">
+			<div class="alert-text">
+				<h6>Erro!</h6>
+				<p>Informe o minion responsável para corrigir o bug. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+	if (Context.Request.Query["result"] == "DeletadoComSucesso")
+	{
+		<div class="alert alert-pro alert-success alert-dismissible">
+			<div class="alert-text">
+				<h6>Registro deletado com Sucesso!</h6>
+				<p>Este registro foi excluído, não será possível retornar ele para a listagem. </p>
+			</div>
+			<button class="close" data-dismiss="alert"></button>
+		</div>
+	}
+}
+

@@ -1,0 +1,52 @@
+﻿@model String
+
+@switch (Model)
+{
+	case ".pdf":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FilePDF.cshtml")
+		break;
+	case ".zip":
+	case ".rar":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileZip.cshtml")
+		break;
+	case ".mp3":
+	case ".wav":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileSound.cshtml")
+		break;
+	case ".mp4":
+	case ".mpeg":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileVideo.cshtml")
+		break;
+	case ".ppt":
+	case ".pptx":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FilePpt.cshtml")
+		break;
+	case ".doc":
+	case ".docx":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileWord.cshtml")
+		break;
+	case ".jpeg":
+	case ".jpg":
+	case ".png":
+	case ".bmp":
+	case ".webp":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileMedia.cshtml")
+		break;
+	case ".xls":
+	case ".xlsx":
+	case ".xlsm":
+	case ".xlsb":
+	case ".xltx":
+	case ".xltm":
+	case ".xlt":
+	case ".xml":
+	case ".xlam":
+	case ".xla":
+	case ".xlw":
+	case ".xlr":
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileExcel.cshtml")
+		break;
+	default:
+		@await Html.PartialAsync("~/Views/Shared/Structure/FileTypes/_FileDoc.cshtml")
+		break;
+}

@@ -1,0 +1,48 @@
+﻿@model DateTime
+
+@functions{
+
+	public static String GetQtdDays(DateTime d1, DateTime d2)
+	{
+		double totalDays = (d2 - d1).TotalDays;
+
+		int amountDays = (int)totalDays;
+
+		
+		String daysMessage = "";
+		String badge = "";
+
+		if (amountDays < 0)
+		{
+			daysMessage = "Vencida";
+			badge = "badge-danger";
+		}
+		else if (amountDays < 1)
+		{
+			daysMessage = "Até amanhã";
+			badge = "badge-warning";
+		}
+		else
+		{
+			switch (amountDays)
+			{
+				case 1:
+					daysMessage = "Encerra Hoje";
+					badge = "badge-warning";
+					break;
+				case 2:
+					daysMessage = "Encerra Amanhã";
+					badge = "badge-warning";
+					break;
+				default:
+					daysMessage = amountDays + " dias";
+					badge = "badge-light";
+					break;
+			}
+		}
+
+		return String.Format("<span class=\"badge badge-dim {0}\"><em class=\"icon ni ni - clock\"></em><span>{1}</span></span>", badge, daysMessage);
+	}
+}
+
+@Html.Raw(GetQtdDays(DateTime.Now, Model))

@@ -1,0 +1,22 @@
+﻿@inherits ErrorBoundary
+
+@if (CurrentException is not null)
+{
+    <div class="error">
+        An error has occurred: @CurrentException.Message
+    </div>
+    <!-- Optionally, you can log the exception here -->
+}
+else
+{
+    @ChildContent
+}
+
+@code {
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        // Log the exception using your preferred logging framework
+        Console.Error.WriteLine($"Error in component: {exception.Message}");
+        return base.OnErrorAsync(exception);
+    }
+}

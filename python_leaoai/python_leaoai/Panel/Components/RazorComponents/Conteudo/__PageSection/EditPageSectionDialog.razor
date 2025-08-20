@@ -1,0 +1,50 @@
+﻿@* @using Framework.Data.Models.Conteudo
+@using MudBlazor
+@using Framework.Repositories
+@inject IDialogService DialogService
+@inject IRepository<PageSection> PageSectionRepository
+
+<EditForm Model="Section" OnValidSubmit="SaveSection">
+    <MudDialog>
+        <DialogContent>
+            <MudTextField T="string" @bind-Value="Section.NameValue" Label="Name Value" FullWidth />
+            <MudTextField T="string" @bind-Value="Section.KeyValue" Label="Key Value" FullWidth />
+            <MudSwitch T="bool" @bind-Value="Section.Ativo" Label="Ativo" />
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Salvar</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [Parameter] public PageSection Section { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task SaveSection()
+    {
+        try
+        {
+            Section.DataEdicao = DateTime.Now;  // Atualizar a data de edição
+
+            if (Section.Id > 0)
+            {
+                await PageSectionRepository.UpdateObjAsync(Section); // Atualizar seção existente
+            }
+
+            MudDialog.Close(DialogResult.Ok(Section)); // Fechar o diálogo corretamente
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving PageSection: " + ex.Message);
+            // Adicione aqui a lógica para lidar com erros, se necessário
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}
+ *@

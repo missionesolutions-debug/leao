@@ -1,0 +1,154 @@
+﻿@model Panel.Models.xCore.ChatIAListMessagesResponse
+@{
+    ViewData["Title"] = "Oráculo";
+}
+
+
+
+<div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+               
+                <div class="nk-block">
+                    <div class="">
+                        <div class="card-inner">
+                            <h4 class="nk-block-title page-title">Oráculo Leão</h4>
+                            <!-- Campo oculto para manter o chatIAId -->
+                            <input type="hidden" id="chatIAId" value="@ViewBag.ChatIAId" />
+
+                            <div id="chat-box" class="border rounded p-3 mb-3">
+                                <!-- Renderiza as mensagens já existentes -->
+                                @foreach (var msg in Model.messageChatResponses)
+                                {
+                                    // Converte o timestamp Unix para data legível
+                                    var unixTime = 0L;
+                                    long.TryParse(msg.Time, out unixTime);
+                                    var formattedTime = DateTimeOffset.FromUnixTimeSeconds(unixTime)
+                                    .LocalDateTime.ToString("dd MMM, yyyy h:mm tt");
+                                    <div class="message @(msg.IsChatAnswer ? "bot" : "user")">
+                                        <strong>@(msg.IsChatAnswer ? "Oráculo Leão:" : "Você:")</strong> @Html.Raw(msg.Message)
+                                        <br /><small class="text-muted" style="font-size: 0.8em;">@formattedTime</small>
+                                    </div>
+                                }
+                            </div>
+                            <form id="chat-form" class="d-flex">
+                                <input type="text" id="message" class="form-control" placeholder="Digite sua mensagem..." autocomplete="off" required>
+                                <button type="submit" class="btn btn-primary ms-2" id="btnenv">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts {
+    <style>
+
+        /* Caixa de chat */
+        #chat-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Estilo base das mensagens */
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            max-width: 70%;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+            /* Mensagens do usuário */
+            .message.user {
+                background-color: #dcf8c6;
+                text-align: right;
+                float: right;
+                border-bottom-right-radius: 0;
+                clear: both;
+            }
+
+            /* Mensagens do ChatBot */
+            .message.bot {
+                background-color: #f1f0f0;
+                text-align: left;
+                float: left;
+                border-bottom-left-radius: 0;
+                clear: both;
+            }
+
+            /* Limpeza dos floats após cada mensagem */
+            .message::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+        /* Indicador de "digitando" */
+        .typing {
+            font-style: italic;
+            color: #888;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+
+            $('#chat-form').submit(function (e) {
+                e.preventDefault();
+                var userMessage = $('#message').val();
+                var uchatId = $('#chatIAId').val();
+                if (userMessage.trim() === '') return;
+
+                // Adiciona a mensagem do usuário na caixa de chat
+                $('#chat-box').append('<div class="message user"><strong>Você:</strong> ' + userMessage + '</div>');
+                $('#message').val('');
+                $('#message').prop('disabled', function (_, val) { return !val; });
+                $('#btnenv').prop('disabled', function (_, val) { return !val; });
+
+                // Exibe o indicador "digitando"
+                $('#chat-box').append('<div id="loading" class="message bot typing"><em>O Oráculo da Leão está digitando...</em></div>');
+                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+
+
+
+                // Envia a mensagem para o servidor via AJAX
+                $.ajax({
+                    url: '@Url.Action("SendMessage", "Chat")',
+                    type: 'POST',
+                    data: { message: userMessage, chatId: uchatId },
+                    success: function (response) {
+                        $('#message').prop('disabled', function (_, val) { return !val; });
+                        $('#btnenv').prop('disabled', function (_, val) { return !val; });
+                        // Remove o indicador de carregamento
+                        $('#loading').remove();
+                        // Adiciona a resposta do ChatBot na caixa de chat
+                        $('#chat-box').append('<div class="message bot"><strong>Oráculo Leão:</strong><div class="response-html">' + response.reply + '</div></div>');
+
+                        // $('#chat-box').append('<div class="message bot"><strong>ChatBot:</strong> ' + response.reply + '</div>');
+                        $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+                    },
+                    error: function () {
+                        $('#loading').remove();
+                        $('#chat-box').append('<div class="mb-2 text-danger"><strong>Erro:</strong> Ocorreu um erro ao enviar a mensagem.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+}

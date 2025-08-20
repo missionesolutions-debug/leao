@@ -1,0 +1,174 @@
+﻿@model Painel.Models.Pages.PaginaPage
+
+@using Painel.Models.Components
+@using Panel.Components.RazorComponents
+@{
+    ContentConfig bread = Model.ContentConfig;
+    bread.Id = Model.Pagina.Id;
+    Layout = "_LayoutBlazor";
+    bread.TabSection = true;
+    bread.OwnerId = Model.Pagina.Id;
+    bread.OwnerType = "Pagina";
+}
+
+@{
+    ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+<div class="nk-block nk-block-lg">
+
+    @await Html.PartialAsync("~/Views/Shared/Structure/_HeadContent.cshtml", bread)
+
+    @if (bread.NavTabs == true)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Structure/_NavTabs.cshtml", bread)
+    }
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabItem5">
+            <form action="@bread.Post" method="post">
+
+                <div class="row g-gs">
+                    <div class="col-lg-8">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+
+                                <input type="hidden" name="Id" value="@Model.Pagina.Id" />
+                                <input type="hidden" name="Excluido" value="@Model.Pagina.Excluido" />
+
+                                @Html.ValidationSummary(true)
+                                @Html.AntiForgeryToken()
+
+                                <div class="row g-gs">
+
+                                    @if (Model.Page.acTitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Titulo.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acSubtitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Subtitulo.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acDescricao == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Descricao.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acAtivo == true)
+                                    {
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="g-3 align-center flex-wrap">
+                                                    @await Html.PartialAsync("~/Views/Objetos/_Ativo.cshtml", Model.Pagina)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @await Html.PartialAsync("~/Views/Components/_FormActions.cshtml")
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="row g-gs">
+
+                                    @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                             new Painel.Models.Components.TextField("Grupo de Páginas", "GroupPagina", Model.Pagina.GroupPagina, "", "required", "As páginas definidas com o mesmo agrupamento poderão ser pesquisadas na API em conjunto. Ex: serviços", "text", "", 12))
+
+
+                                    @if (Model.Page.acCategoria == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/Propriedade/_Categoria.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acOrdem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Ordem.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acImagem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Imagem.cshtml", Model.Pagina)
+                                        @await Html.PartialAsync("~/Views/Objetos/_ImagemAlt.cshtml", Model.Pagina)
+                                    }
+
+                                    @if (Model.Page.acThumbnail == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Thumbnail.cshtml", Model.Pagina)
+                                        @await Html.PartialAsync("~/Views/Objetos/_ThumbnailAlt.cshtml", Model.Pagina)
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row g-gs">
+                    @if (Model.Page.acPageTitle == true || Model.Page.acMetaDescription == true || Model.Page.acUrl == true)
+                    {
+                        <div class="col-lg-8">
+                            <div class="card card-bordered">
+                                <div class="card-inner">
+                                    <div class="row g-gs">
+                                        <div class="col-sm-12 ">
+                                            <h5>SEO</h5>
+                                        </div>
+
+                                        @if (Model.Page.acPageTitle == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                     new Painel.Models.Components.TextField("Page Title", "PageTitle", Model.Pagina.PageTitle, "", "required", "", "text", "", 12))
+                                        }
+
+                                        @if (Model.Page.acUrl == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                     new Painel.Models.Components.TextField("Slug/Url", "Url", Model.Pagina.Url, "", "required", "campo gerado automaticamente a partir do nome/título - <span class=\"sp-snip\">ao preencher manualmente, não colocar espaços e acentos!</span>", "text", "", 12))
+                                        }
+
+                                        @if (Model.Page.acMetaDescription == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                     new Painel.Models.Components.TextField("Meta Description", "MetaDescription", Model.Pagina.MetaDescription, "", "required", "", "text", "", 12))
+
+                                        }
+
+                                        <div class="row form-group">
+                                            <div class="col-sm-12 ">
+                                                <label for="">Snippet Preview</label>
+                                            </div>
+                                            <div class="col-sm-12 ">
+                                                <div class="google-snippet">
+                                                    <h3><a href="javascript:void(0);" class="page-title">@(Model.Pagina.PageTitle == null ? "Título da Página" : Model.Pagina.PageTitle)</a></h3>
+                                                    <span data-domain="http://meudominio.com.br/" data-route="suapagina/">http://meudominio.com.br/suapagina/@(Model.Pagina.Url == null ? "post" : Model.Pagina.Url)</span>
+                                                    <p>@(Model.Pagina.MetaDescription == null ? "Snippet Preview - Meta Description" : Model.Pagina.MetaDescription)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </form>
+
+          
+
+
+        </div>
+    </div>
+</div>
+
+

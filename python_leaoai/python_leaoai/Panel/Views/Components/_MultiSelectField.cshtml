@@ -1,0 +1,14 @@
+﻿@model Painel.Models.Components.TextField
+
+<div class="col-lg-@Model.Col">
+	<div class="form-group">
+		<label class="form-label" for="@Model.Name">@Model.Label</label>
+		<div class="form-control-wrap">
+			<input type="hidden" id="@(Model.Name + "hdd")" value="@Model.Value" class="hdd-@Model.Name" />
+			<select id="@Model.Name" name="@Model.Name" class="@Model.Class" data-search="on" style="width:100%;" data-id="@Model.Name" @Model.Required>
+				<option >Selecione um item</option>
+				@await Component.InvokeAsync(Model.Name.Replace("Id", ""), new { id = Model.Value, TableAction = Model.Tipo })
+			</select>
+		</div>
+	</div>
+</div>
