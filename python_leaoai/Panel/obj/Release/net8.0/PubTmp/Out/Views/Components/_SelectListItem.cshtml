@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Painel.Models.Components.DropItem>
+
+@foreach (var item in Model)
+{
+	if (item.Selected is true)
+	{
+		<option value="@item.Value" selected>@item.Name</option>
+	}
+	if (item.Selected is false)
+	{
+		<option value="@item.Value">@item.Name</option>
+	}
+}

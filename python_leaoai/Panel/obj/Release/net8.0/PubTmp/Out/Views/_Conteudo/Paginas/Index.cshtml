@@ -1,0 +1,98 @@
+﻿@model Painel.Models.Pages.PaginaPage
+@using Painel.Models.Components
+@{
+    ContentConfig bread = Model.ContentConfig;
+}
+
+@{
+    ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+
+@await Html.PartialAsync("~/Views/Components/_Alerts.cshtml")
+
+<div class="components-preview  mx-auto">
+    <div class="nk-block nk-block-lg">
+        @await Html.PartialAsync("~/Views/Shared/Structure/_BreadCrumbList.cshtml", bread)
+
+        <div class="card card-preview">
+            <div class="card-inner">
+
+
+
+                <table class="datatable-init-export nowrap table" data-export-title="Export">
+                    <thead>
+                        <tr>
+                            <th width="8%">ID</th>
+                            <th style="max-width:30%">Nome</th>
+                            @if (Model.Page.acCategoria == true)
+                            {
+                                <th>Categoria</th>
+                            }
+                            @if (Model.Page.acOrdem == true)
+                            {
+                                <th>Ordem</th>
+                            }
+                            <th width="15%">Status</th>
+                            <th width="15%">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Paginas)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Titulo</td>
+                                @if (Model.Page.acCategoria == true)
+                                {
+                                    if (item.Categoria != null)
+                                    {
+                                        <td>@item.Categoria.Titulo</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                @if (Model.Page.acOrdem == true)
+                                {
+                                    if (item.Ordem > 0)
+                                    {
+                                        <td>@item.Ordem</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td>
+                                    @await Html.PartialAsync("~/Views/Components/_AtivoReturn.cshtml", item.Ativo)
+                                </td>
+                                <td class="nk-tb-col nk-tb-col-tools">
+                                    <ul class="nk-tb-actions gx-1 ">
+                                        <li>
+                                            <a href="@String.Format("{0}/{1}",bread.Post,item.Id)" class="btn btn-icon btn-sm btn-primary" title="Editar Registro"><em class="icon ni ni-edit"></em></a>
+                                        </li>
+                                        @if (bread.DetailRoute != null && bread.DetailRoute.Length > 5)
+                                        {
+                                            <li>
+                                                <a href="@String.Format("{0}/{1}",bread.DetailRoute,item.Id)" class="btn btn-icon btn-sm btn-info" title="Visualizar Registro"><em class="icon ni ni-search"></em></a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <form method="post" id="form-@item.Id" action="@String.Format("{0}/{1}",bread.DeleteRoute,item.Id)">
+                                                <button type="button" onclick="callDelete(this,@item.Id);" style="border:none;" class="btn btn-icon btn-sm btn-danger" title="Deletar Registro"><em class="icon ni ni-trash"></em></button>
+                                            </form>
+                                        </li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

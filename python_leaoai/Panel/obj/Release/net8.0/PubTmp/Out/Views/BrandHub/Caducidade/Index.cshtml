@@ -1,0 +1,191 @@
+﻿@model Panel.Models.BrandsHub.CaducidadeRequestModel
+
+@{
+    ViewData["Title"] = "Petição de Caducidade de Registro de Marca";
+}
+
+@if (ViewBag.Prompt != null)
+{
+    <div class="nk-content">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="nk-block">
+                        <div class="card">
+                            <div class="card-inner">
+
+                                <!-- Abas -->
+                                <ul class="nav nav-tabs" id="caducidadeTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="peticao-tab" data-bs-toggle="tab" href="#peticao" role="tab">Petição Gerada</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="historico-tab" data-bs-toggle="tab" href="#historico" role="tab">Histórico do Chat</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content pt-4" id="caducidadeTabsContent">
+                                    <div class="tab-pane fade show active" id="peticao" role="tabpanel">
+                                        <h4 class="nk-block-title page-title">Petição de Caducidade Gerada</h4>
+                                        <p class="text-muted mb-4">Revise o conteúdo abaixo. Caso deseje, adicione observações e reenviar para gerar nova versão.</p>
+
+                                        <div id="prompt-box" class="border rounded p-3 mb-3">
+                                            @Html.Raw(ViewBag.Prompt.Replace("```html", "").Replace("```", ""))
+                                        </div>
+
+                                        <form asp-action="CaducidadeRepost" asp-controller="BrandHub" method="post">
+                                            <input type="hidden" name="PromptAnterior" value="@ViewBag.Prompt" />
+                                            <input type="hidden" name="ChatIAId" value="@ViewBag.ChatId" />
+                                            <div class="form-group">
+                                                <label for="Observacoes">Observações adicionais</label>
+                                                <textarea class="form-control" name="Observacoes" rows="5" placeholder="Inclua sugestões, correções ou informações complementares..."></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mt-3">Reenviar com Observações</button>
+                                        </form>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="historico" role="tabpanel">
+                                        <div id="chat-history">
+                                            <h4 class="nk-block-title page-title">Oráculo Leão</h4>
+                                            <input type="hidden" id="chatIAId" value="@ViewBag.ChatIAId" />
+                                            <div id="chat-box" class="border rounded p-3 mb-3">
+                                                @foreach (var msg in Model.ListMessages.messageChatResponses.Where(b => b.IsChatAnswer))
+                                                {
+                                                    var unixTime = long.TryParse(msg.Time, out var t) ? t : 0L;
+                                                    var formattedTime = DateTimeOffset.FromUnixTimeSeconds(unixTime).LocalDateTime.ToString("dd MMM, yyyy h:mm tt");
+                                                    <div class="message @(msg.IsChatAnswer ? "bot" : "user")">
+                                                        <strong>@(msg.IsChatAnswer ? "Oráculo Leão:" : "Você:")</strong> @Html.Raw(msg.Message)
+                                                        <br /><small class="text-muted" style="font-size: 0.8em;">@formattedTime</small>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <button id="open-diff-modal" class="btn btn-primary">Comparar Últimas Mensagens</button>
+                                            <div id="diffModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000;">
+                                                <div style="background:#fff; width:90%; height:90%; margin:5% auto; padding:20px; border-radius:8px; position:relative;">
+                                                    <button id="close-diff-modal" style="position:absolute; top:10px; right:10px;">Fechar</button>
+                                                    <div style="display:flex; gap:10px; height:100%;">
+                                                        <div id="leftText" style="width:50%; overflow-y:scroll; border:1px solid #ccc; padding:10px; white-space:pre-wrap;"></div>
+                                                        <div id="rightText" style="width:50%; overflow-y:scroll; border:1px solid #ccc; padding:10px; white-space:pre-wrap;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- tab-content -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="nk-content">
+        <div class="nk-content-inner">
+            <div class="nk-block-head">
+                <div class="nk-block-between">
+                    <div class="nk-block-head-content">
+                        <h4 class="nk-block-title fw-normal">Pedido de Caducidade</h4>
+                        <ul class="breadcrumb breadcrumb-arrow">
+                            <li class="breadcrumb-item"><a href="~/">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="~/">Hub de Marcas</a></li>
+                            <li class="breadcrumb-item"><a href="/brandhub?typed=caducidade">Caducidades</a></li>
+                            <li class="breadcrumb-item active">Caducidade</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="nk-content-body">
+                <div class="nk-block">
+                    <div class="card">
+                        <div class="card-inner">
+                            <h4 class="nk-block-title page-title">Petição de Caducidade de Registro de Marca</h4>
+                            <p class="text-muted mb-4">Solicite a extinção de registros inativos com base nos artigos 142 e 143 da LPI.</p>
+
+                            <form action="/brandhub/caducidade" method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="RegistroRequerida">Registro da Marca</label>
+                                        <input type="text" class="form-control" asp-for="RegistroRequerida" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="MarcaRequerida">Marca Requerida</label>
+                                        <input type="text" class="form-control" asp-for="MarcaRequerida" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ClasseRequerida">Classe da Marca</label>
+                                        <input type="text" class="form-control" asp-for="ClasseRequerida" required />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="EspecificacoesRequerida">Especificações</label>
+                                        <textarea class="form-control" asp-for="EspecificacoesRequerida" required></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="TitularRequerida">Titular da Marca</label>
+                                        <input type="text" class="form-control" asp-for="TitularRequerida" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ProcessoRequerida">Número do Processo</label>
+                                        <input type="text" class="form-control" asp-for="ProcessoRequerida" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="NomeCliente">Nome do Cliente</label>
+                                        <input type="text" class="form-control" asp-for="NomeCliente" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="MarcaCliente">Marca do Cliente</label>
+                                        <input type="text" class="form-control" asp-for="MarcaCliente" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="DataDepositoCliente">Data do Depósito</label>
+                                        <input type="date" class="form-control" asp-for="DataDepositoCliente" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ClasseCliente">Classe da Marca do Cliente</label>
+                                        <input type="text" class="form-control" asp-for="ClasseCliente" required />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script src="https://unpkg.com/diff-match-patch"></script>
+    <script type="text/javascript">
+        $(function () {
+            const dmp = new diff_match_patch();
+            $('#open-diff-modal').click(function () {
+                const messages = $('#chat-box .message.bot');
+                if (messages.length < 2) return alert("São necessárias pelo menos 2 mensagens.");
+
+                const oldHTML = messages.eq(-2).text().trim();
+                const newHTML = messages.eq(-1).text().trim();
+                $('#leftText').text(oldHTML);
+
+                const diffs = dmp.diff_main(oldHTML, newHTML);
+                dmp.diff_cleanupSemantic(diffs);
+
+                let diffHTML = '';
+                diffs.forEach(([op, text]) => {
+                    if (op === 1) diffHTML += `<span style="background-color:#d4edda; color:#155724;">${text}</span>`;
+                    else if (op === 0) diffHTML += text;
+                });
+
+                $('#rightText').html(diffHTML);
+                $('#diffModal').fadeIn();
+            });
+
+            $('#close-diff-modal').click(() => $('#diffModal').fadeOut());
+        });
+    </script>
+}

@@ -1,0 +1,15 @@
+﻿@model Painel.Models.Components.DateTimeField
+
+<div class="col-lg-@Model.Col">
+	<div class="form-group col-12">
+		<label class="form-label" for="@Model.Name">@Model.Label</label>
+		<div class="form-control-wrap">
+			<input type="datetime-local" class="form-control @Model.Class" id="@Model.Name" name="@Model.Name" value="@Model.Value?.ToString("yyyy-MM-ddTHH:mm")" @Model.Required>
+		</div>
+		@if (Model.Obs != "")
+		{
+			<br />
+			<small id="small-@Model.Name" class="form-text text-muted">@Html.Raw(Model.Obs)</small>
+		}
+	</div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model Painel.Models.Pages.PaginaPage
+
+@using Painel.Models.Components
+@{
+	ContentConfig bread = new ContentConfig()
+	{
+		Route = Model.Page.Backplace,
+		Post = Model.Page.Post,
+		Tela = Model.Page.Tela,
+		Obs = Model.Page.Obs,
+		Id = Model.Pagina.Id,
+		Table = Model.Page.TableAction,
+		IsContentTime = false,
+		NavTabs = Model.Page.NavTabs,
+		DetailRoute = Model.Page.DetailRoute
+	};
+}
+
+@{
+	ViewData["Title"] = Model.Pagina.PageTitle;
+}
+
+<div class="nk-block nk-block-lg">
+
+	@await Html.PartialAsync("~/Views/Shared/Contents/_HeadContentCreate.cshtml", bread)
+
+	@if (bread.NavTabs == true)
+	{
+		@await Html.PartialAsync("~/Views/Components/_NavigationTabs.cshtml", bread)
+	}
+</div>
+
+<div class="nk-block nk-block-lg">
+	<div class="row g-gs">
+		<div class="col-lg-8">
+			<div class="nk-content-body">
+				<div class="content-page wide-md m-auto">
+					
+					<div class="nk-block">
+						<div class="card card-bordered">
+							<div class="card-inner card-inner-xl">
+								<h4 class="nk-block-title fw-normal">@Model.Pagina.Titulo</h4>
+								<div class="nk-block-des">
+									<p class="lead">@Model.Pagina.Subtitulo</p>
+								</div>
+								<hr />
+								<img src="~/uploads/@Model.Pagina.Imagem" />
+								<hr />
+								<article class="entry">
+									@Html.Raw(Model.Pagina.Descricao)
+								</article>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="card card-bordered">
+				<div class="card-inner">
+					<div class="row g-gs">
+						<div class="col-sm-12 ">
+							<h5>SEO</h5>
+						</div>
+
+						<div class="row">
+
+							<div class="col-sm-12 ">
+								<div class="google-snippet">
+									<h3><a href="javascript:void(0);" class="page-title">@(Model.Pagina.PageTitle == null ? "Título da Página" : Model.Pagina.PageTitle)</a></h3>
+									<span data-domain="http://meudominio.com.br/" data-route="suapagina/">http://meudominio.com.br/suapagina/@(Model.Pagina.Url == null ? "post" : Model.Pagina.Url)</span>
+									<p>@(Model.Pagina.MetaDescription == null ? "Snippet Preview - Meta Description" : Model.Pagina.MetaDescription)</p>
+								</div>
+							</div>
+							<div class="col-sm-12 ">
+								<label for="">Snippet Preview - Google</label>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="nk-content ">
+	<div class="container-fluid">
+		<div class="nk-content-inner">
+		
+		</div>
+	</div>
+</div>
+
+

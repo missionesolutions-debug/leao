@@ -1,0 +1,455 @@
+﻿@model Panel.Models.BrandsHub.OposicaoRequestModel
+
+@{
+    ViewData["Title"] = "Petição de Oposição ao Registro de Marca";
+}
+
+@if (ViewBag.Prompt != null)
+{
+  
+    <div class="nk-content">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="nk-block">
+                        <div class="card">
+                            <div class="card-inner">
+
+                                <!-- Abas -->
+                                <ul class="nav nav-tabs" id="oposicaoTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="peticao-tab" data-bs-toggle="tab" href="#peticao" role="tab" aria-controls="peticao" aria-selected="true">Petição Gerada</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="historico-tab" data-bs-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico do Chat</a>
+                                    </li>
+                                </ul>
+
+                                <!-- Conteúdo das abas -->
+                                <div class="tab-content pt-4" id="oposicaoTabsContent">
+                                    <!-- Aba 1: Petição -->
+                                    <div class="tab-pane fade show active" id="peticao" role="tabpanel" aria-labelledby="peticao-tab">
+                                        <h4 class="nk-block-title page-title">Petição de Oposição Gerada</h4>
+                                        <p class="text-muted mb-4">Revise o conteúdo abaixo. Caso deseje, você pode adicionar observações e reenviar para gerar um novo conteúdo baseado nisso.</p>
+
+                                        <!-- Conteúdo do prompt -->
+                                        <div id="prompt-box" class="border rounded p-3 mb-3">
+                                            @Html.Raw(ViewBag.Prompt.Replace("```html", "").Replace("```", ""))
+                                        </div>
+
+                                        <!-- Formulário de observações -->
+                                        <form asp-action="OposicaoRepost" asp-controller="BrandHub" method="post">
+                                            <input type="hidden" name="PromptAnterior" value="@ViewBag.Prompt" />
+                                            <input type="hidden" name="ChatIAId" value="@ViewBag.ChatId" />
+
+                                            <div class="form-group">
+                                                <label for="Observacoes">Observações adicionais</label>
+                                                <textarea class="form-control" name="Observacoes" rows="5" style="min-height:215px" placeholder="Inclua sugestões, correções ou informações complementares..."></textarea>
+                                                <small class="text-muted">Essas observações serão consideradas para gerar um novo conteúdo.</small>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary mt-3">Reenviar com Observações</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Aba 2: Histórico -->
+                                    <div class="tab-pane fade" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                        <div id="chat-history" class="">
+                                            <h4 class="nk-block-title page-title">Oráculo Leão</h4>
+                                            <!-- Campo oculto para manter o chatIAId -->
+                                            <input type="hidden" id="chatIAId" value="@ViewBag.ChatIAId" />
+
+                                            <div id="chat-box" class="border rounded p-3 mb-3">
+                                                <!-- Renderiza as mensagens já existentes -->
+                                                @foreach (var msg in Model.ListMessages.messageChatResponses.Where(b=> b.IsChatAnswer == true))
+                                                {
+                                                    // Converte o timestamp Unix para data legível
+                                                    var unixTime = 0L;
+                                                    long.TryParse(msg.Time, out unixTime);
+                                                    var formattedTime = DateTimeOffset.FromUnixTimeSeconds(unixTime)
+                                                    .LocalDateTime.ToString("dd MMM, yyyy h:mm tt");
+                                                    <div class="message @(msg.IsChatAnswer ? "bot" : "user")">
+                                                        <strong>@(msg.IsChatAnswer ? "Oráculo Leão:" : "Você:")</strong> @Html.Raw(msg.Message)
+                                                        <br /><small class="text-muted" style="font-size: 0.8em;">@formattedTime</small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- Botão -->
+                                        <button id="open-diff-modal" class="btn btn-primary">Comparar Últimas Mensagens</button>
+
+                                        <!-- Modal -->
+                                        <div id="diffModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000;">
+                                            <div style="background:#fff; width:90%; height:90%; margin:5% auto; padding:20px; overflow:hidden; border-radius:8px; position:relative;">
+                                                <button id="close-diff-modal" style="position:absolute; top:10px; right:10px;">Fechar</button>
+                                                <div style="display:flex; gap:10px; height:100%;">
+                                                    <div id="leftText" style="width:50%; overflow-y:scroll; border:1px solid #ccc; padding:10px; white-space:pre-wrap;"></div>
+                                                    <div id="rightText" style="width:50%; overflow-y:scroll; border:1px solid #ccc; padding:10px; white-space:pre-wrap;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div> <!-- tab-content -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    <div class="nk-content ">
+
+        <div class="nk-content-inner">
+            <div class="nk-block-head">
+                <div class="nk-block-between">
+                    <div class="nk-block-head-content">
+                        <h4 class="nk-block-title fw-normal">Oposição de Marcas</h4>
+                        <div class="nk-block-des">
+                            <nav>
+                                <ul class="breadcrumb breadcrumb-arrow">
+                                    <li class="breadcrumb-item"><a href="~/">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="~/">Hub de Marcas</a></li>
+                                    <li class="breadcrumb-item"><a href="/brandhub?typed=oposicao">Oposições</a></li>
+                                    <li class="breadcrumb-item active">Oposição</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="nk-content-body">
+
+                <div class="nk-block">
+                    <div class="card">
+                        <div class="card-inner">
+                            <h4 class="nk-block-title page-title">Petição de Oposição ao Registro de Marca</h4>
+                            <p class="text-muted mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+
+                            <form action="/brandhub/oposicao" method="post">
+                                <div class="row">
+                                    <!-- Processo Contestado -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ProcessoContestado">Processo Contestado</label>
+                                        <input type="text" class="form-control" asp-for="ProcessoContestado" required />
+                                        <span asp-validation-for="ProcessoContestado" class="text-danger"></span>
+                                        <small>Número do processo administrativo em 9 dígitos do pedido contestado</small>
+                                    </div>
+
+                                    <!-- Marca Contestada -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="MarcaContestada">Marca Contestada</label>
+                                        <input type="text" class="form-control" asp-for="MarcaContestada" required />
+                                        <span asp-validation-for="MarcaContestada" class="text-danger"></span>
+                                        <small>Sinal distintivo objeto da oposição, exatamente como publicado</small>
+                                    </div>
+
+                                    <!-- Classe Contestada -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ClasseContestada">Classe Contestada</label>
+                                        <input type="text" class="form-control" asp-for="ClasseContestada" required />
+                                        <span asp-validation-for="ClasseContestada" class="text-danger"></span>
+                                        <small>Classificação Internacional Nice (NCL) do pedido contestado</small>
+                                    </div>
+
+                                    <!-- Especificação Contestada -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="EspecificacaoContestada">Especificação Contestada</label>
+                                        <textarea class="form-control" asp-for="EspecificacaoContestada" required></textarea>
+                                        <span asp-validation-for="EspecificacaoContestada" class="text-danger"></span>
+                                        <small>Descrição completa dos produtos/serviços do pedido contestado</small>
+                                    </div>
+
+                                    <!-- Titular Contestado -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="TitularContestado">Titular Contestado</label>
+                                        <input type="text" class="form-control" asp-for="TitularContestado" required />
+                                        <span asp-validation-for="TitularContestado" class="text-danger"></span>
+                                        <small>Nome completo do titular do pedido contestado</small>
+                                    </div>
+
+                                    <!-- Número RPI -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="NumeroRpi">Número RPI</label>
+                                        <input type="text" class="form-control" asp-for="NumeroRpi" required />
+                                        <span asp-validation-for="NumeroRpi" class="text-danger"></span>
+                                        <small>Número da Revista da Propriedade Industrial onde foi publicado o pedido</small>
+                                    </div>
+
+                                    <!-- Data RPI -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="DataRpi">Data RPI</label>
+                                        <input type="date" class="form-control" asp-for="DataRpi" required />
+                                        <span asp-validation-for="DataRpi" class="text-danger"></span>
+                                        <small>Data de publicação na RPI (DD/MM/AAAA)</small>
+                                    </div>
+
+                                    <!-- Nome do Cliente -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="NomeCliente">Nome do Cliente</label>
+                                        <input type="text" class="form-control" asp-for="NomeCliente" required />
+                                        <span asp-validation-for="NomeCliente" class="text-danger"></span>
+                                        <small>Nome completo do opoente (cliente)</small>
+                                    </div>
+
+                                    <!-- Marca Anterior -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="MarcaAnterior">Marca Anterior</label>
+                                        <input type="text" class="form-control" asp-for="MarcaAnterior" required />
+                                        <span asp-validation-for="MarcaAnterior" class="text-danger"></span>
+                                        <small>Sinal distintivo anterior base da oposição</small>
+                                    </div>
+
+                                    <!-- Processo Anterior -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ProcessoAnterior">Processo Anterior</label>
+                                        <input type="text" class="form-control" asp-for="ProcessoAnterior" required />
+                                        <span asp-validation-for="ProcessoAnterior" class="text-danger"></span>
+                                        <small>Número do processo da marca anterior</small>
+                                    </div>
+
+                                    <!-- Classe Anterior -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="ClasseAnterior">Classe Anterior</label>
+                                        <input type="text" class="form-control" asp-for="ClasseAnterior" required />
+                                        <span asp-validation-for="ClasseAnterior" class="text-danger"></span>
+                                        <small>Classificação Nice da marca anterior</small>
+                                    </div>
+
+                                    <!-- Produtos/Serviços Anteriores -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="ProdutosAnterior">Produtos/Serviços Anteriores</label>
+                                        <textarea class="form-control" asp-for="ProdutosAnterior" required></textarea>
+                                        <span asp-validation-for="ProdutosAnterior" class="text-danger"></span>
+                                        <small>Especificação da marca anterior</small>
+                                    </div>
+
+                                    <!-- Tipo de Conflito -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="TipoConflito">Tipo de Conflito</label>
+                                        <select class="form-control" asp-for="TipoConflito" required>
+                                            <option value="">Selecione o tipo de conflito</option>
+                                            <option value="Confusao">Confusão quanto à origem</option>
+                                            <option value="Associacao">Associação indevida</option>
+                                        </select>
+                                        <span asp-validation-for="TipoConflito" class="text-danger"></span>
+                                        <small>Natureza do conflito: confusão quanto à origem ou associação indevida</small>
+                                    </div>
+
+                                    <!-- Tipo de Reprodução -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" asp-for="TipoReproducao">Tipo de Reprodução</label>
+                                        <select class="form-control" asp-for="TipoReproducao" required>
+                                            <option value="">Selecione o tipo de reprodução</option>
+                                            <option value="Total">Reprodução Total</option>
+                                            <option value="Parcial">Reprodução Parcial</option>
+                                            <option value="Imitacao">Imitação</option>
+                                        </select>
+                                        <span asp-validation-for="TipoReproducao" class="text-danger"></span>
+                                        <small>Modalidade de violação: reprodução total, parcial ou imitação</small>
+                                    </div>
+
+                                    <!-- Análise Mercadológica -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="AnaliseMercadologica">Análise Mercadológica</label>
+                                        <textarea class="form-control" asp-for="AnaliseMercadologica" required></textarea>
+                                        <span asp-validation-for="AnaliseMercadologica" class="text-danger"></span>
+                                        <small>Análise da afinidade entre produtos/serviços</small>
+                                    </div>
+
+                                    <!-- Precedentes -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="Precedentes">
+                                            Precedentes
+                                        </label>
+                                        <textarea class="form-control" asp-for="Precedentes" required></textarea>
+                                        <span asp-validation-for="Precedentes" class="text-danger"></span>
+                                        <small>Decisões anteriores do INPI em casos similares</small>
+                                    </div>
+
+                                    <!-- Coexistência [campo opcional] -->
+                                    <div class="col-md-12">
+                                        <label class="form-label" asp-for="Coexistencia">
+                                            Coexistência <span class="text-muted">[campo opcional]</span>
+                                        </label>
+                                        <textarea class="form-control" asp-for="Coexistencia"></textarea>
+                                        <span asp-validation-for="Coexistencia" class="text-danger"></span>
+                                        <small>Registros de marcas semelhantes coexistentes no mercado</small>
+                                    </div>
+
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+
+@if (ViewBag.Prompt != null)
+{
+    <style type="text/css">
+        @@keyframes highlightFade {
+            0% { background-color: #d4edda; }
+            100% { background-color: transparent; }
+        }
+        .highlight-new {
+            animation: highlightFade 3s ease-out;
+        }
+        /* Caixa de chat */
+        #chat-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Estilo base das mensagens */
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            max-width: 70%;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+            /* Mensagens do usuário */
+            .message.user {
+                background-color: #dcf8c6;
+                text-align: right;
+                float: right;
+                border-bottom-right-radius: 0;
+                clear: both;
+            }
+
+            /* Mensagens do ChatBot */
+            .message.bot {
+                background-color: #f1f0f0;
+                text-align: left;
+                float: left;
+                border-bottom-left-radius: 0;
+                clear: both;
+            }
+
+            /* Limpeza dos floats após cada mensagem */
+            .message::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+        /* Indicador de "digitando" */
+        .typing {
+            font-style: italic;
+            color: #888;
+        }
+
+    </style>
+
+
+    @section scripts {
+
+    <script src="https://unpkg.com/diff-match-patch"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            const dmp = new diff_match_patch();
+
+            $('#open-diff-modal').click(function () {
+                const messages = $('#chat-box .message.bot');
+                if (messages.length < 2) return alert("São necessárias pelo menos 2 mensagens.");
+
+                const oldHTML = messages.eq(-2).find('div').text().trim();
+                const newHTML = messages.eq(-1).find('div').text().trim();
+
+                // Exibe texto original à esquerda
+                $('#leftText').text(oldHTML);
+
+                // Gera diff visual
+                const diffs = dmp.diff_main(oldHTML, newHTML);
+                dmp.diff_cleanupSemantic(diffs);
+
+                let diffHTML = '';
+                diffs.forEach(([op, text]) => {
+                    if (op === 1) {
+                        diffHTML += `<span style="background-color:#d4edda; color:#155724;">${text}</span>`;
+                    } else if (op === 0) {
+                        diffHTML += text;
+                    }
+                    // Ignora remoções (op === -1), mas pode exibir se quiser
+                });
+
+                $('#rightText').html(diffHTML);
+
+                $('#diffModal').fadeIn();
+            });
+
+            $('#close-diff-modal').click(function () {
+                $('#diffModal').fadeOut();
+            });
+
+            // Sincroniza scroll
+            function syncScroll($src, $dest) {
+                $src.on('scroll', function () {
+                    const ratio = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                    $dest.scrollTop(ratio * ($dest[0].scrollHeight - $dest[0].clientHeight));
+                });
+            }
+
+            syncScroll($('#leftText'), $('#rightText'));
+            syncScroll($('#rightText'), $('#leftText'));
+
+            // const dmp = new diff_match_patch();
+
+            // const messages = $('#chat-box .message.bot');
+            // if (messages.length < 2) return;
+
+            // const penultimateText = messages.eq(-2).find('div').text().trim();
+            // const lastText = messages.eq(-1).find('div').text().trim();
+
+            // const diffs = dmp.diff_main(penultimateText, lastText);
+            // dmp.diff_cleanupSemantic(diffs);
+
+            // let resultHTML = '';
+            // diffs.forEach(([op, data]) => {
+            //     if (op === 1) { // adição
+            //         resultHTML += `<span style="background-color: #d4edda; color: #155724;">${data}</span>`;
+            //     } else if (op === -1) { // remoção
+            //         // você pode mostrar ou esconder - aqui escondemos
+            //     } else {
+            //         resultHTML += data;
+            //     }
+            // });
+
+            // messages.eq(-1).find('div').html(resultHTML.replace(/\n/g, '<br>'));
+
+
+            $('#oposicaoTabs a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            });
+        });
+    </script>
+    }
+}
+
