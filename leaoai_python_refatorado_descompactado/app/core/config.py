@@ -1,19 +1,18 @@
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional
 
 class Settings(BaseSettings):
     # Database URL for SQLAlchemy
-    # Ensure this is set in your .env file, e.g., DATABASE_URL="mysql+mysqlconnector://user:password@host:3306/dbname"
-    DATABASE_URL: str
+    # Lê do .env, e deve ser uma string
+    DATABASE_URL: str  # ⚠️ tipo necessário
 
     # Secret key for JWT
-    # IMPORTANT: Change this to a strong, random key in production
-    SECRET_KEY: str = "your-super-secret-key-replace-me"
+    SECRET_KEY: str = "bG9yZW1pcHN1bGRvbG9yc2l0YW1ldA=="
 
-    # Add other configuration settings as needed from your C# project
+    # Configuração do Pydantic v2 para ler do .env
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"  # ignora variáveis extras no .env
+    )
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore") # Pydantic V2
-
+# Instância das configurações
 settings = Settings()
-
