@@ -1,0 +1,15 @@
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\bin\Release\net8.0\Framework.Data.deps.json
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\bin\Release\net8.0\Framework.Data.runtimeconfig.json
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\bin\Release\net8.0\Framework.Data.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\bin\Release\net8.0\Framework.Data.pdb
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.csproj.AssemblyReference.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.AssemblyInfoInputs.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.AssemblyInfo.cs
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.csproj.CoreCompileInputs.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.sourcelink.json
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\refint\Framework.Data.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.pdb
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\Framework.Data.genruntimeconfig.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Data\obj\Release\net8.0\ref\Framework.Data.dll

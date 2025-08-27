@@ -1,0 +1,25 @@
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.deps.json
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.pdb
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.AssemblyInfo.cs
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.sourcelink.json
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\refint\Framework.Infrastructure.dll
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.pdb
+C:\Users\ferna\source\repos\xLeaoAI\Framework.Infrastructure\obj\Debug\net8.0\ref\Framework.Infrastructure.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.deps.json
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\bin\Debug\net8.0\Framework.Infrastructure.pdb
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.AssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\refint\Framework.Infrastructure.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\Framework.Infrastructure.pdb
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Infrastructure\obj\Debug\net8.0\ref\Framework.Infrastructure.dll

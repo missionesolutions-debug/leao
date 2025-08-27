@@ -1,0 +1,58 @@
+﻿@model Painel.Models.Pages.UsuariosPage
+
+@using Painel.Models.Components
+@{
+    ContentConfig bread = Model.ContentConfig;
+    bread.Id = Model.Usuario.Id;
+}
+
+@{
+    ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+<div class="nk-block nk-block-lg">
+
+    @await Html.PartialAsync("~/Views/Shared/Structure/_HeadContent.cshtml", bread)
+
+    <div class="card">
+        <div class="card-inner">
+
+            <form action="@bread.Post" method="post">
+                <div class="row g-4">
+
+                    <input type="hidden" name="Id" value="@Model.Usuario.Id" />
+                    @Html.HiddenFor(model => model.Usuario.Excluido)
+                    @Html.ValidationSummary(true)
+                    @Html.AntiForgeryToken()
+
+                    @if (Model.Page.acNome == true)
+                    {
+                        @await Html.PartialAsync("~/Views/Objetos/_Nome.cshtml", Model.Usuario)
+                    }
+
+                    @await Html.PartialAsync("~/Views/Objetos/Pessoa/_Email.cshtml", Model.Usuario)
+                    @await Html.PartialAsync("~/Views/Objetos/Pessoa/_Login.cshtml", Model.Usuario)
+                    @await Html.PartialAsync("~/Views/Objetos/Pessoa/_Password.cshtml", Model.Usuario)
+                    @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                        new Painel.Models.Components.TextField("RoleGate", "RoleGate", Model.Usuario.RoleGate, "", "required", "PowerUser, ContentCreator, Business, ProductOwner, Ecommerce", "text", "", 12))
+
+                    @await Html.PartialAsync("~/Views/Components/_ImageUpload.cshtml",
+                        new Painel.Models.Components.TextField("Avatar", "Avatar", Model.Usuario.Avatar, "", "required", "", "text", "", 10))
+
+                    @if (Model.Page.acAtivo == true)
+                    {
+                        @await Html.PartialAsync("~/Views/Objetos/_Ativo.cshtml", Model.Usuario)
+                    }
+
+
+
+
+
+                    @await Html.PartialAsync("~/Views/Components/_FormActions.cshtml")
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

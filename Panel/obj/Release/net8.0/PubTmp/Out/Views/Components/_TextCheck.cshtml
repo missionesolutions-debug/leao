@@ -1,0 +1,17 @@
+﻿@model Painel.Models.Components.CheckField
+
+
+<div class="col-lg-@Model.Col">
+	<div class="form-group">
+		<div class="custom-control custom-switch">
+			@Html.CheckBox(Model.Name, @Model.Value, new { @class = "custom-control-input" })
+			<label class="custom-control-label" for="@Model.Name">@Model.Label</label>
+
+			@if (Model.Obs != "")
+			{
+				<small id="small-@Model.Name" class="form-text text-muted">@Model.Obs</small>
+			}
+		</div>
+	</div>
+</div>
+

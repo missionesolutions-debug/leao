@@ -1,0 +1,153 @@
+﻿@model Painel.Models.Pages.TipoCategoriasPage
+
+@using Painel.Models.Components
+@{
+    ContentConfig bread = Model.ContentConfig;
+    bread.Id = Model.TipoCategoria.Id;
+}
+
+@{
+    ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+<div class="nk-block nk-block-lg">
+
+    @await Html.PartialAsync("~/Views/Shared/Structure/_HeadContent.cshtml", bread)
+
+    @if (bread.NavTabs == true)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Structure/_NavTabs.cshtml", bread)
+    }
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabItem5">
+            <form action="@bread.Post" method="post">
+
+                <div class="row g-gs">
+                    <div class="col-lg-8">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+
+                                <input type="hidden" name="Id" value="@Model.TipoCategoria.Id" />
+
+                                @Html.HiddenFor(model => model.TipoCategoria.Excluido)
+                                @Html.ValidationSummary(true)
+                                @Html.AntiForgeryToken()
+
+                                <div class="row g-gs">
+
+                                    @if (Model.Page.acTitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Titulo.cshtml", Model.TipoCategoria)
+                                    }
+
+                                    @if (Model.Page.acSubtitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Subtitulo.cshtml", Model.TipoCategoria)
+                                    }
+
+                                    @if (Model.Page.acDescricao == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Descricao.cshtml", Model.TipoCategoria)
+                                    }
+
+                                    @if (Model.Page.acAtivo == true)
+                                    {
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="g-3 align-center flex-wrap">
+                                                    @await Html.PartialAsync("~/Views/Objetos/_Ativo.cshtml", Model.TipoCategoria)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @await Html.PartialAsync("~/Views/Components/_FormActions.cshtml")
+
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="row g-gs">
+
+                                    @if (Model.Page.acOrdem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Ordem.cshtml", Model.TipoCategoria)
+                                    }
+
+                                    @if (Model.Page.acImagem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Imagem.cshtml", Model.TipoCategoria)
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.Page.acPageTitle == true || Model.Page.acMetaDescription == true || Model.Page.acUrl == true)
+                    {
+                        <div class="col-lg-12">
+                            <div class="card card-bordered">
+                                <div class="card-inner">
+                                    <div class="row g-gs">
+                                        <div class="col-sm-12 ">
+                                            <h5>SEO</h5>
+                                        </div>
+
+                                        @if (Model.Page.acPageTitle == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                new Painel.Models.Components.TextField("Page Title", "PageTitle", Model.TipoCategoria.PageTitle, "", "required", "", "text", "", 12))
+                                        }
+
+                                        @if (Model.Page.acUrl == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                new Painel.Models.Components.TextField("Slug/Url", "Url", Model.TipoCategoria.Url, "", "required", "campo gerado automaticamente a partir do nome/título - <span class=\"sp-snip\">ao preencher manualmente, não colocar espaços e acentos!</span>", "text", "", 12))
+                                        }
+
+                                        @if (Model.Page.acMetaDescription == true)
+                                        {
+                                            @await Html.PartialAsync("~/Views/Components/_TextField.cshtml",
+                                                new Painel.Models.Components.TextField("Meta Description", "MetaDescription", Model.TipoCategoria.MetaDescription, "", "required", "", "text", "", 12))
+
+                                        }
+
+                                        <div class="row form-group">
+                                            <div class="col-sm-12 ">
+                                                <label for="">Snippet Preview</label>
+                                            </div>
+                                            <div class="col-sm-12 ">
+                                                <div class="google-snippet">
+                                                    <h3><a href="javascript:void(0);" class="page-title">@(Model.TipoCategoria.PageTitle == null ? "Título da Página" : Model.TipoCategoria.PageTitle)</a></h3>
+                                                    <span data-domain="http://meudominio.com.br/" data-route="suapagina/">http://meudominio.com.br/suapagina/@(Model.TipoCategoria.Url == null ? "post" : Model.TipoCategoria.Url)</span>
+                                                    <p>@(Model.TipoCategoria.MetaDescription == null ? "Snippet Preview - Meta Description" : Model.TipoCategoria.MetaDescription)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+

@@ -170,3 +170,16 @@ C:\Users\User 7\Desktop\magnitsky\LeaoAi\Api\obj\Debug\net8.0\refint\Api.dll
 C:\Users\User 7\Desktop\magnitsky\LeaoAi\Api\obj\Debug\net8.0\Api.pdb
 C:\Users\User 7\Desktop\magnitsky\LeaoAi\Api\obj\Debug\net8.0\Api.genruntimeconfig.cache
 C:\Users\User 7\Desktop\magnitsky\LeaoAi\Api\obj\Debug\net8.0\ref\Api.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.csproj.AssemblyReference.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.AssemblyInfoInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.AssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.csproj.CoreCompileInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.RazorAssemblyInfo.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.RazorAssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.sourcelink.json
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\refint\Api.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\obj\Debug\net8.0\Api.pdb

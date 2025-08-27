@@ -1,0 +1,15 @@
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\bin\Debug\net8.0\Framework.Domain.deps.json
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\bin\Debug\net8.0\Framework.Domain.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\bin\Debug\net8.0\Framework.Domain.pdb
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\bin\Debug\net8.0\Framework.Data.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\bin\Debug\net8.0\Framework.Data.pdb
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.csproj.AssemblyReference.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.AssemblyInfoInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.AssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.csproj.CoreCompileInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framewor.7337510F.Up2Date
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\refint\Framework.Domain.dll
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\Framework.Domain.pdb
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Domain\obj\Debug\net8.0\ref\Framework.Domain.dll

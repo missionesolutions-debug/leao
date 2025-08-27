@@ -1,0 +1,5 @@
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Services\obj\Debug\net8.0\Framework.Services.csproj.AssemblyReference.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Services\obj\Debug\net8.0\Framework.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Services\obj\Debug\net8.0\Framework.Services.AssemblyInfoInputs.cache
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Services\obj\Debug\net8.0\Framework.Services.AssemblyInfo.cs
+C:\Users\User 7\Desktop\magnitsky\LeaoAi\Framework.Services\obj\Debug\net8.0\Framework.Services.csproj.CoreCompileInputs.cache

@@ -1,0 +1,574 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.MudDebugAnalyzer = 
+build_property.MudAllowedAttributePattern = 
+build_property.MudIllegalParameters = 
+build_property.RootNamespace = Panel
+build_property.RootNamespace = Panel
+build_property.ProjectDir = C:\Users\User 7\Desktop\magnitsky\LeaoAi\Panel\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Users\User 7\Desktop\magnitsky\LeaoAi\Panel
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Btn.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQnRuLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Components/RazorFileUpload.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29tcG9uZW50c1xSYXpvckZpbGVVcGxvYWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Content/SEOComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29udGVudFxTRU9Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Conteudo/__PageSection/AddPageSectionDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29udGV1ZG9cX19QYWdlU2VjdGlvblxBZGRQYWdlU2VjdGlvbkRpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Conteudo/__PageSection/EditPageSectionDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29udGV1ZG9cX19QYWdlU2VjdGlvblxFZGl0UGFnZVNlY3Rpb25EaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Conteudo/__PageSection/PageSectionComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29udGV1ZG9cX19QYWdlU2VjdGlvblxQYWdlU2VjdGlvbkNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/CustomErrorBoundary.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxDdXN0b21FcnJvckJvdW5kYXJ5LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/RazorCheckField.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxSYXpvckNoZWNrRmllbGQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/RazorFileUpload.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxSYXpvckZpbGVVcGxvYWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/RazorFormActions.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxSYXpvckZvcm1BY3Rpb25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/RazorTextArea.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxSYXpvclRleHRBcmVhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Core/RazorTextField.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ29yZVxSYXpvclRleHRGaWVsZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Dialogs/ConfirmExcludeDialogComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcRGlhbG9nc1xDb25maXJtRXhjbHVkZURpYWxvZ0NvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/RazorComponents/Listing/DataTable.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcTGlzdGluZ1xEYXRhVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/ViewComponents/DataTables/ListPaginas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWaWV3Q29tcG9uZW50c1xEYXRhVGFibGVzXExpc3RQYWdpbmFzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Caducidade/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcQ2FkdWNpZGFkZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/ContrarazaoNulidade/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcQ29udHJhcmF6YW9OdWxpZGFkZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/ManifestacaoIndeferimento/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcTWFuaWZlc3RhY2FvSW5kZWZlcmltZW50b1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Manifestacao/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcTWFuaWZlc3RhY2FvXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Nulidade/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcTnVsaWRhZGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Oposicao/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcT3Bvc2ljYW9cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/Oposicao/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcT3Bvc2ljYW9cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/BrandHub/RecursoIndeferimento/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRIdWJcUmVjdXJzb0luZGVmZXJpbWVudG9cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Chat/CreateChat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhdFxDcmVhdGVDaGF0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Chat/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Clients/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Clients/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xEYXNoYm9hcmRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_Alerts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfQWxlcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_AtivoReturn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfQXRpdm9SZXR1cm4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_DateTimeField.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfRGF0ZVRpbWVGaWVsZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_DeadlineGenerator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfRGVhZGxpbmVHZW5lcmF0b3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_FormActions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfRm9ybUFjdGlvbnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_ImageUpload.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfSW1hZ2VVcGxvYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_MultiSelectField.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfTXVsdGlTZWxlY3RGaWVsZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_NavigationTabs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfTmF2aWdhdGlvblRhYnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_SelectField.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfU2VsZWN0RmllbGQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_SelectListItem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfU2VsZWN0TGlzdEl0ZW0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_SEO.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfU0VPLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_TextArea.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfVGV4dEFyZWEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_TextCheck.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfVGV4dENoZWNrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_TextField.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfVGV4dEZpZWxkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Components/_VideoUpload.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50c1xfVmlkZW9VcGxvYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Home/Tasks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUYXNrcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Login/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cQWNjZXNzRGVuaWVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Login/Authentication.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cQXV0aGVudGljYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Login/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Ecommerce/_Category.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xFY29tbWVyY2VcX0NhdGVnb3J5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_Clientes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX0NsaWVudGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_Email.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX0VtYWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX0xvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_Password.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX1Bhc3N3b3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_RoleGate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX1JvbGVHYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Pessoa/_Usuarios.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQZXNzb2FcX1VzdWFyaW9zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Categoria.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfQ2F0ZWdvcmlhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Cor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfQ29yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Industria.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfSW5kdXN0cmlhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Origem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfT3JpZ2VtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Preco.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfUHJlY28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_SubCategoria.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfU3ViQ2F0ZWdvcmlhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_TipoCategoria.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfVGlwb0NhdGVnb3JpYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Propriedade/_Tipologia.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xQcm9wcmllZGFkZVxfVGlwb2xvZ2lhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/Shortners/_NameShortner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xTaG9ydG5lcnNcX05hbWVTaG9ydG5lci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Ativo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfQXRpdm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Cliente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfQ2xpZW50ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Descricao.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfRGVzY3JpY2FvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Imagem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfSW1hZ2VtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_ImagemAlt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfSW1hZ2VtQWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Nome.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfTm9tZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Ordem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfT3JkZW0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Subtitulo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfU3VidGl0dWxvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Thumbnail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfVGh1bWJuYWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_ThumbnailAlt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfVGh1bWJuYWlsQWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Titulo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfVGl0dWxvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Objetos/_Video.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2JqZXRvc1xfVmlkZW8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/PandaVideo/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFuZGFWaWRlb1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Contents/_BreadCrumbList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbnRlbnRzXF9CcmVhZENydW1iTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Contents/_HeadContentCreate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbnRlbnRzXF9IZWFkQ29udGVudENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Helpers/_FirstLetters.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEhlbHBlcnNcX0ZpcnN0TGV0dGVycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Modals/_NewProject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXE1vZGFsc1xfTmV3UHJvamVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Modals/_SelectUserTask.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXE1vZGFsc1xfU2VsZWN0VXNlclRhc2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileDoc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVEb2MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileExcel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVFeGNlbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileMedia.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVNZWRpYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FilePDF.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVQREYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FilePpt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVQcHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileSwitch.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVTd2l0Y2guY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileVideo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVWaWRlby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileWord.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVXb3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/FileTypes/_FileZip.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxGaWxlVHlwZXNcX0ZpbGVaaXAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/_BreadCrumbList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxfQnJlYWRDcnVtYkxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/_HeadContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxfSGVhZENvbnRlbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/Structure/_NavTabs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN0cnVjdHVyZVxfTmF2VGFicy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/SystemViews/_Menu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN5c3RlbVZpZXdzXF9NZW51LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/SystemViews/_MenuConfigs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN5c3RlbVZpZXdzXF9NZW51Q29uZmlncy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/SystemViews/_MenuConfigsCIR.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN5c3RlbVZpZXdzXF9NZW51Q29uZmlnc0NJUi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/SystemViews/_MenuWrapper.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFN5c3RlbVZpZXdzXF9NZW51V3JhcHBlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/_LayoutBlazor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRCbGF6b3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/_LayoutExames.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRFeGFtZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Suppliers/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcGxpZXJzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/Suppliers/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcGxpZXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Catalogo/Equipes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NhdGFsb2dvXEVxdWlwZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Catalogo/Equipes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NhdGFsb2dvXEVxdWlwZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Conteudo/Paginas/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvbnRldWRvXFBhZ2luYXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Conteudo/Paginas/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvbnRldWRvXFBhZ2luYXNcRGV0YWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Conteudo/Paginas/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvbnRldWRvXFBhZ2luYXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Arquivos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcQXJxdWl2b3NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Arquivos/Modals/_Rename.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcQXJxdWl2b3NcTW9kYWxzXF9SZW5hbWUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Arquivos/_FileItem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcQXJxdWl2b3NcX0ZpbGVJdGVtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Imagens/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcSW1hZ2Vuc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Imagens/Modals/_Rename.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcSW1hZ2Vuc1xNb2RhbHNcX1JlbmFtZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Core/Imagens/_FileItem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX0NvcmVcSW1hZ2Vuc1xfRmlsZUl0ZW0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_PainelConfig/Menus/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1BhaW5lbENvbmZpZ1xNZW51c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_PainelConfig/Menus/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1BhaW5lbENvbmZpZ1xNZW51c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_PainelConfig/Pages/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1BhaW5lbENvbmZpZ1xQYWdlc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_PainelConfig/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1BhaW5lbENvbmZpZ1xQYWdlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Pessoa/Clientes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Blc3NvYVxDbGllbnRlc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Pessoa/Clientes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Blc3NvYVxDbGllbnRlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Pessoa/Usuarios/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Blc3NvYVxVc3Vhcmlvc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Pessoa/Usuarios/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Blc3NvYVxVc3Vhcmlvc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/Categorias/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXENhdGVnb3JpYXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/Categorias/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXENhdGVnb3JpYXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/SubCategorias/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXFN1YkNhdGVnb3JpYXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/SubCategorias/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXFN1YkNhdGVnb3JpYXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/TipoCategorias/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXFRpcG9DYXRlZ29yaWFzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_Propriedade/TipoCategorias/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1Byb3ByaWVkYWRlXFRpcG9DYXRlZ29yaWFzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User 7/Desktop/magnitsky/LeaoAi/Panel/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
