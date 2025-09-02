@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-pydantic
-python-dotenv # Para ler variáveis de ambiente de um arquivo .env
-# Adicione outras dependências aqui conforme implementa as funcionalidades do C#
-# Por exemplo, para autenticação, integração com APIs externas, etc.
