@@ -1,0 +1,84 @@
+# Testes para usuários
+def test_create_user():
+    from app.services.user_service import UserService
+    class DummyRepo:
+        def create(self, data): return {"id": 1, "email": data.email}
+    service = UserService(DummyRepo())
+    class DummyUser: email = "test@example.com"
+    user = service.create_user(DummyUser())
+    assert user["id"] == 1
+    assert user["email"] == "test@example.com"
+
+def test_get_user():
+    from app.services.user_service import UserService
+    class DummyRepo:
+        def get_user_by_id(self, user_id): return {"id": user_id, "email": "test@example.com"}
+    service = UserService(DummyRepo())
+    user = service.get_user(1)
+    assert user["id"] == 1
+
+def test_update_user():
+    from app.services.user_service import UserService
+    class DummyRepo:
+        def update_user(self, user_id, data): return {"id": user_id, "email": data.email}
+    service = UserService(DummyRepo())
+    class DummyUser: email = "updated@example.com"
+    user = service.update_user(1, DummyUser())
+    assert user["email"] == "updated@example.com"
+
+def test_delete_user():
+    from app.services.user_service import UserService
+    class DummyRepo:
+        def delete_user(self, user_id): return True
+    service = UserService(DummyRepo())
+    result = service.delete_user(1)
+    assert result is True
+
+# Testes para marcas
+def test_create_brand():
+    from app.services.brand_service import BrandService
+    class DummyRepo:
+        def create(self, data): return {"id": 1, "name": data.name}
+    service = BrandService(DummyRepo())
+    class DummyBrand: name = "Marca"
+    brand = service.create_brand(DummyBrand())
+    assert brand["id"] == 1
+    assert brand["name"] == "Marca"
+
+def test_get_brand():
+    from app.services.brand_service import BrandService
+    class DummyRepo:
+        def get_brand_by_id(self, brand_id): return {"id": brand_id, "name": "Marca"}
+    service = BrandService(DummyRepo())
+    brand = service.get_brand(1)
+    assert brand["id"] == 1
+
+def test_update_brand():
+    from app.services.brand_service import BrandService
+    class DummyRepo:
+        def update_brand(self, brand_id, data): return {"id": brand_id, "name": data.name}
+    service = BrandService(DummyRepo())
+    class DummyBrand: name = "NovaMarca"
+    brand = service.update_brand(1, DummyBrand())
+    assert brand["name"] == "NovaMarca"
+
+def test_delete_brand():
+    from app.services.brand_service import BrandService
+    class DummyRepo:
+        def delete_brand(self, brand_id): return True
+    service = BrandService(DummyRepo())
+    result = service.delete_brand(1)
+    assert result is True
+
+# Testes para Oráculo (IA)
+def test_oracle_query():
+    from app.services.oracle_service import OracleService
+    class DummyOpenAI:
+        def query_openai(self, prompt): return {"answer": "Resposta"}
+    service = OracleService(DummyOpenAI())
+    result = service.query_openai("Pergunta?")
+    assert result["answer"] == "Resposta"
+
+# Testes para autenticação
+def test_authenticate_user():
+    from app.utils.auth import verify_password
