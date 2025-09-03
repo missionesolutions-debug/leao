@@ -1,26 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.schemas.user_schema import UserResponse
-from app.repositories.user_repository import UserRepository
-from app.config.database import get_db
-from app.models.user_model import User
-from app.schemas.user_schema import UserCreate
-from app.services.user_service import UserService
+from fastapi import APIRouter
+from .auth_routes import router as auth_router
+from .brand_routes import router as brand_router
+# from .oracle_routes import router as oracle_router
+from .user_routes import router as user_router
 
 router = APIRouter()
-
-
-
-# User routes
-@router.get("/usuarios/")
-def read_users(db: Session = Depends(get_db)):
-    users = db.query(User).all()
-    return users
-
-@router.post("/register", response_model=UserResponse)
-def register(user: UserCreate, db: Session = Depends(get_db)):
-    user_repository = UserRepository(db)
-    user_service = UserService(user_repository)
-    if user_service.get_user_by_email(user.email):
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return user_service.create_user(user)
+router.include_router(auth_router, prefix="/auth")
+router.include_router(brand_router, prefix="/brand")
+# router.include_router(oracle_router, prefix="/oracle")
+router.include_router(user_router, prefix="/usuarios")

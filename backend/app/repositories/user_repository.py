@@ -20,7 +20,7 @@ class UserRepository:
         self.db.refresh(user)
         return user
 
-    def get_user_by_id(self, user_id):
+    def get_by_id(self, user_id):
         return self.db.query(User).filter(User.id == user_id).first()
 
     def get_by_email(self, email):
@@ -35,3 +35,6 @@ class UserRepository:
         self.db.query(User).filter(User.id == user_id).delete()
         self.db.commit()
         return {"message": "User deleted successfully"}
+    
+    def get_all_users(self):
+        return self.db.query(User).all()

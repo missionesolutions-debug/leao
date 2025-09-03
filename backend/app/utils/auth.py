@@ -2,10 +2,13 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
+from fastapi.security import APIKeyHeader
 from app.config.settings import settings
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+api_key_scheme = APIKeyHeader(name="Authorization")
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -35,3 +38,23 @@ def verify_token(token: str) -> dict:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+def get_current_user(token: str = Depends(api_key_scheme)):
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token ausente",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    # Remove o prefixo 'Bearer ' se presente
+    if token.lower().startswith("bearer "):
+        token = token[7:]
+    payload = verify_token(token)
+    user_id = payload.get("sub")
+    if user_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return payload

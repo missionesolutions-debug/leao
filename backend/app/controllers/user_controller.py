@@ -1,54 +1,38 @@
-from fastapi import Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
-from app.repositories.user_repository import UserRepository
-from app.schemas.user_schema import UserCreate
 from app.services.user_service import UserService
+from app.repositories.user_repository import UserRepository
+from app.schemas.user_schema import UserCreate, UserUpdate, UserResponse
 from app.config.database import get_db
+from app.utils.auth import get_current_user
 
-def register(user: UserCreate, db: Session = Depends(get_db)):
-    user_repository = UserRepository(db)
-    user_service = UserService(user_repository)
-    if user_service.get_user_by_email(user.email):
-        return {"error": "Email already registered"}
-    return user_service.create_user(user, db)
-class UserController:
-    def __init__(self, user_service):
-        self.user_service = user_service
+router = APIRouter()
 
-    async def create_user(self, user_data, db: Session):
-        """
-        Handle user creation request.
-        :param user_data: Data for the new user.
-        :param db: Sessão do banco de dados.
-        :return: Created user information.
-        """
-        return await self.user_service.create_user(user_data, db)
+@router.post("/usuarios/", response_model=UserResponse)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    user_service = UserService(UserRepository(db))
+    return user_service.create_user(user)
 
-    async def get_user(self, user_id, db: Session):
-        """
-        Handle request to retrieve user information.
-        :param user_id: ID of the user to retrieve.
-        :param db: Sessão do banco de dados.
-        :return: User information.
-        """
-        return await self.user_service.get_user(user_id, db)
+@router.get("/usuarios/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    user_service = UserService(UserRepository(db))
+    user = user_service.get_user(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return user
 
-    async def update_user(self, user_id, user_data, db: Session):
-        """
-        Handle request to update user information.
-        :param user_id: ID of the user to update.
-        :param user_data: Updated user data.
-        :param db: Sessão do banco de dados.
-        :return: Updated user information.
-        """
-        return await self.user_service.update_user(user_id, user_data, db)
+@router.put("/usuarios/{user_id}", response_model=UserResponse)
+def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    user_service = UserService(UserRepository(db))
+    user = user_service.update_user(user_id, user_update)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return user
 
-    async def delete_user(self, user_id, db: Session):
-        """
-        Handle request to delete a user.
-        :param user_id: ID of the user to delete.
-        :param db: Sessão do banco de dados.
-        :return: Confirmation of deletion.
-        """
-        return await self.user_service.delete_user(user_id, db)
+@router.delete("/usuarios/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    user_service = UserService(UserRepository(db))
+    result = user_service.delete_user(user_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return {"detail": "Usuário deletado com sucesso"}
