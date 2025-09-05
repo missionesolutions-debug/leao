@@ -1,0 +1,12 @@
+﻿namespace Api.Models.Factory
+{
+    public class ProjectImageResponse
+    {
+        public int Id { get; set; }
+        public string UrlSource { get; set; }
+        public int ProjectBlockId { get; set; }
+        public DateTime DataCadastro { get; set; }
+        public required string Description { get; set; }
+        public required bool EnableOnReport { get; set; }
+    }
+}
