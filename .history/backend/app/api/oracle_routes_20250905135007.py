@@ -3,6 +3,7 @@ from app.services.oracle_service import OracleService
 from app.schemas.oracle_schema import OracleRequest, OracleResponse
 from app.utils.auth import get_current_user
 from app.integrations.openai_client import OpenAIClient
+from app.controllers import oracle_controller
 
 router = APIRouter()
 
@@ -14,5 +15,5 @@ async def query_oracle(request: OracleRequest, current_user: str = Depends(get_c
     """
     Endpoint to query the Oracle AI for information related to intellectual property.
     """
-    answer = oracle_service.query_openai(request.query)
-    return OracleResponse(response=answer, confidence=1.0)  # Ajuste o confidence conforme sua lógica
+    response = await oracle_controller.query_oracle(request.query)
+    return response

@@ -14,5 +14,5 @@ async def query_oracle(request: OracleRequest, current_user: str = Depends(get_c
     """
     Endpoint to query the Oracle AI for information related to intellectual property.
     """
-    answer = oracle_service.query_openai(request.query)
-    return OracleResponse(response=answer, confidence=1.0)  # Ajuste o confidence conforme sua lógica
+    response = await oracle_controller.query_oracle(request)
+    return response

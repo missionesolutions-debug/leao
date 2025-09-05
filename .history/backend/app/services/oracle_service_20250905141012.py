@@ -2,7 +2,7 @@ class OracleService:
     def __init__(self, openai_client):
         self.openai_client = openai_client
 
-    def query_openai(self, prompt: str) -> dict:
+    async def query_openai(self, prompt: str) -> dict:
         response = self.openai_client.query_openai(
             model="gpt-3.5-turbo",
             prompt=prompt,

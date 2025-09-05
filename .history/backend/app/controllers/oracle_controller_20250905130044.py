@@ -11,7 +11,7 @@ oracle_service = OracleService(openai_client)
 @router.post("/oracle/query", response_model=OracleResponse)
 def query_oracle(request: OracleRequest, user=Depends(get_current_user)):
     try:
-        response = oracle_service.query_openai(request.query)
+        response = oracle_service.query_openai(request.question)
         return OracleResponse(answer=response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

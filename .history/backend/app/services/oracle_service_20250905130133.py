@@ -2,9 +2,9 @@ class OracleService:
     def __init__(self, openai_client):
         self.openai_client = openai_client
 
-    def query_openai(self, prompt: str) -> dict:
-        response = self.openai_client.query_openai(
-            model="gpt-3.5-turbo",
+    async def query_openai(self, prompt: str) -> dict:
+        response = await self.openai_client.create_completion(
+            model="text-davinci-003",
             prompt=prompt,
             max_tokens=150
         )

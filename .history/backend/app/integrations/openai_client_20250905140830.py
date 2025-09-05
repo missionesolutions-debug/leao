@@ -5,7 +5,7 @@ class OpenAIClient:
     def __init__(self):
         self.client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
-    def query_openai(self, prompt: str, model: str = "gpt-3.5-turbo", max_tokens: int = 150) -> str:
+    async def query_openai(self, prompt: str, model: str = "gpt-3.5-turbo", max_tokens: int = 150) -> str:
         try:
             response = self.client.chat.completions.create(
                 model=model,
