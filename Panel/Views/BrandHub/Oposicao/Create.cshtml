@@ -1,0 +1,218 @@
+﻿@model Panel.Models.BrandsHub.OposicaoRequestModel
+
+@{
+    ViewData["Title"] = "Petição de Oposição ao Registro de Marca";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (ViewBag.Prompt != null)
+{
+    <textarea>@Html.Raw(ViewBag.Prompt)</textarea>
+}
+
+<form asp-action="Create" method="post">
+    <div class="row">
+        <!-- Processo Contestado -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="ProcessoContestado" class="control-label">Processo Contestado</label>
+                <input asp-for="ProcessoContestado" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Número do processo administrativo em 9 dígitos do pedido contestado
+                </small>
+            </div>
+        </div>
+
+        <!-- Marca Contestada -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="MarcaContestada" class="control-label">Marca Contestada</label>
+                <input asp-for="MarcaContestada" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Sinal distintivo objeto da oposição, exatamente como publicado
+                </small>
+            </div>
+        </div>
+
+        <!-- Classe Contestada -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="ClasseContestada" class="control-label">Classe Contestada</label>
+                <input asp-for="ClasseContestada" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Classificação Internacional Nice (NCL) do pedido contestado
+                </small>
+            </div>
+        </div>
+
+        <!-- Especificação Contestada -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="EspecificacaoContestada" class="control-label">Especificação Contestada</label>
+                <textarea asp-for="EspecificacaoContestada" class="form-control round-borders"></textarea>
+                <small class="form-text text-muted">
+                    Descrição completa dos produtos/serviços do pedido contestado
+                </small>
+            </div>
+        </div>
+
+        <!-- Titular Contestado -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="TitularContestado" class="control-label">Titular Contestado</label>
+                <input asp-for="TitularContestado" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Nome completo do titular do pedido contestado
+                </small>
+            </div>
+        </div>
+
+        <!-- Número RPI -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="NumeroRpi" class="control-label">Número RPI</label>
+                <input asp-for="NumeroRpi" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Número da Revista da Propriedade Industrial onde foi publicado o pedido
+                </small>
+            </div>
+        </div>
+
+        <!-- Data RPI -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="DataRpi" class="control-label">Data RPI</label>
+                <input asp-for="DataRpi" class="form-control round-borders" type="date" />
+                <small class="form-text text-muted">
+                    Data de publicação na RPI (DD/MM/AAAA)
+                </small>
+            </div>
+        </div>
+
+        <!-- Nome do Cliente -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="NomeCliente" class="control-label">Nome do Cliente</label>
+                <input asp-for="NomeCliente" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Nome completo do opoente (cliente)
+                </small>
+            </div>
+        </div>
+
+        <!-- Marca Anterior -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="MarcaAnterior" class="control-label">Marca Anterior</label>
+                <input asp-for="MarcaAnterior" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Sinal distintivo anterior base da oposição
+                </small>
+            </div>
+        </div>
+
+        <!-- Processo Anterior -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="ProcessoAnterior" class="control-label">Processo Anterior</label>
+                <input asp-for="ProcessoAnterior" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Número do processo da marca anterior
+                </small>
+            </div>
+        </div>
+
+        <!-- Classe Anterior -->
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="ClasseAnterior" class="control-label">Classe Anterior</label>
+                <input asp-for="ClasseAnterior" class="form-control round-borders" />
+                <small class="form-text text-muted">
+                    Classificação Nice da marca anterior
+                </small>
+            </div>
+        </div>
+
+        <!-- Produtos/Serviços Anteriores -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="ProdutosAnterior" class="control-label">Produtos/Serviços Anteriores</label>
+                <textarea asp-for="ProdutosAnterior" class="form-control round-borders"></textarea>
+                <small class="form-text text-muted">
+                    Especificação da marca anterior
+                </small>
+            </div>
+        </div>
+
+        <!-- Tipo de Conflito -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="TipoConflito" class="control-label">Tipo de Conflito</label>
+                <select asp-for="TipoConflito" class="form-control">
+                    <option value="">Selecione o tipo de conflito</option>
+                    <option value="Confusao">Confusão quanto à origem</option>
+                    <option value="Associacao">Associação indevida</option>
+                </select>
+                <small class="form-text text-muted">
+                    Natureza do conflito: confusão quanto à origem ou associação indevida
+                </small>
+            </div>
+        </div>
+
+        <!-- Tipo de Reprodução -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="TipoReproducao" class="control-label">Tipo de Reprodução</label>
+                <select asp-for="TipoReproducao" class="form-control">
+                    <option value="">Selecione o tipo de reprodução</option>
+                    <option value="Total">Reprodução Total</option>
+                    <option value="Parcial">Reprodução Parcial</option>
+                    <option value="Imitacao">Imitação</option>
+                </select>
+                <small class="form-text text-muted">
+                    Modalidade de violação: reprodução total, parcial ou imitação
+                </small>
+            </div>
+        </div>
+
+        <!-- Análise Mercadológica -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="AnaliseMercadologica" class="control-label">Análise Mercadológica</label>
+                <textarea asp-for="AnaliseMercadologica" class="form-control round-borders"></textarea>
+                <small class="form-text text-muted">
+                    Análise da afinidade entre produtos/serviços
+                </small>
+            </div>
+        </div>
+
+        <!-- Precedentes [campo opcional] -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="Precedentes" class="control-label">
+                    Precedentes <span class="text-muted">[campo opcional]</span>
+                </label>
+                <textarea asp-for="Precedentes" class="form-control round-borders"></textarea>
+                <small class="form-text text-muted">
+                    Decisões anteriores do INPI em casos similares
+                </small>
+            </div>
+        </div>
+
+        <!-- Coexistência [campo opcional] -->
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label asp-for="Coexistencia" class="control-label">
+                    Coexistência <span class="text-muted">[campo opcional]</span>
+                </label>
+                <textarea asp-for="Coexistencia" class="form-control round-borders"></textarea>
+                <small class="form-text text-muted">
+                    Registros de marcas semelhantes coexistentes no mercado
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>

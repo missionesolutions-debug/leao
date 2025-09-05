@@ -1,0 +1,53 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="col-lg-@Model.Col">
+    <div class="form-group">
+        <label class="form-label" for="@Model.Name">@Model.Label</label>
+        <div class="form-control-wrap">
+            <InputTextArea class="@($"form-control {Model.Class}")"
+                           id="@Model.Name"
+                           name="@Model.Name"
+                           aria-describedby="@($"small-{Model.Name}")"
+                           placeholder="@Model.Placeholder"
+                           @attributes="AdditionalAttributes"
+                           Value="@Model.Value"
+                           ValueChanged="HandleChange"
+                           ValueExpression="@(() => Model.Value)"/>
+            @if (Model.Obs != "")
+            {
+                <small id="small-@Model.Name" class="form-text text-muted">@((MarkupString)Model.Obs)</small>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public TextField Model { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [JSInvokable]
+    public async Task HandleChange(string value)
+    {
+        Model.Value = value;
+        await ValueChanged.InvokeAsync(Model.Value);
+    }
+
+    private Dictionary<string, object> AdditionalAttributes => new Dictionary<string, object>
+    {
+        { "name", Model.Name },
+        { "required", Model.Required.Contains("required")}
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Model.Name == "Descricao")
+        {
+            await JSRuntime.InvokeVoidAsync("initializeClassicEditor", DotNetObjectReference.Create(this));
+        }
+    }
+}

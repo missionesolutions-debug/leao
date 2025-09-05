@@ -1,0 +1,358 @@
+﻿@model Panel.Models.BrandsHub.RecursoIndeferimentoRequestModel
+
+@{
+    ViewData["Title"] = "Petição de Recurso ao Indeferimento do Registro de Marca";
+}
+
+@if (ViewBag.Prompt != null)
+{
+
+    <div class="nk-content">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="nk-block">
+                        <div class="card">
+                            <div class="card-inner">
+
+                                <!-- Abas -->
+                                <ul class="nav nav-tabs" id="oposicaoTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="peticao-tab" data-bs-toggle="tab" href="#peticao" role="tab" aria-controls="peticao" aria-selected="true">Petição Gerada</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="historico-tab" data-bs-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico do Chat</a>
+                                    </li>
+                                </ul>
+
+                                <!-- Conteúdo das abas -->
+                                <div class="tab-content pt-4" id="oposicaoTabsContent">
+                                    <!-- Aba 1: Petição -->
+                                    <div class="tab-pane fade show active" id="peticao" role="tabpanel" aria-labelledby="peticao-tab">
+                                        <h4 class="nk-block-title page-title">Petição de Recurso ao Indeferimento Gerada</h4>
+                                        <p class="text-muted mb-4">Revise o conteúdo abaixo. Caso deseje, você pode adicionar observações e reenviar para gerar um novo conteúdo baseado nisso.</p>
+
+                                        <!-- Conteúdo do prompt -->
+                                        <div id="prompt-box" class="border rounded p-3 mb-3">
+                                            @Html.Raw(ViewBag.Prompt.Replace("```html", "").Replace("```", ""))
+                                        </div>
+
+                                        <!-- Formulário de observações -->
+                                        <form asp-action="RecursoIndeferimentoRepost" asp-controller="BrandHub" method="post">
+                                            <input type="hidden" name="PromptAnterior" value="@ViewBag.Prompt" />
+                                            <input type="hidden" name="ChatIAId" value="@ViewBag.ChatId" />
+
+                                            <div class="form-group">
+                                                <label for="Observacoes">Observações adicionais</label>
+                                                <textarea class="form-control" name="Observacoes" rows="5" style="min-height:215px" placeholder="Inclua sugestões, correções ou informações complementares..."></textarea>
+                                                <small class="text-muted">Essas observações serão consideradas para gerar um novo conteúdo.</small>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary mt-3">Reenviar com Observações</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Aba 2: Histórico -->
+                                    <div class="tab-pane fade" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                        <div id="chat-history" class="">
+                                            <h4 class="nk-block-title page-title">Oráculo Leão</h4>
+                                            <!-- Campo oculto para manter o chatIAId -->
+                                            <input type="hidden" id="chatIAId" value="@ViewBag.ChatIAId" />
+
+                                            <div id="chat-box" class="border rounded p-3 mb-3">
+                                                <!-- Renderiza as mensagens já existentes -->
+                                                @foreach (var msg in Model.ListMessages.messageChatResponses.Where(b => b.IsChatAnswer == true))
+                                                {
+                                                    // Converte o timestamp Unix para data legível
+                                                    var unixTime = 0L;
+                                                    long.TryParse(msg.Time, out unixTime);
+                                                    var formattedTime = DateTimeOffset.FromUnixTimeSeconds(unixTime)
+                                                    .LocalDateTime.ToString("dd MMM, yyyy h:mm tt");
+                                                    <div class="message @(msg.IsChatAnswer ? "bot" : "user")">
+                                                        <strong>@(msg.IsChatAnswer ? "Oráculo Leão:" : "Você:")</strong> @Html.Raw(msg.Message)
+                                                        <br /><small class="text-muted" style="font-size: 0.8em;">@formattedTime</small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- tab-content -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    <div class="nk-content ">
+
+        <div class="nk-content-inner">
+            <div class="nk-block-head">
+                <div class="nk-block-between">
+                    <div class="nk-block-head-content">
+                        <h4 class="nk-block-title fw-normal">Oposição de Marcas</h4>
+                        <div class="nk-block-des">
+                            <nav>
+                                <ul class="breadcrumb breadcrumb-arrow">
+                                    <li class="breadcrumb-item"><a href="~/">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="~/">Hub de Marcas</a></li>
+                                    <li class="breadcrumb-item"><a href="/brandhub?typed=recursoindeferimento">Recursos ao Indeferimento</a></li>
+                                    <li class="breadcrumb-item active">Recurso ao Indeferimento</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="nk-content-body">
+
+                <div class="nk-block">
+                    <div class="card">
+                        <div class="card-inner">
+                            <h4 class="nk-block-title page-title">Petição de Recurso ao Indeferimento</h4>
+                            <p class="text-muted mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+
+                            <form action="/BrandHub/RecursoIndeferimento" method="post">
+                                <div id="task-type-container" class="row">
+
+                                    <!-- Número do Processo -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="processo_numero">Número do Processo</label>
+                                            <input type="text" class="round-borders form-control" id="processo_numero" name="ProcessoNumero" required>
+                                            <div class="field-help-text">Número do processo administrativo em 9 dígitos do pedido indeferido.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Marca -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="processo_marca">Marca</label>
+                                            <input type="text" class="round-borders form-control" id="processo_marca" name="ProcessoMarca" required>
+                                            <div class="field-help-text">Sinal distintivo objeto do recurso.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Classe Nice -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="processo_classe">Classe Nice</label>
+                                            <input type="text" class="round-borders form-control" id="processo_classe" name="ProcessoClasse" required>
+                                            <div class="field-help-text">Classificação Internacional Nice completa.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Especificação -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="processo_especificacao">Especificação</label>
+                                            <textarea class="round-borders form-control" id="processo_especificacao" name="ProcessoEspecificacao" required></textarea>
+                                            <div class="field-help-text">Descrição completa dos produtos/serviços.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Titular -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="processo_titular">Titular</label>
+                                            <input type="text" class="round-borders form-control" id="processo_titular" name="ProcessoTitular" required>
+                                            <div class="field-help-text">Denominação completa do recorrente.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- RPI do Indeferimento -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="indeferimento_rpi">RPI do Indeferimento</label>
+                                            <input type="text" class="round-borders form-control" id="indeferimento_rpi" name="IndeferimentoRpi" required>
+                                            <div class="field-help-text">Número da Revista da Propriedade Industrial.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Data Indeferimento -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="indeferimento_data_rpi">Data Indeferimento</label>
+                                            <input type="date" class="round-borders form-control" id="indeferimento_data_rpi" name="IndeferimentoDataRpi" required>
+                                            <div class="field-help-text">Data da publicação do indeferimento.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Base Legal do Indeferimento -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="indeferimento_fundamento">Base Legal do Indeferimento</label>
+                                            <input type="text" class="round-borders form-control" id="indeferimento_fundamento" name="IndeferimentoFundamento" required>
+                                            <div class="field-help-text">Citação literal do despacho de indeferimento.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Motivo do Indeferimento -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="indeferimento_motivo">Motivo do Indeferimento</label>
+                                            <textarea class="round-borders form-control" id="indeferimento_motivo" name="IndeferimentoMotivo" required></textarea>
+                                            <div class="field-help-text">Descrição técnica do motivo do indeferimento.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Os demais campos opcionais continuam sem required abaixo... -->
+                                    <!-- Anterioridade Citada (opcional) -->
+                                    <div class="col-sm-4">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="indeferimento_anterioridade">Anterioridade Citada</label>
+                                            <input type="text" class="round-borders form-control" id="indeferimento_anterioridade" name="IndeferimentoAnterioridade">
+                                        </div>
+                                    </div>
+
+                                    <!-- Conjunto Marcário -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_distintividade_conjunto_marcario">Conjunto Marcário</label>
+                                            <textarea class="round-borders form-control" id="defesa_distintividade_conjunto_marcario" name="DefesaDistintividadeConjuntoMarcario"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Elementos Distintivos -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_distintividade_elementos_distintivos">Elementos Distintivos</label>
+                                            <textarea class="round-borders form-control" id="defesa_distintividade_elementos_distintivos" name="DefesaDistintividadeElementosDistintivos"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Precedentes de Distintividade (opcional) -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_distintividade_precedentes">Precedentes de Distintividade</label>
+                                            <textarea class="round-borders form-control" id="defesa_distintividade_precedentes" name="DefesaDistintividadePrecedentes"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Registros Similares (opcional) -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_coexistencia_registros_similares">Registros Similares</label>
+                                            <textarea class="round-borders form-control" id="defesa_coexistencia_registros_similares" name="DefesaCoexistenciaRegistrosSimilares"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Segmento de Mercado (opcional) -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_coexistencia_segmento">Segmento de Mercado</label>
+                                            <textarea class="round-borders form-control" id="defesa_coexistencia_segmento" name="DefesaCoexistenciaSegmento"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Público-Alvo Distinto (opcional) -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_coexistencia_publico">Público-Alvo Distinto</label>
+                                            <textarea class="round-borders form-control" id="defesa_coexistencia_publico" name="DefesaCoexistenciaPublico"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Outros Argumentos (opcional) -->
+                                    <div class="col-sm-12">
+                                        <div class="form-field-container">
+                                            <label class="form-label" for="defesa_outros">Outros Argumentos</label>
+                                            <textarea class="round-borders form-control" id="defesa_outros" name="DefesaOutros"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Enviar Recurso</button>
+                            </form>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+@if (ViewBag.Prompt != null)
+{
+    <style>
+
+        /* Caixa de chat */
+        #chat-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Estilo base das mensagens */
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            max-width: 70%;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+            /* Mensagens do usuário */
+            .message.user {
+                background-color: #dcf8c6;
+                text-align: right;
+                float: right;
+                border-bottom-right-radius: 0;
+                clear: both;
+            }
+
+            /* Mensagens do ChatBot */
+            .message.bot {
+                background-color: #f1f0f0;
+                text-align: left;
+                float: left;
+                border-bottom-left-radius: 0;
+                clear: both;
+            }
+
+            /* Limpeza dos floats após cada mensagem */
+            .message::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+        /* Indicador de "digitando" */
+        .typing {
+            font-style: italic;
+            color: #888;
+        }
+
+    </style>
+
+    @section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#oposicaoTabs a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            });
+        });
+    </script>
+    }
+}
+

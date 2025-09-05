@@ -1,0 +1,27 @@
+{
+  "name": "xcodie-sites",
+  "version": "0.0.3",
+  "description": "",
+  "author": "codie",
+  "private": false,
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "main": "./dist/index",
+  "module": "./dist/index",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "generate-types": "node Gerador.js",
+    "build": "rimraf dist && tsc"
+  },
+  "dependencies": {
+    "rimraf": "^6.0.1",
+    "swagger-generator-codie": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "openapi-typescript": "^7.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.2"
+  }
+}

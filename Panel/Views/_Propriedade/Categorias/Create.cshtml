@@ -1,0 +1,125 @@
+﻿@model Painel.Models.Pages.CategoriasPage
+
+@using Painel.Models.Components
+@using Panel.Components.RazorComponents
+@{
+    ContentConfig bread = Model.ContentConfig;
+    bread.Id = Model.Categoria.Id;
+    Layout = "_LayoutBlazor";
+}
+
+@{
+    ViewData["Title"] = "Cadastro de " + bread.Tela;
+}
+
+<div class="nk-block nk-block-lg">
+
+    @await Html.PartialAsync("~/Views/Shared/Structure/_HeadContent.cshtml", bread)
+
+    @if (bread.NavTabs == true)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Structure/_NavTabs.cshtml", bread)
+    }
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabItem5">
+            <form action="@bread.Post" method="post">
+
+                <div class="row g-gs">
+                    <div class="col-lg-8">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+
+                                <input type="hidden" name="Id" value="@Model.Categoria.Id" />
+
+                                @Html.HiddenFor(model => model.Categoria.Excluido)
+                                @Html.ValidationSummary(true)
+                                @Html.AntiForgeryToken()
+
+                                <div class="row g-gs">
+
+                                    @if (Model.Page.acTitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Titulo.cshtml", Model.Categoria)
+                                    }
+
+
+                                    @if (Model.Page.acSubtitulo == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Subtitulo.cshtml", Model.Categoria)
+                                    }
+
+                                    @if (Model.Page.acDescricao == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Descricao.cshtml", Model.Categoria)
+                                    }
+
+                                    @if (Model.Page.acAtivo == true)
+                                    {
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="g-3 align-center flex-wrap">
+                                                    @await Html.PartialAsync("~/Views/Objetos/_Ativo.cshtml", Model.Categoria)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @await Html.PartialAsync("~/Views/Components/_FormActions.cshtml")
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        @if (Model.Page.acPageTitle is true || Model.Page.acMetaDescription is true || Model.Page.acUrl is true)
+                        {
+                            @await Html.PartialAsync("~/Views/Components/_SEO.cshtml", Model.Categoria)
+                        }
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="row g-gs">
+                                    @if (Model.Page.acOrdem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Ordem.cshtml", Model.Categoria)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <div class="row g-gs">
+                                    @if (Model.Page.acImagem == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Imagem.cshtml", Model.Categoria)
+                                        @await Html.PartialAsync("~/Views/Objetos/_ImagemAlt.cshtml", Model.Categoria)
+                                    }
+                                    @if (Model.Page.acThumbnail == true)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Objetos/_Thumbnail.cshtml", Model.Categoria)
+                                        @await Html.PartialAsync("~/Views/Objetos/_ThumbnailAlt.cshtml", Model.Categoria)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+
+         
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
