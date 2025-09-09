@@ -126,6 +126,39 @@
                                         <div class="nk-content-body">
                                             <div class="nk-block">
                                                 <div class="card-inner">
+                                                    <!-- Formulário de Login -->
+                                                    <form id="loginForm" style="margin-bottom:20px;">
+                                                    <h4>Login</h4>
+                                                    <input type="email" id="email" placeholder="E-mail" required>
+                                                    <input type="password" id="password" placeholder="Senha" required>
+                                                    <button type="submit">Entrar</button>
+                                                    </form>
+
+                                                    <!-- Formulário de Cadastro -->
+                                                    <form id="cadastroForm" style="margin-bottom:20px;">
+                                                    <h4>Cadastro</h4>
+                                                    <input type="text" id="cadastroUsername" placeholder="Nome de usuário" required>
+                                                    <input type="email" id="cadastroEmail" placeholder="E-mail" required>
+                                                    <input type="password" id="cadastroPassword" placeholder="Senha" required>
+                                                    <button type="submit">Cadastrar</button>
+                                                    </form>
+
+                                                    <!-- Buscar usuário -->
+                                                    <div style="margin-bottom:20px;">
+                                                    <h4>Buscar Usuário</h4>
+                                                    <input type="text" id="userId" placeholder="ID do usuário">
+                                                    <button id="buscarUsuarioBtn">Buscar</button>
+                                                    </div>
+
+                                                    <!-- Consulta Oracle/OpenAI -->
+                                                    <form id="oracleForm" style="margin-bottom:20px;">
+                                                    <h4>Consulta Oracle</h4>
+                                                    <input type="text" id="oraclePergunta" placeholder="Digite sua pergunta" required>
+                                                    <button type="submit">Consultar</button>
+                                                    </form>
+
+                                                    <!-- Exibir resposta Oracle -->
+                                                    <div id="oracleResposta"></div>
                                                     <h4 class="nk-block-title page-title">Bem-vindo à IA da Leão</h4>
                                                     <p class="text-muted mb-4">Sua plataforma inteligente para gestão e automação de processos em propriedade intelectual.</p>
                                                     <div class="row">
