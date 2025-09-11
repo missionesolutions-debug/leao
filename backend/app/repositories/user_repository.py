@@ -1,4 +1,6 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from app.models.user_model import User
 from passlib.context import CryptContext
 from app.models.user_model import User
@@ -17,9 +19,15 @@ class UserRepository:
             hashed_password=hashed_password,
             )
         self.db.add(user)
-        self.db.commit()
-        self.db.refresh(user)
-        return user
+        try:
+            self.db.commit()
+            self.db.refresh(user)
+            return user
+        except IntegrityError as e:
+            self.db.rollback()
+            if "duplicate key value violates unique constraint" in str(e):
+                raise HTTPException(status_code=400, detail="Nome de usuário ou e-mail já cadastrado.")
+            raise HTTPException(status_code=500, detail="Erro ao cadastrar usuário.")
 
     def get_by_id(self, user_id):
         return self.db.query(User).filter(User.id == user_id).first()

@@ -16,6 +16,8 @@ async function login(email, password) {
   if (response.ok) {
     localStorage.setItem("token", data.access_token);
     alert("Login realizado!");
+    // Redirecione para a página principal
+    window.location.replace("index.html");
   } else {
     alert(data.detail || "Erro ao fazer login");
   }
@@ -31,6 +33,7 @@ async function cadastrarUsuario(usuario) {
   const data = await response.json();
   if (response.ok) {
     alert("Usuário cadastrado com sucesso!");
+    window.location.replace("login.html");
   } else {
     alert(data.detail || "Erro ao cadastrar usuário");
   }
