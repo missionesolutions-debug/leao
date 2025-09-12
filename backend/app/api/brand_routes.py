@@ -20,6 +20,12 @@ async def get_brand(brand_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Brand not found")
     return brand
 
+@router.get("/", response_model=list[BrandResponse])
+async def get_all_brands(db: Session = Depends(get_db)):
+    brand_repository = BrandRepository(db)
+    brands = brand_repository.get_all_brands()
+    return brands
+
 @router.put("/{brand_id}", response_model=BrandResponse)
 async def update_brand(brand_id: int, brand: BrandUpdate, db: Session = Depends(get_db)):
     brand_repository = BrandRepository(db)

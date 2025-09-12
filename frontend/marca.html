@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Hub de Marcas</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body class="nk-body bg-lighter npc-default has-sidebar">
+  <a href="index.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para o início">
+  &#8592; <!-- seta para a esquerda -->
+</a>
+  <div class="container" style="max-width:600px; margin-top:80px;">
+    <h2>Hub de Marcas</h2>
+    <form id="marcaForm">
+      <div class="form-group">
+        <label for="marcaNome">Nome da Marca</label>
+        <input type="text" id="marcaNome" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Cadastrar Marca</button>
+    </form>
+    <hr>
+    <h4>Buscar marca por ID</h4>
+    <div class="form-inline mb-3">
+      <input type="number" id="marcaIdBusca" class="form-control" placeholder="ID da marca">
+      <button id="buscarMarcaBtn" class="btn btn-info ml-2">Buscar</button>
+    </div>
+    <div id="marcaBuscaResultado"></div>
+    <hr>
+    <h4>Marcas cadastradas</h4>
+    <ul id="listaMarcas" class="list-group"></ul>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const marcaForm = document.getElementById("marcaForm");
+      const listaMarcas = document.getElementById("listaMarcas");
+      const marcaIdBusca = document.getElementById("marcaIdBusca");
+      const buscarMarcaBtn = document.getElementById("buscarMarcaBtn");
+      const marcaBuscaResultado = document.getElementById("marcaBuscaResultado");
+
+      // Função para cadastrar marca
+      marcaForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const nome = document.getElementById("marcaNome").value;
+        cadastrarMarca({ name: nome });
+      });
+
+      // Função para cadastrar marca no backend
+      function cadastrarMarca(marca) {
+        const token = localStorage.getItem("token");
+        fetch("http://localhost:8000/brand/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(marca),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.id) {
+            alert("Marca cadastrada com sucesso!");
+            listarMarcas();
+            marcaForm.reset();
+          } else {
+            alert(data.detail || "Erro ao cadastrar marca");
+          }
+        })
+        .catch(() => alert("Erro de conexão com o servidor"));
+      }
+
+      // Função para listar marcas do backend
+      function listarMarcas() {
+        const token = localStorage.getItem("token");
+        fetch("http://localhost:8000/brand/", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+          listaMarcas.innerHTML = "";
+          if (Array.isArray(data)) {
+            data.forEach(marca => {
+              const li = document.createElement("li");
+              li.className = "list-group-item d-flex justify-content-between align-items-center";
+              li.innerHTML = `
+                <span>${marca.name || marca.nome} (ID: ${marca.id})</span>
+                <div>
+                  <button class="btn btn-sm btn-warning mr-2" onclick="editarMarcaPrompt(${marca.id}, '${marca.name || marca.nome}')">Editar</button>
+                  <button class="btn btn-sm btn-danger" onclick="excluirMarca(${marca.id})">Excluir</button>
+                </div>
+              `;
+              listaMarcas.appendChild(li);
+            });
+          } else {
+            listaMarcas.innerHTML = "<li class='list-group-item'>Nenhuma marca encontrada.</li>";
+          }
+        })
+        .catch(() => {
+          listaMarcas.innerHTML = "<li class='list-group-item'>Erro ao carregar marcas.</li>";
+        });
+      }
+
+      // Função para excluir marca
+      window.excluirMarca = function(id) {
+        const token = localStorage.getItem("token");
+        if (confirm("Tem certeza que deseja excluir esta marca?")) {
+          fetch(`http://localhost:8000/brand/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.detail || "Marca excluída com sucesso!");
+            listarMarcas();
+          })
+          .catch(() => alert("Erro ao excluir marca"));
+        }
+      };
+
+      // Função para editar marca (prompt simples)
+      window.editarMarcaPrompt = function(id, nomeAtual) {
+        const novoNome = prompt("Editar nome da marca:", nomeAtual);
+        if (novoNome && novoNome !== nomeAtual) {
+          editarMarca(id, { name: novoNome });
+        }
+      };
+
+      // Função para editar marca no backend
+      function editarMarca(id, marca) {
+        const token = localStorage.getItem("token");
+        fetch(`http://localhost:8000/brand/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(marca),
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.detail || "Marca atualizada com sucesso!");
+          listarMarcas();
+        })
+        .catch(() => alert("Erro ao editar marca"));
+      }
+
+      // Função para buscar marca por ID
+      buscarMarcaBtn.addEventListener("click", function () {
+        const id = marcaIdBusca.value;
+        if (!id) {
+          marcaBuscaResultado.innerHTML = "<div class='alert alert-warning'>Informe o ID da marca.</div>";
+          return;
+        }
+        buscarMarcaPorId(id);
+      });
+
+      function buscarMarcaPorId(id) {
+        const token = localStorage.getItem("token");
+        fetch(`http://localhost:8000/brand/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.id) {
+            marcaBuscaResultado.innerHTML = `<div class='alert alert-success'>Marca encontrada: <strong>${data.name || data.nome}</strong> (ID: ${data.id})</div>`;
+          } else {
+            marcaBuscaResultado.innerHTML = `<div class='alert alert-danger'>Marca não encontrada.</div>`;
+          }
+        })
+        .catch(() => {
+          marcaBuscaResultado.innerHTML = "<div class='alert alert-danger'>Erro ao buscar marca.</div>";
+        });
+      }
+
+      // Carrega as marcas ao abrir a página
+      listarMarcas();
+    });
+  </script>
+</body>
+</html>

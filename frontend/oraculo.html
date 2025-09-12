@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Oráculo</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body class="nk-body bg-lighter npc-default has-sidebar">
+   <a href="index.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para o início">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:500px; margin-top:80px;">
+    <h2>Oráculo IA</h2>
+    <form id="oracleForm">
+      <div class="form-group">
+        <label for="oraclePergunta">Pergunta para o Oráculo</label>
+        <input type="text" id="oraclePergunta" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Consultar</button>
+    </form>
+    <div id="oracleResposta" class="mt-4"></div>
+    <hr>
+    <h4>Histórico</h4>
+    <ul id="historicoPerguntas" class="list-group"></ul>
+  </div>
+  <script>
+    const historico = [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const oracleForm = document.getElementById("oracleForm");
+      const oracleResposta = document.getElementById("oracleResposta");
+      const historicoPerguntas = document.getElementById("historicoPerguntas");
+
+      oracleForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const pergunta = document.getElementById("oraclePergunta").value;
+        consultarOracle(pergunta, function(resposta) {
+          oracleResposta.innerHTML = `<div class="alert alert-info">${resposta}</div>`;
+          historico.unshift({ pergunta, resposta });
+          if (historico.length > 10) historico.pop(); // Limita a 10 itens
+          atualizarHistorico();
+        });
+      });
+
+      function atualizarHistorico() {
+        historicoPerguntas.innerHTML = "";
+        historico.forEach(item => {
+          const li = document.createElement("li");
+          li.className = "list-group-item";
+          li.innerHTML = `<strong>Pergunta:</strong> ${item.pergunta}<br><strong>Resposta:</strong> ${item.resposta}`;
+          historicoPerguntas.appendChild(li);
+        });
+      }
+    });
+
+    function consultarOracle(pergunta, callback) {
+      const token = localStorage.getItem("token");
+      fetch("http://localhost:8000/oracle/query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ query: pergunta }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.response) {
+          callback(data.response);
+        } else {
+          callback(data.detail || "Erro na consulta Oracle");
+        }
+      })
+      .catch(() => callback("Erro de conexão com o servidor"));
+    }
+  </script>
+</body>
+</html>
