@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.repositories.user_repository import UserRepository
@@ -21,6 +22,12 @@ async def get_user(user_id: int, db: Session = Depends(get_db), current_user: Us
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+@router.get("/", response_model=List[UserResponse])
+async def get_all_users(db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    user_repository = UserRepository(db)
+    users = user_repository.get_all()
+    return users
+
 @router.put("/{user_id}", response_model=UserResponse)
 async def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
     user_repository = UserRepository(db)
@@ -43,3 +50,5 @@ async def delete_user(user_id: int, db: Session = Depends(get_db), current_user:
     db.delete(db_user)
     db.commit()
     return {"detail": "User deleted successfully"}
+
+    

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuários</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="menu.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Menu">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:700px; margin-top:40px;">
+    <h2>Usuários</h2>
+    <p class="mb-4">Gerencie os usuários cadastrados no sistema.</p>
+    <ul id="usuariosList" class="list-group mb-4"></ul>
+  </div>
+
+  <!-- Modal Editar Usuário -->
+  <div id="modalUsuario" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
+    <div class="container" style="max-width:500px; margin-top:60px; background:#fff; border-radius:8px; box-shadow:0 2px 16px rgba(0,0,0,0.15); padding:2rem;">
+      <h4 class="mb-3">Editar Usuário</h4>
+      <form id="formUsuario">
+        <input type="hidden" id="usuarioId">
+        <div class="form-group mb-2">
+          <label for="usuarioUsername">Usuário</label>
+          <input type="text" id="usuarioUsername" class="form-control" required>
+        </div>
+        <div class="form-group mb-2">
+          <label for="usuarioEmail">Email</label>
+          <input type="email" id="usuarioEmail" class="form-control" required>
+        </div>
+        <div class="form-group mb-2">
+          <label for="usuarioPassword">Senha <span style="font-weight:normal;">(deixe em branco para não alterar)</span></label>
+          <input type="password" id="usuarioPassword" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+        <button type="button" class="btn btn-secondary mt-2" onclick="fecharModalUsuario()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://localhost:8000"; // Altere para sua URL real se necessário
+
+    // Listar todos os usuários
+    function listarUsuarios() {
+      fetch(`${API_URL}/usuarios/`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      .then(resp => {
+        if (!resp.ok) throw new Error("Erro ao buscar usuários");
+        return resp.json();
+      })
+      .then(data => {
+        const ul = document.getElementById("usuariosList");
+        ul.innerHTML = "";
+        if (data.length === 0) {
+          ul.innerHTML = '<li class="list-group-item text-center text-muted">Nenhum usuário cadastrado.</li>';
+        }
+        data.forEach(user => {
+          const li = document.createElement("li");
+          li.className = "list-group-item d-flex justify-content-between align-items-center";
+          li.innerHTML = `
+            <span>
+              <strong>${user.username || user.nome || user.email}</strong> - ${user.email}
+            </span>
+            <span>
+              <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditarUsuario('${user.id}', '${user.username || user.nome || ""}', '${user.email}')">Editar</button>
+              <button class="btn btn-sm btn-danger" onclick="excluirUsuario('${user.id}')">Excluir</button>
+            </span>
+          `;
+          ul.appendChild(li);
+        });
+      })
+      .catch(() => {
+        alert("Erro ao buscar usuários. Faça login novamente."+ err.message);
+        //window.location.href = 'index.html';
+      });
+    }
+
+    // Abrir modal para editar usuário
+    function abrirModalEditarUsuario(id, username, email) {
+      document.getElementById("usuarioId").value = id;
+      document.getElementById("usuarioUsername").value = username;
+      document.getElementById("usuarioEmail").value = email;
+      document.getElementById("usuarioPassword").value = "";
+      document.getElementById("modalUsuario").style.display = "block";
+    }
+
+    function fecharModalUsuario() {
+      document.getElementById("modalUsuario").style.display = "none";
+    }
+
+    // Salvar edição de usuário
+    document.getElementById("formUsuario").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const id = document.getElementById("usuarioId").value;
+      const username = document.getElementById("usuarioUsername").value;
+      const email = document.getElementById("usuarioEmail").value;
+      const password = document.getElementById("usuarioPassword").value;
+
+      const userData = { username, email };
+      if (password) userData.password = password;
+
+      fetch(`${API_URL}/usuarios/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(userData)
+      })
+      .then(resp => {
+        if (resp.ok) {
+          fecharModalUsuario();
+          listarUsuarios();
+          alert('Usuário atualizado com sucesso!');
+        } else {
+          return resp.json().then(data => alert(data.detail || "Erro ao salvar usuário."));
+        }
+      });
+    });
+
+    // Excluir usuário
+    function excluirUsuario(id) {
+      if (confirm("Deseja excluir este usuário?")) {
+        fetch(`${API_URL}/usuarios/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        })
+        .then(resp => {
+          if (resp.ok) {
+            listarUsuarios();
+          } else {
+            alert("Erro ao excluir usuário.");
+          }
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", listarUsuarios);
+  </script>
+</body>
+</html>

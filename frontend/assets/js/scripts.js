@@ -33,7 +33,7 @@ async function cadastrarUsuario(usuario) {
   const data = await response.json();
   if (response.ok) {
     alert("Usuário cadastrado com sucesso!");
-    window.location.replace("login.html");
+    window.location.replace("index.html");
   } else {
     alert(data.detail || "Erro ao cadastrar usuário");
   }
