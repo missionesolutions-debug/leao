@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Petição de Oposição ao Registro de Marca</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:700px; margin-top:40px;">
+    <h2>Petição de Oposição ao Registro de Marca</h2>
+    <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+    <form id="oposicaoForm">
+      <div class="form-group">
+        <label for="processo_contestado">Processo Contestado</label>
+        <input type="text" id="processo_contestado" name="processo_contestado" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca_contestada">Marca Contestada</label>
+        <input type="text" id="marca_contestada" name="marca_contestada" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe_contestada">Classe Contestada</label>
+        <input type="text" id="classe_contestada" name="classe_contestada" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="especificacao_contestada">Especificação Contestada</label>
+        <input type="text" id="especificacao_contestada" name="especificacao_contestada" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="titular_contestado">Titular Contestado</label>
+        <input type="text" id="titular_contestado" name="titular_contestado" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="numero_rpi">Número RPI</label>
+        <input type="text" id="numero_rpi" name="numero_rpi" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data_rpi">Data RPI</label>
+        <input type="text" id="data_rpi" name="data_rpi" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="nome_cliente">Nome do Cliente</label>
+        <input type="text" id="nome_cliente" name="nome_cliente" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca_anterior">Marca Anterior</label>
+        <input type="text" id="marca_anterior" name="marca_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="processo_anterior">Processo Anterior</label>
+        <input type="text" id="processo_anterior" name="processo_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="classe_anterior">Classe Anterior</label>
+        <input type="text" id="classe_anterior" name="classe_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="produtos_servicos_anteriores">Produtos/Serviços Anteriores</label>
+        <input type="text" id="produtos_servicos_anteriores" name="produtos_servicos_anteriores" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="tipo_conflito">Tipo de Conflito</label>
+        <select id="tipo_conflito" name="tipo_conflito" class="form-control">
+          <option value="">Selecione</option>
+          <option value="confusao_origem">Confusão quanto à origem</option>
+          <option value="associacao_indevida">Associação indevida</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="tipo_reproducao">Tipo de Reprodução</label>
+        <select id="tipo_reproducao" name="tipo_reproducao" class="form-control">
+          <option value="">Selecione</option>
+          <option value="total">Reprodução total</option>
+          <option value="parcial">Reprodução parcial</option>
+          <option value="imitacao">Imitação</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="analise_mercadologica">Análise Mercadológica</label>
+        <textarea id="analise_mercadologica" name="analise_mercadologica" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="precedentes">Precedentes</label>
+        <textarea id="precedentes" name="precedentes" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="coexistencia">Coexistência <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="coexistencia" name="coexistencia" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('oposicaoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/oposicao/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Oposição enviada!');
+      window.location.href = 'marca.html';
+      })
+      .catch(() => alert('Erro ao enviar oposição.'));
+    });
+  </script>
+</body>
+</html>

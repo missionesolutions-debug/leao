@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Petição de Nulidade ao Registro de Marca</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:700px; margin-top:40px;">
+    <h2>Petição de Nulidade ao Registro de Marca</h2>
+    <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+    <form id="nulidadeForm">
+      <div class="form-group">
+        <label for="numero_registro">Número do Registro</label>
+        <input type="text" id="numero_registro" name="numero_registro" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="numero_processo">Número do processo administrativo (9 dígitos)</label>
+        <input type="text" id="numero_processo" name="numero_processo" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca_registrada">Marca Registrada</label>
+        <input type="text" id="marca_registrada" name="marca_registrada" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe_registro">Classe do Registro</label>
+        <input type="text" id="classe_registro" name="classe_registro" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="especificacao_registro">Especificação do Registro</label>
+        <input type="text" id="especificacao_registro" name="especificacao_registro" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="titular_registro">Titular do Registro</label>
+        <input type="text" id="titular_registro" name="titular_registro" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="data_concessao">Data da Concessão</label>
+        <input type="text" id="data_concessao" name="data_concessao" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="rpi_concessao">RPI da Concessão</label>
+        <input type="text" id="rpi_concessao" name="rpi_concessao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="registro_anterior">Registro Anterior</label>
+        <input type="text" id="registro_anterior" name="registro_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="marca_anterior">Marca Anterior</label>
+        <input type="text" id="marca_anterior" name="marca_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="classe_anterior">Classe Anterior</label>
+        <input type="text" id="classe_anterior" name="classe_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="especificacao_anterior">Especificação Anterior</label>
+        <input type="text" id="especificacao_anterior" name="especificacao_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="titular_anterior">Titular Anterior</label>
+        <input type="text" id="titular_anterior" name="titular_anterior" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data_deposito_anterior">Data Depósito Anterior</label>
+        <input type="text" id="data_deposito_anterior" name="data_deposito_anterior" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="tipo_reproducao">Tipo de Reprodução</label>
+        <input type="text" id="tipo_reproducao" name="tipo_reproducao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="elementos_similares">Elementos Similares</label>
+        <input type="text" id="elementos_similares" name="elementos_similares" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="analise_visual">Análise Visual <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="analise_visual" name="analise_visual" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="analise_fonetica">Análise Fonética</label>
+        <textarea id="analise_fonetica" name="analise_fonetica" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="precedentes">Precedentes <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="precedentes" name="precedentes" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="ma_fe">Má-Fé <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="ma_fe" name="ma_fe" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="danos_mercado">Danos ao Mercado <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="danos_mercado" name="danos_mercado" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="decisoes_anteriores">Decisões Anteriores <span style="font-weight:normal;">(opcional)</span></label>
+        <textarea id="decisoes_anteriores" name="decisoes_anteriores" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('nulidadeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/nulidade/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Petição enviada!');
+        window.location.href = 'marca.html';
+      })
+      .catch(() => alert('Erro ao enviar petição.'));
+    });
+  </script>
+</body>
+</html>

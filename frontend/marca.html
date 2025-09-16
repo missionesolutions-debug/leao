@@ -2,178 +2,884 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
-  <title>Hub de Marcas</title>
+  <title>Marcas - CRUD Completo</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <style>
+    .modal-bg {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: #fff; padding: 2rem; border-radius: 8px; min-width: 300px; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-bg.active { display: flex; }
+  </style>
 </head>
-<body class="nk-body bg-lighter npc-default has-sidebar">
-  <a href="index.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para o início">
-  &#8592; <!-- seta para a esquerda -->
-</a>
-  <div class="container" style="max-width:600px; margin-top:80px;">
-    <h2>Hub de Marcas</h2>
-    <form id="marcaForm">
-      <div class="form-group">
-        <label for="marcaNome">Nome da Marca</label>
-        <input type="text" id="marcaNome" class="form-control" required>
-      </div>
-      <button type="submit" class="btn btn-primary mt-3">Cadastrar Marca</button>
-    </form>
-    <hr>
-    <h4>Buscar marca por ID</h4>
-    <div class="form-inline mb-3">
-      <input type="number" id="marcaIdBusca" class="form-control" placeholder="ID da marca">
-      <button id="buscarMarcaBtn" class="btn btn-info ml-2">Buscar</button>
-    </div>
-    <div id="marcaBuscaResultado"></div>
-    <hr>
-    <h4>Marcas cadastradas</h4>
-    <ul id="listaMarcas" class="list-group"></ul>
+<body>
+  <div class="container mt-5">
+    <h2>Caducidade</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='caducidade.html'">Acessar formulário de cadastro</button>
+    <ul id="caducidadeList" class="list-group mb-4"></ul>
+
+    <h2>Oposição</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='oposicao.html'">Acessar formulário de cadastro</button>
+    <ul id="oposicaoList" class="list-group mb-4"></ul>
+
+    <h2>Nulidade</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='nulidade.html'">Acessar formulário de cadastro</button>
+    <ul id="nulidadeList" class="list-group mb-4"></ul>
+
+    <h2>Contrarrazão à Nulidade</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='contrarazao_nulidade.html'">Acessar formulário de cadastro</button>
+    <ul id="contrarazaoNulidadeList" class="list-group mb-4"></ul>
+
+    <h2>Manifestação à Oposição</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='manifestacao_oposicao.html'">Acessar formulário de cadastro</button>
+    <ul id="manifestacaoOposicaoList" class="list-group mb-4"></ul>
+
+    <h2>Manifestação ao Recurso</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='manifestacao_recurso.html'">Acessar formulário de cadastro</button>
+    <ul id="manifestacaoRecursoList" class="list-group mb-4"></ul>
+
+    <h2>Recurso ao Indeferimento</h2>
+    <button class="btn btn-primary mb-3" onclick="window.location.href='recurso_indeferimento.html'">Acessar formulário de cadastro</button>
+    <ul id="recursoIndeferimentoList" class="list-group mb-4"></ul>
   </div>
+
+  <!-- Modais de edição (um para cada entidade) -->
+  <!-- Caducidade -->
+  <!-- Modal Caducidade -->
+<div id="editModalCaducidade" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Caducidade</h4>
+    <form id="editFormCaducidade">
+      <input type="hidden" id="editIdCaducidade">
+      <div class="form-group mb-2"><label>Registro Marca</label><input type="text" id="edit_registro_marca" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Marca Requerida</label><input type="text" id="edit_marca_requerida" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Marca</label><input type="text" id="edit_classe_marca" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificações</label><input type="text" id="edit_especificacoes" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular Marca</label><input type="text" id="edit_titular_marca" class="form-control"></div>
+      <div class="form-group mb-2"><label>Número Processo</label><input type="text" id="edit_numero_processo" class="form-control"></div>
+      <div class="form-group mb-2"><label>Nome Cliente</label><input type="text" id="edit_nome_cliente" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Cliente</label><input type="text" id="edit_marca_cliente" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Depósito</label><input type="text" id="edit_data_deposito" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Marca Cliente</label><input type="text" id="edit_classe_marca_cliente" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('Caducidade')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Oposição -->
+  <!-- Modal Oposição -->
+<div id="editModalOposicao" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Oposição</h4>
+    <form id="editFormOposicao">
+      <input type="hidden" id="editIdOposicao">
+      <div class="form-group mb-2"><label>Processo Contestada</label><input type="text" id="edit_processo_contestado" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Marca Contestada</label><input type="text" id="edit_marca_contestada" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Contestada</label><input type="text" id="edit_classe_contestada" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificação Contestada</label><input type="text" id="edit_especificacao_contestada" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular Contestada</label><input type="text" id="edit_titular_contestado" class="form-control"></div>
+      <div class="form-group mb-2"><label>Número RPI</label><input type="text" id="edit_numero_rpi" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data RPI</label><input type="text" id="edit_data_rpi" class="form-control"></div>
+      <div class="form-group mb-2"><label>Nome Cliente</label><input type="text" id="edit_nome_cliente" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Anterior</label><input type="text" id="edit_marca_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Processo Anterior</label><input type="text" id="edit_processo_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Anterior</label><input type="text" id="edit_classe_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Produtos/Serviços Anteriores</label><input type="text" id="edit_produtos_servicos_anteriores" class="form-control"></div>
+      <div class="form-group mb-2"><label>Tipo Conflito</label><input type="text" id="edit_tipo_conflito" class="form-control"></div>
+      <div class="form-group mb-2"><label>Tipo Reprodução</label><input type="text" id="edit_tipo_reproducao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Análise Mercadológica</label><input type="text" id="edit_analise_mercadologica" class="form-control"></div>
+      <div class="form-group mb-2"><label>Precedentes</label><input type="text" id="edit_precedentes" class="form-control"></div>
+      <div class="form-group mb-2"><label>Coexistência</label><input type="text" id="edit_coexistencia" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('Oposicao')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Modal Nulidade -->
+<div id="editModalNulidade" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Nulidade</h4>
+    <form id="editFormNulidade">
+      <input type="hidden" id="editIdNulidade">
+      <div class="form-group mb-2"><label>Número Registro</label><input type="text" id="edit_numero_registro" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Marca Registrada</label><input type="text" id="edit_marca_registrada" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Registro</label><input type="text" id="edit_classe_registro" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificação Registro</label><input type="text" id="edit_especificacao_registro" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular Registro</label><input type="text" id="edit_titular_registro" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Concessão</label><input type="text" id="edit_data_concessao" class="form-control"></div>
+      <div class="form-group mb-2"><label>RPI Concessão</label><input type="text" id="edit_rpi_concessao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Registro Anterior</label><input type="text" id="edit_registro_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Anterior</label><input type="text" id="edit_marca_anterior_nulidade" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Anterior</label><input type="text" id="edit_classe_anterior_nulidade" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificação Anterior</label><input type="text" id="edit_especificacao_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular Anterior</label><input type="text" id="edit_titular_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Depósito Anterior</label><input type="text" id="edit_data_deposito_anterior" class="form-control"></div>
+      <div class="form-group mb-2"><label>Tipo Reprodução</label><input type="text" id="edit_tipo_reproducao_nulidade" class="form-control"></div>
+      <div class="form-group mb-2"><label>Elementos Similares</label><input type="text" id="edit_elementos_similares" class="form-control"></div>
+      <div class="form-group mb-2"><label>Análise Visual</label><input type="text" id="edit_analise_visual" class="form-control"></div>
+      <div class="form-group mb-2"><label>Análise Fonética</label><input type="text" id="edit_analise_fonetica" class="form-control"></div>
+      <div class="form-group mb-2"><label>Precedentes</label><input type="text" id="edit_precedentes_nulidade" class="form-control"></div>
+      <div class="form-group mb-2"><label>Má-fé</label><input type="text" id="edit_ma_fe" class="form-control"></div>
+      <div class="form-group mb-2"><label>Danos ao Mercado</label><input type="text" id="edit_danos_mercado" class="form-control"></div>
+      <div class="form-group mb-2"><label>Decisões Anteriores</label><input type="text" id="edit_decisoes_anteriores" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('Nulidade')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Contrarrazão à Nulidade -->
+ <div id="editModalContrarazaoNulidade" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Contrarrazão à Nulidade</h4>
+    <form id="editFormContrarazaoNulidade">
+      <input type="hidden" id="editIdContrarazaoNulidade">
+      <div class="form-group mb-2"><label>Cliente</label><input type="text" id="edit_cliente_contrarrazao" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Classe</label><input type="text" id="edit_classe_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular</label><input type="text" id="edit_titular_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificações</label><input type="text" id="edit_especificacoes_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Número</label><input type="text" id="edit_numero_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data</label><input type="text" id="edit_data_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Terceiro</label><input type="text" id="edit_marca_terceiro_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Processo Terceiro</label><input type="text" id="edit_processo_terceiro_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Requerida</label><input type="text" id="edit_marca_requerida_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Processo Requerido</label><input type="text" id="edit_processo_requerido_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Cliente</label><input type="text" id="edit_marca_cliente_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Comentário Diferença Marcas</label><input type="text" id="edit_comentario_diferenca_marcas_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Planilha Marcas Similares</label><input type="text" id="edit_planilha_marcas_similares_contrarrazao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Comentário Distinção Produto/Serviço</label><input type="text" id="edit_comentario_distincao_produto_servico_contrarrazao" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('ContrarazaoNulidade')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Manifestação à Oposição -->
+ <div id="editModalManifestacaoOposicao" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Manifestação à Oposição</h4>
+    <form id="editFormManifestacaoOposicao">
+      <input type="hidden" id="editIdManifestacaoOposicao">
+      <div class="form-group mb-2"><label>Número Registro</label><input type="text" id="edit_numero_registro_oposicao" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Número Processo</label><input type="text" id="edit_numero_processo_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Depósito</label><input type="text" id="edit_data_deposito_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Registrada</label><input type="text" id="edit_marca_registrada_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Registro</label><input type="text" id="edit_classe_registro_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificação Registro</label><input type="text" id="edit_especificacao_registro_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular Registro</label><input type="text" id="edit_titular_registro_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>RPI Oposição</label><input type="text" id="edit_rpi_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Oposição</label><input type="text" id="edit_data_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Opoente</label><input type="text" id="edit_oponente_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca Oposição</label><input type="text" id="edit_marca_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Processo Oposição</label><input type="text" id="edit_processo_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Fundamento Oposição</label><input type="text" id="edit_fundamento_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Tipo Conflito Alegado</label><input type="text" id="edit_tipo_conflito_alegado" class="form-control"></div>
+      <div class="form-group mb-2"><label>Tipo Reprodução Alegada</label><input type="text" id="edit_tipo_reproducao_alegada" class="form-control"></div>
+      <div class="form-group mb-2"><label>Análise Mercadológica Defesa</label><input type="text" id="edit_analise_mercadologica_defesa" class="form-control"></div>
+      <div class="form-group mb-2"><label>Distintividade Fonética</label><input type="text" id="edit_distintividade_fonetica" class="form-control"></div>
+      <div class="form-group mb-2"><label>Distintividade Ideológica</label><input type="text" id="edit_distintividade_ideologica" class="form-control"></div>
+      <div class="form-group mb-2"><label>Distintividade Visual</label><input type="text" id="edit_distintividade_visual" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especialidade Segmento</label><input type="text" id="edit_especialidade_segmento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especialidade Público</label><input type="text" id="edit_especialidade_publico" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especialidade Canais</label><input type="text" id="edit_especialidade_canais" class="form-control"></div>
+      <div class="form-group mb-2"><label>Coexistência</label><input type="text" id="edit_coexistencia_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Decisões Anteriores</label><input type="text" id="edit_decisoes_anteriores_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Uso Anterior Boa-fé</label><input type="text" id="edit_uso_anterior_boa_fe" class="form-control"></div>
+      <div class="form-group mb-2"><label>Outros Registros</label><input type="text" id="edit_outros_registros_oposicao" class="form-control"></div>
+      <div class="form-group mb-2"><label>Má-fé</label><input type="text" id="edit_ma_fe_oposicao" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('ManifestacaoOposicao')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Manifestação ao Recurso -->
+  <div id="editModalManifestacaoRecurso" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Manifestação ao Recurso</h4>
+    <form id="editFormManifestacaoRecurso">
+      <input type="hidden" id="editIdManifestacaoRecurso">
+      <div class="form-group mb-2"><label>Cliente</label><input type="text" id="edit_cliente_recurso" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Processo</label><input type="text" id="edit_processo_recurso" class="form-control"></div>
+      <div class="form-group mb-2"><label>Marca</label><input type="text" id="edit_marca_recurso" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe</label><input type="text" id="edit_classe_recurso" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular</label><input type="text" id="edit_titular_recurso" class="form-control"></div>
+      <div class="form-group mb-2"><label>RPI Data</label><input type="text" id="edit_rpi_data" class="form-control"></div>
+      <div class="form-group mb-2"><label>Número da RPI</label><input type="text" id="edit_numero_rpi" class="form-control"></div>
+      <div class="form-group mb-2"><label>Fundamento da Recorrente</label><input type="text" id="edit_fundamento_recorrente" class="form-control"></div>
+      <div class="form-group mb-2"><label>Fundamento Legal para Indeferimento</label><input type="text" id="edit_fundamento_legal_indeferimento" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('ManifestacaoRecurso')">Cancelar</button>
+    </form>
+  </div>
+</div>
+  <!-- Recurso ao Indeferimento -->
+ <!-- Modal Recurso ao Indeferimento -->
+<div id="editModalRecursoIndeferimento" class="modal-bg">
+  <div class="modal-content">
+    <h4>Editar Recurso ao Indeferimento</h4>
+    <form id="editFormRecursoIndeferimento">
+      <input type="hidden" id="editIdRecursoIndeferimento">
+      <div class="form-group mb-2"><label>Número Processo</label><input type="text" id="edit_numero_processo_recurso" class="form-control" required></div>
+      <div class="form-group mb-2"><label>Marca</label><input type="text" id="edit_marca_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Classe Nice</label><input type="text" id="edit_classe_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Especificação</label><input type="text" id="edit_especificacao_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Titular</label><input type="text" id="edit_titular_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>RPI Indeferimento</label><input type="text" id="edit_rpi_indeferimento_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Data Indeferimento</label><input type="text" id="edit_data_indeferimento_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Base Legal Indeferimento</label><input type="text" id="edit_base_legal_indeferimento_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Motivo Indeferimento</label><input type="text" id="edit_motivo_indeferimento_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Anterioridade Citada</label><input type="text" id="edit_anterioridade_citada_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Conjunto Marcário</label><input type="text" id="edit_conjunto_marcario_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Elementos Distintivos</label><input type="text" id="edit_elementos_distintivos_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Precedentes Distintividade</label><input type="text" id="edit_precedentes_distintividade_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Registros Similares</label><input type="text" id="edit_registros_similares_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Segmento Mercado</label><input type="text" id="edit_segmento_mercado_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Público Alvo Distinto</label><input type="text" id="edit_publico_alvo_distinto_recurso_indeferimento" class="form-control"></div>
+      <div class="form-group mb-2"><label>Outros Argumentos</label><input type="text" id="edit_outros_argumentos_recurso_indeferimento" class="form-control"></div>
+      <button type="submit" class="btn btn-success mt-2">Salvar</button>
+      <button type="button" class="btn btn-secondary mt-2" onclick="fecharModal('RecursoIndeferimento')">Cancelar</button>
+    </form>
+  </div>
+</div>
+
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const marcaForm = document.getElementById("marcaForm");
-      const listaMarcas = document.getElementById("listaMarcas");
-      const marcaIdBusca = document.getElementById("marcaIdBusca");
-      const buscarMarcaBtn = document.getElementById("buscarMarcaBtn");
-      const marcaBuscaResultado = document.getElementById("marcaBuscaResultado");
+    const API_URL = "http://localhost:8000";
+    const token = localStorage.getItem("token");
 
-      // Função para cadastrar marca
-      marcaForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const nome = document.getElementById("marcaNome").value;
-        cadastrarMarca({ name: nome });
-      });
-
-      // Função para cadastrar marca no backend
-      function cadastrarMarca(marca) {
-        const token = localStorage.getItem("token");
-        fetch("http://localhost:8000/brand/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(marca),
-        })
-        .then(response => response.json())
+    // Funções de listagem (exemplo para Caducidade, repita para as outras)
+    function listarCaducidade() {
+      fetch(`${API_URL}/caducidade/`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(resp => resp.json())
         .then(data => {
-          if (data.id) {
-            alert("Marca cadastrada com sucesso!");
-            listarMarcas();
-            marcaForm.reset();
-          } else {
-            alert(data.detail || "Erro ao cadastrar marca");
-          }
-        })
-        .catch(() => alert("Erro de conexão com o servidor"));
-      }
-
-      // Função para listar marcas do backend
-      function listarMarcas() {
-        const token = localStorage.getItem("token");
-        fetch("http://localhost:8000/brand/", {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(response => response.json())
-        .then(data => {
-          listaMarcas.innerHTML = "";
-          if (Array.isArray(data)) {
-            data.forEach(marca => {
-              const li = document.createElement("li");
-              li.className = "list-group-item d-flex justify-content-between align-items-center";
-              li.innerHTML = `
-                <span>${marca.name || marca.nome} (ID: ${marca.id})</span>
-                <div>
-                  <button class="btn btn-sm btn-warning mr-2" onclick="editarMarcaPrompt(${marca.id}, '${marca.name || marca.nome}')">Editar</button>
-                  <button class="btn btn-sm btn-danger" onclick="excluirMarca(${marca.id})">Excluir</button>
-                </div>
-              `;
-              listaMarcas.appendChild(li);
-            });
-          } else {
-            listaMarcas.innerHTML = "<li class='list-group-item'>Nenhuma marca encontrada.</li>";
-          }
-        })
-        .catch(() => {
-          listaMarcas.innerHTML = "<li class='list-group-item'>Erro ao carregar marcas.</li>";
+          const ul = document.getElementById("caducidadeList");
+          ul.innerHTML = "";
+          data.forEach(doc => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+              <span>${doc.registro_marca || "Sem registro"}</span>
+              <span>
+                <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('caducidade', ${doc.id})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="excluirCadastro('caducidade', ${doc.id})">Excluir</button>
+              </span>
+            `;
+            ul.appendChild(li);
+          });
         });
-      }
-
-      // Função para excluir marca
-      window.excluirMarca = function(id) {
-        const token = localStorage.getItem("token");
-        if (confirm("Tem certeza que deseja excluir esta marca?")) {
-          fetch(`http://localhost:8000/brand/${id}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` }
-          })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.detail || "Marca excluída com sucesso!");
-            listarMarcas();
-          })
-          .catch(() => alert("Erro ao excluir marca"));
-        }
-      };
-
-      // Função para editar marca (prompt simples)
-      window.editarMarcaPrompt = function(id, nomeAtual) {
-        const novoNome = prompt("Editar nome da marca:", nomeAtual);
-        if (novoNome && novoNome !== nomeAtual) {
-          editarMarca(id, { name: novoNome });
-        }
-      };
-
-      // Função para editar marca no backend
-      function editarMarca(id, marca) {
-        const token = localStorage.getItem("token");
-        fetch(`http://localhost:8000/brand/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(marca),
-        })
-        .then(response => response.json())
-        .then(data => {
-          alert(data.detail || "Marca atualizada com sucesso!");
-          listarMarcas();
-        })
-        .catch(() => alert("Erro ao editar marca"));
-      }
-
-      // Função para buscar marca por ID
-      buscarMarcaBtn.addEventListener("click", function () {
-        const id = marcaIdBusca.value;
-        if (!id) {
-          marcaBuscaResultado.innerHTML = "<div class='alert alert-warning'>Informe o ID da marca.</div>";
-          return;
-        }
-        buscarMarcaPorId(id);
+    }
+    function listarOposicao() {
+  fetch(`${API_URL}/oposicao/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      const ul = document.getElementById("oposicaoList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.processo_contestado || "Sem processo"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('oposicao', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('oposicao', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
       });
-
-      function buscarMarcaPorId(id) {
-        const token = localStorage.getItem("token");
-        fetch(`http://localhost:8000/brand/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.id) {
-            marcaBuscaResultado.innerHTML = `<div class='alert alert-success'>Marca encontrada: <strong>${data.name || data.nome}</strong> (ID: ${data.id})</div>`;
-          } else {
-            marcaBuscaResultado.innerHTML = `<div class='alert alert-danger'>Marca não encontrada.</div>`;
-          }
-        })
-        .catch(() => {
-          marcaBuscaResultado.innerHTML = "<div class='alert alert-danger'>Erro ao buscar marca.</div>";
-        });
-      }
-
-      // Carrega as marcas ao abrir a página
-      listarMarcas();
     });
+}
+    function listarNulidade() {
+  fetch(`${API_URL}/nulidade/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      const ul = document.getElementById("nulidadeList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.numero_registro || "Sem registro"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('nulidade', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('nulidade', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    });
+}
+    function listarContrarazaoNulidade() {
+  fetch(`${API_URL}/contrarazao_nulidade/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())  
+    .then(data => {
+      const ul = document.getElementById("contrarazaoNulidadeList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.cliente || "Sem cliente"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('contrarazao_nulidade', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('contrarazao_nulidade', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    });
+}
+    function listarManifestacaoOposicao() {
+  fetch(`${API_URL}/manifestacao_oposicao/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      const ul = document.getElementById("manifestacaoOposicaoList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.numero_registro || "Sem numero"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('manifestacao_oposicao', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('manifestacao_oposicao', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    });
+}
+    function listarManifestacaoRecurso() {
+  fetch(`${API_URL}/manifestacao_recurso/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      const ul = document.getElementById("manifestacaoRecursoList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.cliente || "Sem cliente"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('manifestacao_recurso', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('manifestacao_recurso', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    });
+}
+    function listarRecursoIndeferimento() {
+  fetch(`${API_URL}/recurso_indeferimento/`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      const ul = document.getElementById("recursoIndeferimentoList");
+      ul.innerHTML = "";
+      data.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <span>${doc.numero_processo || "Sem número de processo"}</span>
+          <span>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('recurso_indeferimento', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('recurso_indeferimento', ${doc.id})">Excluir</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    });
+}
+
+    // Função para atualizar todas as listas
+    function atualizarListas() {
+      listarCaducidade();
+      listarOposicao();
+      listarNulidade();
+      listarContrarazaoNulidade();
+      listarManifestacaoOposicao();
+      listarManifestacaoRecurso();
+      listarRecursoIndeferimento();
+    }
+
+    // Chamar a função para carregar as listas ao carregar a página
+    document.addEventListener("DOMContentLoaded", atualizarListas);
+
+    // Função para fechar modais
+    function fecharModal(tipo) {
+      document.getElementById(`editModal${tipo}`).classList.remove("active");
+      mostrarSetaVoltar();
+    }
+
+// Função para excluir cadastro (genérica)
+    function excluirCadastro(tipo, id) {
+      if (confirm("Excluir este cadastro?")) {
+        fetch(`${API_URL}/${tipo}/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(() => atualizarListas());
+      }
+    }
+
+    function mostrarSetaVoltar() {
+  document.getElementById("seta-voltar").style.display = "block";
+}
+function esconderSetaVoltar() {
+  document.getElementById("seta-voltar").style.display = "none";
+}
+    
+    // Função para abrir o modal correto e preencher os campos (exemplo para Caducidade)
+    function abrirModalEditar(tipo, id) {
+      esconderSetaVoltar();
+      if (tipo === "caducidade") {
+  fetch(`${API_URL}/caducidade/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdCaducidade").value = data.id;
+      document.getElementById("edit_registro_marca").value = data.registro_marca || "";
+      document.getElementById("edit_marca_requerida").value = data.marca_requerida || "";
+      document.getElementById("edit_classe_marca").value = data.classe_marca || "";
+      document.getElementById("edit_especificacoes").value = data.especificacoes || "";
+      document.getElementById("edit_titular_marca").value = data.titular_marca || "";
+      document.getElementById("edit_numero_processo").value = data.numero_processo || "";
+      document.getElementById("edit_nome_cliente").value = data.nome_cliente || "";
+      document.getElementById("edit_marca_cliente").value = data.marca_cliente || "";
+      document.getElementById("edit_data_deposito").value = data.data_deposito || "";
+      document.getElementById("edit_classe_marca_cliente").value = data.classe_marca_cliente || "";
+      document.getElementById("editModalCaducidade").classList.add("active");
+    });
+}
+
+    
+    else if (tipo === "oposicao") {      
+  fetch(`${API_URL}/oposicao/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdOposicao").value = data.id;
+      document.getElementById("edit_processo_contestado").value = data.processo_contestado || "";
+      document.getElementById("edit_marca_contestada").value = data.marca_contestada || "";
+      document.getElementById("edit_classe_contestada").value = data.classe_contestada || "";
+      document.getElementById("edit_especificacao_contestada").value = data.especificacao_contestada || "";
+      document.getElementById("edit_titular_contestado").value = data.titular_contestado || "";
+      document.getElementById("edit_numero_rpi").value = data.numero_rpi || "";
+      document.getElementById("edit_data_rpi").value = data.data_rpi || "";
+      document.getElementById("edit_nome_cliente").value = data.nome_cliente || "";
+      document.getElementById("edit_marca_anterior").value = data.marca_anterior || "";
+      document.getElementById("edit_processo_anterior").value = data.processo_anterior || "";
+      document.getElementById("edit_classe_anterior").value = data.classe_anterior || "";
+      document.getElementById("edit_produtos_servicos_anteriores").value = data.produtos_servicos_anteriores || "";
+      document.getElementById("edit_tipo_conflito").value = data.tipo_conflito || "";
+      document.getElementById("edit_tipo_reproducao").value = data.tipo_reproducao || "";
+      document.getElementById("edit_analise_mercadologica").value = data.analise_mercadologica || "";
+      document.getElementById("edit_precedentes").value = data.precedentes || "";
+      document.getElementById("edit_coexistencia").value = data.coexistencia || "";
+      document.getElementById("editModalOposicao").classList.add("active");
+    });
+      } 
+      else if (tipo === "nulidade") {
+  fetch(`${API_URL}/nulidade/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdNulidade").value = data.id;
+      document.getElementById("edit_numero_registro").value = data.numero_registro || "";
+      document.getElementById("edit_marca_registrada").value = data.marca_registrada || "";
+      document.getElementById("edit_classe_registro").value = data.classe_registro || "";
+      document.getElementById("edit_especificacao_registro").value = data.especificacao_registro || "";
+      document.getElementById("edit_titular_registro").value = data.titular_registro || "";
+      document.getElementById("edit_data_concessao").value = data.data_concessao || "";
+      document.getElementById("edit_rpi_concessao").value = data.rpi_concessao || "";
+      document.getElementById("edit_registro_anterior").value = data.registro_anterior || "";
+      document.getElementById("edit_marca_anterior_nulidade").value = data.marca_anterior || "";
+      document.getElementById("edit_classe_anterior_nulidade").value = data.classe_anterior || "";
+      document.getElementById("edit_especificacao_anterior").value = data.especificacao_anterior || "";
+      document.getElementById("edit_titular_anterior").value = data.titular_anterior || "";
+      document.getElementById("edit_data_deposito_anterior").value = data.data_deposito_anterior || "";
+      document.getElementById("edit_tipo_reproducao_nulidade").value = data.tipo_reproducao || "";
+      document.getElementById("edit_elementos_similares").value = data.elementos_similares || "";
+      document.getElementById("edit_analise_visual").value = data.analise_visual || "";
+      document.getElementById("edit_analise_fonetica").value = data.analise_fonetica || "";
+      document.getElementById("edit_precedentes_nulidade").value = data.precedentes || "";
+      document.getElementById("edit_ma_fe").value = data.ma_fe || "";
+      document.getElementById("edit_danos_mercado").value = data.danos_mercado || "";
+      document.getElementById("edit_decisoes_anteriores").value = data.decisoes_anteriores || "";
+      document.getElementById("editModalNulidade").classList.add("active");
+    });
+}
+        else if (tipo === "contrarazao_nulidade") {
+  fetch(`${API_URL}/contrarazao_nulidade/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdContrarazaoNulidade").value = data.id;
+      document.getElementById("edit_cliente_contrarrazao").value = data.cliente || "";
+      document.getElementById("edit_classe_contrarrazao").value = data.classe || "";
+      document.getElementById("edit_titular_contrarrazao").value = data.titular || "";
+      document.getElementById("edit_especificacoes_contrarrazao").value = data.especificacoes || "";
+      document.getElementById("edit_numero_contrarrazao").value = data.numero || "";
+      document.getElementById("edit_data_contrarrazao").value = data.data || "";
+      document.getElementById("edit_marca_terceiro_contrarrazao").value = data.marca_terceiro || "";
+      document.getElementById("edit_processo_terceiro_contrarrazao").value = data.processo_terceiro || "";
+      document.getElementById("edit_marca_requerida_contrarrazao").value = data.marca_requerida || "";
+      document.getElementById("edit_processo_requerido_contrarrazao").value = data.processo_requerido || "";
+      document.getElementById("edit_marca_cliente_contrarrazao").value = data.marca_cliente || "";
+      document.getElementById("edit_comentario_diferenca_marcas_contrarrazao").value = data.comentario_diferenca_marcas || "";
+      document.getElementById("edit_planilha_marcas_similares_contrarrazao").value = data.planilha_marcas_similares || "";
+      document.getElementById("edit_comentario_distincao_produto_servico_contrarrazao").value = data.comentario_distincao_produto_servico || "";
+      document.getElementById("editModalContrarazaoNulidade").classList.add("active");
+    });
+}
+          else if (tipo === "manifestacao_oposicao") {
+  fetch(`${API_URL}/manifestacao_oposicao/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdManifestacaoOposicao").value = data.id;
+      document.getElementById("edit_numero_registro_oposicao").value = data.numero_registro || "";
+      document.getElementById("edit_numero_processo_oposicao").value = data.numero_processo || "";
+      document.getElementById("edit_data_deposito_oposicao").value = data.data_deposito || "";
+      document.getElementById("edit_marca_registrada_oposicao").value = data.marca_registrada || "";
+      document.getElementById("edit_classe_registro_oposicao").value = data.classe_registro || "";
+      document.getElementById("edit_especificacao_registro_oposicao").value = data.especificacao_registro || "";
+      document.getElementById("edit_titular_registro_oposicao").value = data.titular_registro || "";
+      document.getElementById("edit_rpi_oposicao").value = data.rpi_oposicao || "";
+      document.getElementById("edit_data_oposicao").value = data.data_oposicao || "";
+      document.getElementById("edit_oponente_oposicao").value = data.opoente || "";
+      document.getElementById("edit_marca_oposicao").value = data.marca_oposicao || "";
+      document.getElementById("edit_processo_oposicao").value = data.processo_oposicao || "";
+      document.getElementById("edit_fundamento_oposicao").value = data.fundamento_oposicao || "";
+      document.getElementById("edit_tipo_conflito_alegado").value = data.tipo_conflito_alegado || "";
+      document.getElementById("edit_tipo_reproducao_alegada").value = data.tipo_reproducao_alegada || "";
+      document.getElementById("edit_analise_mercadologica_defesa").value = data.analise_mercadologica_defesa || "";
+      document.getElementById("edit_distintividade_fonetica").value = data.distintividade_fonetica || "";
+      document.getElementById("edit_distintividade_ideologica").value = data.distintividade_ideologica || "";
+      document.getElementById("edit_distintividade_visual").value = data.distintividade_visual || "";
+      document.getElementById("edit_especialidade_segmento").value = data.especialidade_segmento || "";
+      document.getElementById("edit_especialidade_publico").value = data.especialidade_publico || "";
+      document.getElementById("edit_especialidade_canais").value = data.especialidade_canais || "";
+      document.getElementById("edit_coexistencia_oposicao").value = data.coexistencia || "";
+      document.getElementById("edit_decisoes_anteriores_oposicao").value = data.decisoes_anteriores || "";
+      document.getElementById("edit_uso_anterior_boa_fe").value = data.uso_anterior_boa_fe || "";
+      document.getElementById("edit_outros_registros_oposicao").value = data.outros_registros || "";
+      document.getElementById("edit_ma_fe_oposicao").value = data.ma_fe || "";
+      document.getElementById("editModalManifestacaoOposicao").classList.add("active");
+    });
+  }
+            else if (tipo === "manifestacao_recurso") {
+  fetch(`${API_URL}/manifestacao_recurso/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdManifestacaoRecurso").value = data.id;
+      document.getElementById("edit_cliente_recurso").value = data.cliente || "";
+      document.getElementById("edit_processo_recurso").value = data.processo || "";
+      document.getElementById("edit_marca_recurso").value = data.marca || "";
+      document.getElementById("edit_classe_recurso").value = data.classe || "";
+      document.getElementById("edit_titular_recurso").value = data.titular || "";
+      document.getElementById("edit_rpi_data").value = data.rpi_data || "";
+      document.getElementById("edit_numero_rpi").value = data.numero_rpi || "";
+      document.getElementById("edit_fundamento_recorrente").value = data.fundamento_recorrente || "";
+      document.getElementById("edit_fundamento_legal_indeferimento").value = data.fundamento_legal_indeferimento || "";
+      document.getElementById("editModalManifestacaoRecurso").classList.add("active");
+    });
+}
+             else if (tipo === "recurso_indeferimento") {
+  fetch(`${API_URL}/recurso_indeferimento/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+    .then(resp => resp.json())
+    .then(data => {
+      document.getElementById("editIdRecursoIndeferimento").value = data.id;
+      document.getElementById("edit_numero_processo_recurso").value = data.numero_processo || "";
+      document.getElementById("edit_marca_recurso_indeferimento").value = data.marca || "";
+      document.getElementById("edit_classe_recurso_indeferimento").value = data.classe_nice || "";
+      document.getElementById("edit_especificacao_recurso_indeferimento").value = data.especificacao || "";
+      document.getElementById("edit_titular_recurso_indeferimento").value = data.titular || "";
+      document.getElementById("edit_rpi_indeferimento_recurso_indeferimento").value = data.rpi_indeferimento || "";
+      document.getElementById("edit_data_indeferimento_recurso_indeferimento").value = data.data_indeferimento || "";
+      document.getElementById("edit_base_legal_indeferimento_recurso_indeferimento").value = data.base_legal_indeferimento || "";
+      document.getElementById("edit_motivo_indeferimento_recurso_indeferimento").value = data.motivo_indeferimento || "";
+      document.getElementById("edit_anterioridade_citada_recurso_indeferimento").value = data.anterioridade_citada || "";
+      document.getElementById("edit_conjunto_marcario_recurso_indeferimento").value = data.conjunto_marcario || "";
+      document.getElementById("edit_elementos_distintivos_recurso_indeferimento").value = data.elementos_distintivos || "";
+      document.getElementById("edit_precedentes_distintividade_recurso_indeferimento").value = data.precedentes_distintividade || "";
+      document.getElementById("edit_registros_similares_recurso_indeferimento").value = data.registros_similares || "";
+      document.getElementById("edit_segmento_mercado_recurso_indeferimento").value = data.segmento_mercado || "";
+      document.getElementById("edit_publico_alvo_distinto_recurso_indeferimento").value = data.publico_alvo_distinto || "";
+      document.getElementById("edit_outros_argumentos_recurso_indeferimento").value = data.outros_argumentos || "";
+      document.getElementById("editModalRecursoIndeferimento").classList.add("active");
+    });
+}
+}
+
+    // Função para fechar modal
+   function fecharModal(tipo) {
+  document.getElementById(`editModal${tipo}`).classList.remove("active");
+  mostrarSetaVoltar();
+}
+
+    // Submissão do formulário de edição (exemplo para Caducidade)
+    // ...existing code...
+    document.getElementById("editFormCaducidade").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdCaducidade").value;
+  const data = {
+    registro_marca: document.getElementById("edit_registro_marca").value,
+    marca_requerida: document.getElementById("edit_marca_requerida").value,
+    classe_marca: document.getElementById("edit_classe_marca").value,
+    especificacoes: document.getElementById("edit_especificacoes").value,
+    titular_marca: document.getElementById("edit_titular_marca").value,
+    numero_processo: document.getElementById("edit_numero_processo").value,
+    nome_cliente: document.getElementById("edit_nome_cliente").value,
+    marca_cliente: document.getElementById("edit_marca_cliente").value,
+    data_deposito: document.getElementById("edit_data_deposito").value,
+    classe_marca_cliente: document.getElementById("edit_classe_marca_cliente").value
+  };
+  fetch(`${API_URL}/caducidade/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('Caducidade');
+    listarCaducidade();
+  });
+});
+    document.getElementById("editFormOposicao").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdOposicao").value;
+  const data = {
+    processo_contestado: document.getElementById("edit_processo_contestado").value,
+    marca_contestada: document.getElementById("edit_marca_contestada").value,
+    classe_contestada: document.getElementById("edit_classe_contestada").value,
+    especificacao_contestada: document.getElementById("edit_especificacao_contestada").value,
+    titular_contestado: document.getElementById("edit_titular_contestado").value,
+    numero_rpi: document.getElementById("edit_numero_rpi").value,
+    data_rpi: document.getElementById("edit_data_rpi").value,
+    nome_cliente: document.getElementById("edit_nome_cliente").value,
+    marca_anterior: document.getElementById("edit_marca_anterior").value,
+    processo_anterior: document.getElementById("edit_processo_anterior").value,
+    classe_anterior: document.getElementById("edit_classe_anterior").value,
+    produtos_servicos_anteriores: document.getElementById("edit_produtos_servicos_anteriores").value,
+    tipo_conflito: document.getElementById("edit_tipo_conflito").value,
+    tipo_reproducao: document.getElementById("edit_tipo_reproducao").value,
+    analise_mercadologica: document.getElementById("edit_analise_mercadologica").value,
+    precedentes: document.getElementById("edit_precedentes").value,
+    coexistencia: document.getElementById("edit_coexistencia").value
+  };
+  fetch(`${API_URL}/oposicao/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('Oposicao');
+    listarOposicao();
+  });
+});
+    document.getElementById("editFormNulidade").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdNulidade").value;
+  const data = {
+    numero_registro: document.getElementById("edit_numero_registro").value,
+    marca_registrada: document.getElementById("edit_marca_registrada").value,
+    classe_registro: document.getElementById("edit_classe_registro").value,
+    especificacao_registro: document.getElementById("edit_especificacao_registro").value,
+    titular_registro: document.getElementById("edit_titular_registro").value,
+    data_concessao: document.getElementById("edit_data_concessao").value,
+    rpi_concessao: document.getElementById("edit_rpi_concessao").value,
+    registro_anterior: document.getElementById("edit_registro_anterior").value,
+    marca_anterior: document.getElementById("edit_marca_anterior_nulidade").value,
+    classe_anterior: document.getElementById("edit_classe_anterior_nulidade").value,
+    especificacao_anterior: document.getElementById("edit_especificacao_anterior").value,
+    titular_anterior: document.getElementById("edit_titular_anterior").value,
+    data_deposito_anterior: document.getElementById("edit_data_deposito_anterior").value,
+    tipo_reproducao: document.getElementById("edit_tipo_reproducao_nulidade").value,
+    elementos_similares: document.getElementById("edit_elementos_similares").value,
+    analise_visual: document.getElementById("edit_analise_visual").value,
+    analise_fonetica: document.getElementById("edit_analise_fonetica").value,
+    precedentes: document.getElementById("edit_precedentes_nulidade").value,
+    ma_fe: document.getElementById("edit_ma_fe").value,
+    danos_mercado: document.getElementById("edit_danos_mercado").value,
+    decisoes_anteriores: document.getElementById("edit_decisoes_anteriores").value
+  };
+  fetch(`${API_URL}/nulidade/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('Nulidade');
+    listarNulidade();
+  });
+});
+    document.getElementById("editFormContrarazaoNulidade").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdContrarazaoNulidade").value;
+  const data = {
+    cliente: document.getElementById("edit_cliente_contrarrazao").value,
+    classe: document.getElementById("edit_classe_contrarrazao").value,
+    titular: document.getElementById("edit_titular_contrarrazao").value,
+    especificacoes: document.getElementById("edit_especificacoes_contrarrazao").value,
+    numero: document.getElementById("edit_numero_contrarrazao").value,
+    data: document.getElementById("edit_data_contrarrazao").value,
+    marca_terceiro: document.getElementById("edit_marca_terceiro_contrarrazao").value,
+    processo_terceiro: document.getElementById("edit_processo_terceiro_contrarrazao").value,
+    marca_requerida: document.getElementById("edit_marca_requerida_contrarrazao").value,
+    processo_requerido: document.getElementById("edit_processo_requerido_contrarrazao").value,
+    marca_cliente: document.getElementById("edit_marca_cliente_contrarrazao").value,
+    comentario_diferenca_marcas: document.getElementById("edit_comentario_diferenca_marcas_contrarrazao").value,
+    planilha_marcas_similares: document.getElementById("edit_planilha_marcas_similares_contrarrazao").value,
+    comentario_distincao_produto_servico: document.getElementById("edit_comentario_distincao_produto_servico_contrarrazao").value
+  };
+  fetch(`${API_URL}/contrarazao_nulidade/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('ContrarazaoNulidade');
+    listarContrarazaoNulidade();
+  });
+});
+    document.getElementById("editFormManifestacaoOposicao").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdManifestacaoOposicao").value;
+  const data = {
+    numero_registro: document.getElementById("edit_numero_registro_oposicao").value,
+    numero_processo: document.getElementById("edit_numero_processo_oposicao").value,
+    data_deposito: document.getElementById("edit_data_deposito_oposicao").value,
+    marca_registrada: document.getElementById("edit_marca_registrada_oposicao").value,
+    classe_registro: document.getElementById("edit_classe_registro_oposicao").value,
+    especificacao_registro: document.getElementById("edit_especificacao_registro_oposicao").value,
+    titular_registro: document.getElementById("edit_titular_registro_oposicao").value,
+    rpi_oposicao: document.getElementById("edit_rpi_oposicao").value,
+    data_oposicao: document.getElementById("edit_data_oposicao").value,
+    opoente: document.getElementById("edit_oponente_oposicao").value,
+    marca_oposicao: document.getElementById("edit_marca_oposicao").value,
+    processo_oposicao: document.getElementById("edit_processo_oposicao").value,
+    fundamento_oposicao: document.getElementById("edit_fundamento_oposicao").value,
+    tipo_conflito_alegado: document.getElementById("edit_tipo_conflito_alegado").value,
+    tipo_reproducao_alegada: document.getElementById("edit_tipo_reproducao_alegada").value,
+    analise_mercadologica_defesa: document.getElementById("edit_analise_mercadologica_defesa").value,
+    distintividade_fonetica: document.getElementById("edit_distintividade_fonetica").value,
+    distintividade_ideologica: document.getElementById("edit_distintividade_ideologica").value,
+    distintividade_visual: document.getElementById("edit_distintividade_visual").value,
+    especialidade_segmento: document.getElementById("edit_especialidade_segmento").value,
+    especialidade_publico: document.getElementById("edit_especialidade_publico").value,
+    especialidade_canais: document.getElementById("edit_especialidade_canais").value,
+    coexistencia: document.getElementById("edit_coexistencia_oposicao").value,
+    decisoes_anteriores: document.getElementById("edit_decisoes_anteriores_oposicao").value,
+    uso_anterior_boa_fe: document.getElementById("edit_uso_anterior_boa_fe").value,
+    outros_registros: document.getElementById("edit_outros_registros_oposicao").value,
+    ma_fe: document.getElementById("edit_ma_fe_oposicao").value
+  };
+  fetch(`${API_URL}/manifestacao_oposicao/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('ManifestacaoOposicao');
+    listarManifestacaoOposicao();
+  });
+});
+    document.getElementById("editFormManifestacaoRecurso").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdManifestacaoRecurso").value;
+  const data = {
+    cliente: document.getElementById("edit_cliente_recurso").value,
+    processo: document.getElementById("edit_processo_recurso").value,
+    marca: document.getElementById("edit_marca_recurso").value,
+    classe: document.getElementById("edit_classe_recurso").value,
+    titular: document.getElementById("edit_titular_recurso").value,
+    rpi_data: document.getElementById("edit_rpi_data").value,
+    numero_rpi: document.getElementById("edit_numero_rpi").value,
+    fundamento_recorrente: document.getElementById("edit_fundamento_recorrente").value,
+    fundamento_legal_indeferimento: document.getElementById("edit_fundamento_legal_indeferimento").value
+  };
+  fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('ManifestacaoRecurso');
+    listarManifestacaoRecurso();
+  });
+});
+    document.getElementById("editFormRecursoIndeferimento").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("editIdRecursoIndeferimento").value;
+  const data = {
+    numero_processo: document.getElementById("edit_numero_processo_recurso").value,
+    marca: document.getElementById("edit_marca_recurso_indeferimento").value,
+    classe_nice: document.getElementById("edit_classe_recurso_indeferimento").value,
+    especificacao: document.getElementById("edit_especificacao_recurso_indeferimento").value,
+    titular: document.getElementById("edit_titular_recurso_indeferimento").value,
+    rpi_indeferimento: document.getElementById("edit_rpi_indeferimento_recurso_indeferimento").value,
+    data_indeferimento: document.getElementById("edit_data_indeferimento_recurso_indeferimento").value,
+    base_legal_indeferimento: document.getElementById("edit_base_legal_indeferimento_recurso_indeferimento").value,
+    motivo_indeferimento: document.getElementById("edit_motivo_indeferimento_recurso_indeferimento").value,
+    anterioridade_citada: document.getElementById("edit_anterioridade_citada_recurso_indeferimento").value,
+    conjunto_marcario: document.getElementById("edit_conjunto_marcario_recurso_indeferimento").value,
+    elementos_distintivos: document.getElementById("edit_elementos_distintivos_recurso_indeferimento").value,
+    precedentes_distintividade: document.getElementById("edit_precedentes_distintividade_recurso_indeferimento").value,
+    registros_similares: document.getElementById("edit_registros_similares_recurso_indeferimento").value,
+    segmento_mercado: document.getElementById("edit_segmento_mercado_recurso_indeferimento").value,
+    publico_alvo_distinto: document.getElementById("edit_publico_alvo_distinto_recurso_indeferimento").value,
+    outros_argumentos: document.getElementById("edit_outros_argumentos_recurso_indeferimento").value
+  };
+  fetch(`${API_URL}/recurso_indeferimento/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(resp => resp.json())
+  .then(() => {
+    fecharModal('RecursoIndeferimento');
+    listarRecursoIndeferimento();
+  });
+});
+
+
+
+        
+
+    // Atualiza todas as listas
+    function atualizarListas() {
+      listarCaducidade();
+      listarOposicao();
+      listarNulidade();
+      listarContrarazaoNulidade();
+      listarManifestacaoOposicao();
+      listarManifestacaoRecurso();
+      listarRecursoIndeferimento();
+    }
+
+    document.addEventListener("DOMContentLoaded", atualizarListas);
   </script>
 </body>
+<a id="seta-voltar" href="index.html" style="text-decoration:none;position:fixed;top:20px;left:20px;z-index:2000;">
+  <span style="font-size:2rem;">&#8592;</span> 
+</a>
 </html>

@@ -24,6 +24,7 @@
     <ul id="historicoPerguntas" class="list-group"></ul>
   </div>
   <script>
+    const API_URL = "http://localhost:8000"; // ou o endereço correto da sua API
     const historico = [];
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -55,7 +56,7 @@
 
     function consultarOracle(pergunta, callback) {
       const token = localStorage.getItem("token");
-      fetch("http://localhost:8000/oracle/query", {
+      fetch(`${API_URL}/oracle/query`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

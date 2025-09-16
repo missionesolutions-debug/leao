@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Manifestação ao Recurso de Indeferimento</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:600px; margin-top:80px;">
+    <h2>Manifestação ao Recurso de Indeferimento</h2>
+    <p class="mb-4">Forneça os dados solicitados abaixo para geração da manifestação ao recurso do indeferimento.</p>
+    <form id="manifestacaoForm">
+      <div class="form-group">
+        <label for="cliente">Cliente</label>
+        <input type="text" id="cliente" name="cliente" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="processo">Processo</label>
+        <input type="text" id="processo" name="processo" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca">Marca</label>
+        <input type="text" id="marca" name="marca" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe">Classe</label>
+        <input type="text" id="classe" name="classe" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="titular">Titular</label>
+        <input type="text" id="titular" name="titular" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="rpi_data">RpiData</label>
+        <input type="text" id="rpi_data" name="rpi_data" class="form-control" placeholder="01/01/0001">
+      </div>
+      <div class="form-group">
+        <label for="numero_rpi">Número da RPI</label>
+        <input type="text" id="numero_rpi" name="numero_rpi" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="fundamento_recorrente">Fundamento da Recorrente</label>
+        <textarea id="fundamento_recorrente" name="fundamento_recorrente" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="fundamento_legal">Fundamento Legal para indeferimento</label>
+        <textarea id="fundamento_legal" name="fundamento_legal" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Cadastrar Manifestação</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.addEventListener("DOMContentLoaded", function () {
+      const manifestacaoForm = document.getElementById("manifestacaoForm");
+
+      manifestacaoForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const manifestacao = {
+          cliente: document.getElementById("cliente").value,
+          processo: document.getElementById("processo").value,
+          marca: document.getElementById("marca").value,
+          classe: document.getElementById("classe").value,
+          titular: document.getElementById("titular").value,
+          rpi_data: document.getElementById("rpi_data").value,
+          numero_rpi: document.getElementById("numero_rpi").value,
+          fundamento_recorrente: document.getElementById("fundamento_recorrente").value,
+          fundamento_legal: document.getElementById("fundamento_legal").value,
+        };
+        const token = localStorage.getItem("token");
+        fetch(`${API_URL}/manifestacao_recurso/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(manifestacao),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.id) {
+            alert("Manifestação cadastrada com sucesso!");
+            window.location.href = "marca.html";
+          } else {
+            alert(data.detail || "Erro ao cadastrar manifestação");
+          }
+        })
+        .catch(() => alert("Erro de conexão com o servidor"));
+      });
+    });
+  </script>
+</body>
+</html>

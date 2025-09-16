@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Contrarrazão à Nulidade</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:600px; margin-top:40px;">
+    <h2>Contrarrazão à Nulidade</h2>
+    <p class="mb-4">Forneça os dados solicitados abaixo para geração da contra-razão à nulidade de marca.</p>
+    <form id="contrarrazaoForm">
+      <div class="form-group">
+        <label for="cliente">Cliente</label>
+        <input type="text" id="cliente" name="cliente" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe">Classe</label>
+        <input type="text" id="classe" name="classe" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="titular">Titular</label>
+        <input type="text" id="titular" name="titular" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="especificacoes">Especificações</label>
+        <input type="text" id="especificacoes" name="especificacoes" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="numero">Número</label>
+        <input type="text" id="numero" name="numero" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input type="text" id="data" name="data" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="marca_terceiro">Marca de terceiro</label>
+        <input type="text" id="marca_terceiro" name="marca_terceiro" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="processo_terceiro">Processo de terceiro</label>
+        <input type="text" id="processo_terceiro" name="processo_terceiro" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="marca_requerida">Marca Requerida</label>
+        <input type="text" id="marca_requerida" name="marca_requerida" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="processo_requerido">Processo requerido</label>
+        <input type="text" id="processo_requerido" name="processo_requerido" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="marca_cliente">Marca do Cliente</label>
+        <input type="text" id="marca_cliente" name="marca_cliente" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="comentario_diferenca">Comentar sobre a diferença entre as marcas</label>
+        <textarea id="comentario_diferenca" name="comentario_diferenca" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="planilha_similares">Planilha marcas similares</label>
+        <input type="text" id="planilha_similares" name="planilha_similares" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="comentario_distincao">Comentar sobre a distinção entre produto e serviço</label>
+        <textarea id="comentario_distincao" name="comentario_distincao" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('contrarrazaoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/contrarazao_nulidade/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Contrarrazão enviada!');
+        window.location.href = 'marca.html';
+      })
+      .catch(() => alert('Erro ao enviar contrarrazão.'));
+    });
+  </script>
+</body>
+</html>

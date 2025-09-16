@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Petição de Manifestação à Oposição ao Registro de Marca</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:700px; margin-top:40px;">
+    <h2>Petição de Manifestação à Oposição ao Registro de Marca</h2>
+    <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+    <form id="manifestacaoOposicaoForm">
+      <div class="form-group">
+        <label for="numero_registro">Número do Registro</label>
+        <input type="text" id="numero_registro" name="numero_registro" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="numero_processo">Número do processo administrativo (9 dígitos)</label>
+        <input type="text" id="numero_processo" name="numero_processo" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="data_deposito">Data do Depósito</label>
+        <input type="text" id="data_deposito" name="data_deposito" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="data_protocolo">Data do protocolo do registro</label>
+        <input type="text" id="data_protocolo" name="data_protocolo" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="marca_registrada">Marca Registrada</label>
+        <input type="text" id="marca_registrada" name="marca_registrada" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="classe_registro">Classe do Registro</label>
+        <input type="text" id="classe_registro" name="classe_registro" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="especificacao_registro">Especificação do Registro</label>
+        <input type="text" id="especificacao_registro" name="especificacao_registro" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="titular_registro">Titular do Registro</label>
+        <input type="text" id="titular_registro" name="titular_registro" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="rpi_oposicao">RPI da Oposição</label>
+        <input type="text" id="rpi_oposicao" name="rpi_oposicao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data_oposicao">Data da Oposição</label>
+        <input type="text" id="data_oposicao" name="data_oposicao" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="opoente">Opoente</label>
+        <input type="text" id="opoente" name="opoente" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="marca_oposicao">Marca da Oposição</label>
+        <input type="text" id="marca_oposicao" name="marca_oposicao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="processo_oposicao">Processo da Oposição</label>
+        <input type="text" id="processo_oposicao" name="processo_oposicao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="fundamento_oposicao">Fundamento da Oposição</label>
+        <input type="text" id="fundamento_oposicao" name="fundamento_oposicao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="tipo_conflito">Tipo de Conflito Alegado</label>
+        <input type="text" id="tipo_conflito" name="tipo_conflito" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="tipo_reproducao">Tipo de Reprodução Alegada</label>
+        <input type="text" id="tipo_reproducao" name="tipo_reproducao" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="analise_mercadologica">Análise Mercadológica Defesa</label>
+        <textarea id="analise_mercadologica" name="analise_mercadologica" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="distintividade_fonetica">Distintividade Fonética</label>
+        <textarea id="distintividade_fonetica" name="distintividade_fonetica" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="distintividade_ideologica">Distintividade Ideológica</label>
+        <textarea id="distintividade_ideologica" name="distintividade_ideologica" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="distintividade_visual">Distintividade Visual</label>
+        <textarea id="distintividade_visual" name="distintividade_visual" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="especialidade_segmento">Especialidade Segmento</label>
+        <input type="text" id="especialidade_segmento" name="especialidade_segmento" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="especialidade_publico">Especialidade Público</label>
+        <input type="text" id="especialidade_publico" name="especialidade_publico" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="especialidade_canais">Especialidade Canais</label>
+        <input type="text" id="especialidade_canais" name="especialidade_canais" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="coexistencia">Coexistência</label>
+        <input type="text" id="coexistencia" name="coexistencia" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="decisoes_anteriores">Decisões Anteriores</label>
+        <input type="text" id="decisoes_anteriores" name="decisoes_anteriores" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="uso_boa_fe">Uso Anterior de Boa-Fé</label>
+        <input type="text" id="uso_boa_fe" name="uso_boa_fe" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="outros_registros">Outros Registros</label>
+        <input type="text" id="outros_registros" name="outros_registros" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="ma_fe">Má Fé</label>
+        <input type="text" id="ma_fe" name="ma_fe" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('manifestacaoOposicaoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/manifestacao_oposicao/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Manifestação enviada!');
+        window.location.href = 'marca.html';
+      })
+      .catch(() => alert('Erro ao enviar manifestação.'));
+    });
+  </script>
+</body>
+</html>

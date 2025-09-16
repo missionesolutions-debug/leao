@@ -124,6 +124,410 @@ async function consultarOracle(pergunta) {
   }
 }
 
+// ----------- CADUCIDADE -----------
+
+// Criar (POST)
+async function criarCaducidade(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/caducidade/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarCaducidades() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/caducidade/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterCaducidade(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/caducidade/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarCaducidade(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/caducidade/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarCaducidade(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/caducidade/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+// ----------- CONTRARRAZÃO À NULIDADE -----------
+
+// Criar (POST)
+async function criarContrarazaoNulidade(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/contrarazao_nulidade/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarContrarrazoesNulidade() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/contrarazao_nulidade/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterContrarazaoNulidade(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/contrarazao_nulidade/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarContrarazaoNulidade(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/contrarazao_nulidade/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarContrarazaoNulidade(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/contrarazao_nulidade/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// ----------- MANIFESTAÇÃO À OPOSIÇÃO -----------
+
+// Criar (POST)
+async function criarManifestacaoOposicao(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_oposicao/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarManifestacoesOposicao() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_oposicao/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterManifestacaoOposicao(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_oposicao/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarManifestacaoOposicao(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_oposicao/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarManifestacaoOposicao(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_oposicao/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// ----------- MANIFESTAÇÃO AO RECURSO -----------
+
+// Criar (POST)
+async function criarManifestacaoRecurso(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarManifestacoesRecurso() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterManifestacaoRecurso(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarManifestacaoRecurso(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarManifestacaoRecurso(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// ----------- MANIFESTAÇÃO AO RECURSO -----------
+
+// Criar (POST)
+async function criarManifestacaoRecurso(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarManifestacoesRecurso() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterManifestacaoRecurso(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarManifestacaoRecurso(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarManifestacaoRecurso(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/manifestacao_recurso/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// ----------- OPOSIÇÃO -----------
+
+// Criar (POST)
+async function criarOposicao(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/oposicao/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarOposicoes() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/oposicao/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterOposicao(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/oposicao/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarOposicao(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/oposicao/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarOposicao(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/oposicao/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// ----------- RECURSO AO INDEFERIMENTO -----------
+
+// Criar (POST)
+async function criarRecursoIndeferimento(data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/recurso_indeferimento/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Listar todos (GET)
+async function listarRecursosIndeferimento() {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/recurso_indeferimento/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Obter um (GET)
+async function obterRecursoIndeferimento(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/recurso_indeferimento/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
+
+// Atualizar (PUT)
+async function atualizarRecursoIndeferimento(id, data) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/recurso_indeferimento/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return await resp.json();
+}
+
+// Deletar (DELETE)
+async function deletarRecursoIndeferimento(id) {
+  const token = localStorage.getItem("token");
+  const resp = await fetch(`${API_URL}/recurso_indeferimento/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return await resp.json();
+}
 // ----------- INTEGRAÇÃO COM FORMULÁRIOS HTML -----------
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -169,6 +573,151 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       const pergunta = document.getElementById("oraclePergunta").value;
       consultarOracle(pergunta);
+    });
+  }
+
+  // CADUCIDADE
+  const caducidadeForm = document.getElementById("caducidadeForm");
+  if (caducidadeForm) {
+    caducidadeForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        registro_marca: document.getElementById("registro_marca").value,
+        // ...outros campos do formulário...
+      };
+      const resp = await criarCaducidade(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // CONTRARRAZÃO À NULIDADE
+  const contrarrazaoForm = document.getElementById("contrarrazaoForm");
+  if (contrarrazaoForm) {
+    contrarrazaoForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        cliente: document.getElementById("cliente").value,
+        // ...outros campos do formulário...
+      };
+      const resp = await criarContrarazaoNulidade(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // MANIFESTAÇÃO À OPOSIÇÃO
+  const manifestacaoOposicaoForm = document.getElementById(
+    "manifestacaoOposicaoForm"
+  );
+  if (manifestacaoOposicaoForm) {
+    manifestacaoOposicaoForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        numero_registro: document.getElementById("numero_registro").value,
+        numero_processo: document.getElementById("numero_processo").value,
+        // ...adicione os outros campos conforme seu formulário...
+      };
+      const resp = await criarManifestacaoOposicao(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // MANIFESTAÇÃO AO RECURSO
+  const manifestacaoRecursoForm = document.getElementById(
+    "manifestacaoRecursoForm"
+  );
+  if (manifestacaoRecursoForm) {
+    manifestacaoRecursoForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        cliente: document.getElementById("cliente").value,
+        processo: document.getElementById("processo").value,
+        // ...adicione os outros campos conforme seu formulário...
+      };
+      const resp = await criarManifestacaoRecurso(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // NULIDADE
+  const nulidadeForm = document.getElementById("nulidadeForm");
+  if (nulidadeForm) {
+    nulidadeForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        numero_registro: document.getElementById("numero_registro").value,
+        marca_registrada: document.getElementById("marca_registrada").value,
+        // ...adicione os outros campos conforme seu formulário...
+      };
+      const resp = await criarNulidade(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // OPOSIÇÃO
+  const oposicaoForm = document.getElementById("oposicaoForm");
+  if (oposicaoForm) {
+    oposicaoForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        processo_contestado: document.getElementById("processo_contestado")
+          .value,
+        marca_contestada: document.getElementById("marca_contestada").value,
+        // ...adicione os outros campos conforme seu formulário...
+      };
+      const resp = await criarOposicao(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
+    });
+  }
+
+  // RECURSO AO INDEFERIMENTO
+  const recursoIndeferimentoForm = document.getElementById(
+    "recursoIndeferimentoForm"
+  );
+  if (recursoIndeferimentoForm) {
+    recursoIndeferimentoForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        numero_processo: document.getElementById("numero_processo").value,
+        marca: document.getElementById("marca").value,
+        // ...adicione os outros campos conforme seu formulário...
+      };
+      const resp = await criarRecursoIndeferimento(data);
+      if (resp.id) {
+        alert("Cadastrado com sucesso!");
+        window.location.href = "marca.html";
+      } else {
+        alert("Erro ao cadastrar!");
+      }
     });
   }
 });

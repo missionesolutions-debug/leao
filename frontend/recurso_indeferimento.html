@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Petição de Recurso ao Indeferimento</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:700px; margin-top:40px;">
+    <h2>Petição de Recurso ao Indeferimento</h2>
+    <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
+    <form id="recursoIndeferimentoForm">
+      <div class="form-group">
+        <label for="numero_processo">Número do Processo</label>
+        <input type="text" id="numero_processo" name="numero_processo" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca">Marca</label>
+        <input type="text" id="marca" name="marca" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe_nice">Classe Nice</label>
+        <input type="text" id="classe_nice" name="classe_nice" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="especificacao">Especificação</label>
+        <input type="text" id="especificacao" name="especificacao" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="titular">Titular</label>
+        <input type="text" id="titular" name="titular" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="rpi_indeferimento">RPI do Indeferimento</label>
+        <input type="text" id="rpi_indeferimento" name="rpi_indeferimento" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data_indeferimento">Data Indeferimento</label>
+        <input type="text" id="data_indeferimento" name="data_indeferimento" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="base_legal_indeferimento">Base Legal do Indeferimento</label>
+        <textarea id="base_legal_indeferimento" name="base_legal_indeferimento" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="motivo_indeferimento">Motivo do Indeferimento</label>
+        <textarea id="motivo_indeferimento" name="motivo_indeferimento" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="anterioridade_citada">Anterioridade Citada</label>
+        <input type="text" id="anterioridade_citada" name="anterioridade_citada" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="conjunto_marcario">Conjunto Marcário</label>
+        <input type="text" id="conjunto_marcario" name="conjunto_marcario" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="elementos_distintivos">Elementos Distintivos</label>
+        <input type="text" id="elementos_distintivos" name="elementos_distintivos" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="precedentes_distintividade">Precedentes de Distintividade</label>
+        <input type="text" id="precedentes_distintividade" name="precedentes_distintividade" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="registros_similares">Registros Similares</label>
+        <input type="text" id="registros_similares" name="registros_similares" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="segmento_mercado">Segmento de Mercado</label>
+        <input type="text" id="segmento_mercado" name="segmento_mercado" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="publico_alvo_distinto">Público-Alvo Distinto</label>
+        <input type="text" id="publico_alvo_distinto" name="publico_alvo_distinto" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="outros_argumentos">Outros Argumentos</label>
+        <textarea id="outros_argumentos" name="outros_argumentos" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('recursoIndeferimentoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/recurso_indeferimento/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Recurso enviado!');
+        window.location.href = 'marca.html';
+      })
+      .catch(() => alert('Erro ao enviar recurso.'));
+    });
+  </script>
+</body>
+</html>

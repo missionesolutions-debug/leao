@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Petição de Caducidade de Registro de Marca</title>
+  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+</head>
+<body>
+  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+    &#8592;
+  </a>
+  <div class="container" style="max-width:600px; margin-top:40px;">
+    <h2>Petição de Caducidade de Registro de Marca</h2>
+    <p class="mb-4">Solicite a extinção de registros inativos com base nos artigos 142 e 143 da LPI.</p>
+    <form id="caducidadeForm">
+      <div class="form-group">
+        <label for="registro_marca">Registro da Marca</label>
+        <input type="text" id="registro_marca" name="registro_marca" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="marca_requerida">Marca Requerida</label>
+        <input type="text" id="marca_requerida" name="marca_requerida" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="classe_marca">Classe da Marca</label>
+        <input type="text" id="classe_marca" name="classe_marca" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="especificacoes">Especificações</label>
+        <input type="text" id="especificacoes" name="especificacoes" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="titular_marca">Titular da Marca</label>
+        <input type="text" id="titular_marca" name="titular_marca" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="numero_processo">Número do Processo</label>
+        <input type="text" id="numero_processo" name="numero_processo" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="nome_cliente">Nome do Cliente</label>
+        <input type="text" id="nome_cliente" name="nome_cliente" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="marca_cliente">Marca do Cliente</label>
+        <input type="text" id="marca_cliente" name="marca_cliente" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="data_deposito">Data do Depósito</label>
+        <input type="text" id="data_deposito" name="data_deposito" class="form-control" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="classe_marca_cliente">Classe da Marca do Cliente</label>
+        <input type="text" id="classe_marca_cliente" name="classe_marca_cliente" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8000";
+    document.getElementById('caducidadeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`${API_URL}/caducidade/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        alert('Petição enviada!');
+      window.location.href = "marca.html";
+      })
+      .catch(() => alert('Erro ao enviar petição.'));
+    });
+  </script>
+</body>
+</html>
