@@ -1,7 +1,7 @@
 "use strict";
 
 // URL do backend FastAPI
-const API_URL = "http://localhost:8000";
+const API_URL = window.APP_CONFIG.API_URL;
 
 // ----------- AUTENTICAÇÃO -----------
 

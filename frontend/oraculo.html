@@ -24,7 +24,7 @@
     <ul id="historicoPerguntas" class="list-group"></ul>
   </div>
   <script>
-    const API_URL = "http://localhost:8000"; // ou o endereço correto da sua API
+    const API_URL = window.APP_CONFIG.API_URL; // ou o endereço correto da sua API
     const historico = [];
 
     document.addEventListener("DOMContentLoaded", function () {

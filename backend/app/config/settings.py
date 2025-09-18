@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DEBUG: bool = False
-    ALLOW_ORIGINS: str = ["http://localhost:3000"]
+    ALLOW_ORIGINS: str = ["https://www.leaoia.com.br", "http://www.leaoia.com.br"]
 
     class Config:
         env_file = "app/.env"
