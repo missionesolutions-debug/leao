@@ -4,5 +4,5 @@ window.APP_CONFIG = {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
       ? "http://localhost:8000" // Desenvolvimento
-      : "https://www.leaoai.com.br/api", // Produção
+      : "https://www.leaoia.com.br/api", // Produção
 };

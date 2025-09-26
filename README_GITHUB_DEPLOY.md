@@ -9,7 +9,7 @@
 1. **Você faz push** para branch `NewPython-only-front`
 2. **GitHub Actions** executa automaticamente
 3. **Deploy acontece** no Digital Ocean
-4. **Site fica online** em www.leaoai.com.br
+4. **Site fica online** em www.leaoia.com.br
 
 ---
 

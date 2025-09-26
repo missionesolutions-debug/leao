@@ -1,4 +1,4 @@
-# 🌊 DEPLOY NO DIGITAL OCEAN - www.leaoai.com.br
+# 🌊 DEPLOY NO DIGITAL OCEAN - www.leaoia.com.br
 
 ## 🚀 CONFIGURAÇÃO COMPLETA PARA DIGITAL OCEAN + GITHUB
 

@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DEBUG: bool = False
     ALLOW_ORIGINS: list = [
-        "https://www.leaoai.com.br", 
-        "http://www.leaoai.com.br",
+        "https://www.leaoia.com.br", 
+        "http://www.leaoia.com.br",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",

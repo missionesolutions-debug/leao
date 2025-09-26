@@ -22,8 +22,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",        # Desenvolvimento frontend
         "http://127.0.0.1:3000",        # Desenvolvimento local
-        "https://www.leaoai.com.br",    # Produção
-        "http://www.leaoai.com.br",     # Produção sem HTTPS (fallback)
+        "https://www.leaoia.com.br",    # Produção
+        "http://www.leaoia.com.br",     # Produção sem HTTPS (fallback)
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
