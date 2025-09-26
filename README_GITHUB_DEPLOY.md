@@ -2,7 +2,7 @@
 
 ## ✅ TUDO CONFIGURADO PARA DEPLOY VIA GITHUB!
 
-<!-- Deploy sync 26/09/2025 16:05 -->
+<!-- Deploy test SSH fixed 26/09/2025 16:10 -->
 
 ### 🎯 **Como funciona:**
 
