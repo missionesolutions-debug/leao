@@ -2,6 +2,8 @@
 
 ## ✅ TUDO CONFIGURADO PARA DEPLOY VIA GITHUB!
 
+<!-- Deploy test 26/09/2025 -->
+
 ### 🎯 **Como funciona:**
 
 1. **Você faz push** para branch `NewPython-only-front`
