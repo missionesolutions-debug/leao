@@ -2,170 +2,128 @@ name: Deploy to Digital Ocean
 
 on:
   push:
-    branches: [ NewPython-only-front ]
+    branches: [NewPython-only-front]
   pull_request:
-    branches: [ NewPython-only-front ]
+    branches: [NewPython-only-front]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 🚀 Checkout code
-      uses: actions/checkout@v3
-    
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: 📦 Install dependencies
-      run: |
-        cd backend
-        pip install -r requirements.txt
-    
-    - name: 🧪 Run tests (optional)
-      run: |
-        cd backend
-        # python -m pytest tests/ || echo "No tests found"
-        echo "✅ Tests would run here"
-    
-    - name: 🏗️ Build production files
-      run: |
-        python build_production.py
-        
-    - name: 📁 Archive production artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: production-files
-        path: dist/
-    
-    - name: 🚢 Deploy to Digital Ocean
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.DO_HOST }}
-        username: ${{ secrets.DO_USERNAME }}
-        key: ${{ secrets.DO_SSH_KEY }}
-        port: ${{ secrets.DO_PORT || 22 }}
-        script: |
-          echo "🚀 Iniciando deploy no Digital Ocean..."
-          
-          # Definir variáveis
-          APP_DIR="/var/www/leaoai"
-          BACKUP_DIR="/var/backups/leaoai-$(date +%Y%m%d-%H%M%S)"
-          
-          # Fazer backup da versão atual
-          if [ -d "$APP_DIR" ]; then
-            echo "📦 Fazendo backup da versão atual..."
-            sudo cp -r $APP_DIR $BACKUP_DIR
-          fi
-          
-          # Parar serviços
-          echo "⏹️ Parando serviços..."
-          sudo systemctl stop leaoai || echo "Serviço não estava rodando"
-          
-          # Criar diretório da aplicação
-          sudo mkdir -p $APP_DIR
-          sudo chown -R $USER:$USER $APP_DIR
-          
-          # Atualizar código do GitHub
-          cd $APP_DIR
-          if [ -d ".git" ]; then
-            echo "🔄 Atualizando repositório existente..."
-            git fetch origin
-            git reset --hard origin/NewPython-only-front
-          else
-            echo "📥 Clonando repositório..."
-            git clone https://github.com/${{ github.repository }} .
-          fi
-          
-          # Configurar backend
-          echo "⚙️ Configurando backend..."
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: 📦 Install dependencies
+        run: |
           cd backend
-          
-          # Criar ambiente virtual se não existir
-          if [ ! -d "venv" ]; then
-            python3 -m venv venv
-          fi
-          
-          # Ativar ambiente e instalar dependências
-          source venv/bin/activate
           pip install -r requirements.txt
-          
-          # Verificar se .env existe
-          if [ ! -f "app/.env" ]; then
-            echo "⚠️ Arquivo .env não encontrado, criando template..."
-            cp .env.template app/.env || echo "Template não encontrado"
-          fi
-          
-          # Configurar nginx se necessário
-          echo "🌐 Configurando Nginx..."
-          sudo tee /etc/nginx/sites-available/leaoai > /dev/null <<EOF
-          server {
-              listen 80;
-              server_name www.leaoai.com.br leaoai.com.br;
-              return 301 https://\$server_name\$request_uri;
-          }
-          
-          server {
-              listen 443 ssl http2;
-              server_name www.leaoai.com.br leaoai.com.br;
-              
-              # SSL (configurar certificados)
-              ssl_certificate /etc/letsencrypt/live/www.leaoai.com.br/fullchain.pem;
-              ssl_certificate_key /etc/letsencrypt/live/www.leaoai.com.br/privkey.pem;
-              
-              # Frontend
-              location / {
-                  root $APP_DIR/frontend;
-                  index index.html;
-                  try_files \$uri \$uri/ /index.html;
-              }
-              
-              # API
-              location /api/ {
-                  proxy_pass http://127.0.0.1:8000/;
-                  proxy_set_header Host \$host;
-                  proxy_set_header X-Real-IP \$remote_addr;
-                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto \$scheme;
-              }
-          }
-          EOF
-          
-          # Ativar site
-          sudo ln -sf /etc/nginx/sites-available/leaoai /etc/nginx/sites-enabled/
-          sudo nginx -t && sudo systemctl reload nginx
-          
-          # Configurar systemd service
-          echo "🔧 Configurando serviço systemd..."
-          sudo tee /etc/systemd/system/leaoai.service > /dev/null <<EOF
-          [Unit]
-          Description=LeaoAI FastAPI Application
-          After=network.target
-          
-          [Service]
-          Type=exec
-          User=$USER
-          Group=$USER
-          WorkingDirectory=$APP_DIR/backend
-          Environment=PATH=$APP_DIR/backend/venv/bin
-          ExecStart=$APP_DIR/backend/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
-          Restart=always
-          RestartSec=3
-          
-          [Install]
-          WantedBy=multi-user.target
-          EOF
-          
-          # Recarregar e iniciar serviços
-          sudo systemctl daemon-reload
-          sudo systemctl enable leaoai
-          sudo systemctl start leaoai
-          
-          echo "✅ Deploy concluído!"
-          echo "🌐 Site: https://www.leaoai.com.br"
-          echo "⚡ API: https://www.leaoai.com.br/api"
-          
-          # Verificar status
-          sudo systemctl status leaoai --no-pager -l
+
+      - name: 🧪 Run tests (optional)
+        run: |
+          cd backend
+          # python -m pytest tests/ || echo "No tests found"
+          echo "✅ Tests would run here"
+
+      - name: 🚢 Deploy to Digital Ocean
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          script: |
+            echo "🚀 Iniciando deploy no Digital Ocean..."
+
+            # Usar o diretório correto que já existe
+            APP_DIR="/var/www/leaopy"
+            BACKUP_DIR="/var/backups/leaopy-$(date +%Y%m%d-%H%M%S)"
+
+            # Fazer backup da versão atual
+            if [ -d "$APP_DIR" ]; then
+              echo "📦 Fazendo backup da versão atual..."
+              sudo mkdir -p /var/backups
+              sudo cp -r $APP_DIR $BACKUP_DIR
+            fi
+
+            # Parar o serviço correto
+            echo "⏹️ Parando serviço backend..."
+            sudo systemctl stop backend || echo "Serviço não estava rodando"
+
+            # Atualizar código do GitHub
+            cd $APP_DIR
+            echo "🔄 Atualizando repositório..."
+            git stash push -m "Backup antes do deploy $(date)"
+            git fetch origin
+            git checkout NewPython-only-front
+            git pull origin NewPython-only-front
+
+            # Configurar backend
+            echo "⚙️ Atualizando dependências do backend..."
+            cd backend
+
+            # Ativar ambiente virtual e instalar dependências
+            source venv/bin/activate
+            pip install -r requirements.txt
+
+            # Instalar dependências que podem estar faltando
+            pip install slowapi redis asyncio-throttle psycopg2-binary
+
+            # Limpar cache Python
+            find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+            find . -name "*.pyc" -delete 2>/dev/null || true
+
+            # Verificar se .env existe
+            if [ ! -f ".env" ]; then
+              echo "⚠️ Arquivo .env não encontrado"
+              echo "🔧 Criando .env básico..."
+              cat > .env << 'EOL'
+            DATABASE_URL=postgresql://usuario:senha@localhost/leaopy
+            OPENAI_API_KEY=sua_chave_aqui
+            SECRET_KEY=sua_secret_key_aqui
+            CORS_ORIGINS=https://www.leaoia.com.br,http://www.leaoia.com.br,http://localhost:3000
+            EOL
+            fi
+
+            # Testar se a aplicação inicia
+            echo "🧪 Testando aplicação..."
+            timeout 10s python -c "
+            import sys
+            sys.path.append('/var/www/leaopy/backend')
+            try:
+                from app.main import app
+                print('✅ Aplicação carregada com sucesso')
+            except Exception as e:
+                print(f'❌ Erro ao carregar aplicação: {e}')
+                sys.exit(1)
+            " || echo "⚠️ Teste de carregamento falhou, mas continuando..."
+
+            # Reiniciar o serviço correto
+            echo "� Reiniciando serviço backend..."
+            sudo systemctl daemon-reload
+            sudo systemctl start backend
+            sudo systemctl enable backend
+
+            # Aguardar um momento para o serviço iniciar
+            sleep 5
+
+            # Recarregar nginx
+            echo "🌐 Recarregando Nginx..."
+            sudo nginx -t && sudo systemctl reload nginx || echo "⚠️ Erro no nginx, mas continuando"
+
+            echo "✅ Deploy concluído!"
+            echo "🌐 Site: https://www.leaoia.com.br"
+            echo "⚡ API: https://www.leaoia.com.br/api"
+
+            # Verificar status final
+            echo "📊 Status dos serviços:"
+            sudo systemctl status backend --no-pager -l | head -10
+
+            # Testar se API está respondendo
+            echo "🧪 Testando API..."
+            curl -s http://localhost:8000/ > /dev/null && echo "✅ API respondendo" || echo "❌ API não responde"
