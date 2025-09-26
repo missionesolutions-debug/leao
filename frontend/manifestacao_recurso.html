@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <title>Manifestação ao Recurso de Indeferimento</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body>
   <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
-  <div class="container" style="max-width:600px; margin-top:80px;">
+  <div class="container" style="max-width:600px; margin-top:40px;">
     <h2>Manifestação ao Recurso de Indeferimento</h2>
     <p class="mb-4">Forneça os dados solicitados abaixo para geração da manifestação ao recurso do indeferimento.</p>
     <form id="manifestacaoForm">
@@ -31,7 +32,7 @@
       </div>
       <div class="form-group">
         <label for="titular">Titular</label>
-        <input type="text" id="titular" name="titular" class="form-control">
+        <input type="text" id="titular" name="titular" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="rpi_data">RpiData</label>
@@ -39,11 +40,11 @@
       </div>
       <div class="form-group">
         <label for="numero_rpi">Número da RPI</label>
-        <input type="text" id="numero_rpi" name="numero_rpi" class="form-control">
+        <input type="text" id="numero_rpi" name="numero_rpi" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="fundamento_recorrente">Fundamento da Recorrente</label>
-        <textarea id="fundamento_recorrente" name="fundamento_recorrente" class="form-control"></textarea>
+        <textarea id="fundamento_recorrente" name="fundamento_recorrente" class="form-control" required></textarea>
       </div>
       <div class="form-group">
         <label for="fundamento_legal">Fundamento Legal para indeferimento</label>
@@ -54,43 +55,87 @@
   </div>
   <script>
     const API_URL = window.APP_CONFIG.API_URL;
-    document.addEventListener("DOMContentLoaded", function () {
-      const manifestacaoForm = document.getElementById("manifestacaoForm");
-
-      manifestacaoForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const manifestacao = {
-          cliente: document.getElementById("cliente").value,
-          processo: document.getElementById("processo").value,
-          marca: document.getElementById("marca").value,
-          classe: document.getElementById("classe").value,
-          titular: document.getElementById("titular").value,
-          rpi_data: document.getElementById("rpi_data").value,
-          numero_rpi: document.getElementById("numero_rpi").value,
-          fundamento_recorrente: document.getElementById("fundamento_recorrente").value,
-          fundamento_legal: document.getElementById("fundamento_legal").value,
-        };
-        const token = localStorage.getItem("token");
-        fetch(`${API_URL}/manifestacao_recurso/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(manifestacao),
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.id) {
-            alert("Manifestação cadastrada com sucesso!");
-            window.location.href = "marca.html";
-          } else {
-            alert(data.detail || "Erro ao cadastrar manifestação");
-          }
-        })
-        .catch(() => alert("Erro de conexão com o servidor"));
+    
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = '⏳ Processando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Cadastrar Manifestação';
+    }
+    
+    document.getElementById("manifestacaoForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      // Mostrar loading simples
+      mostrarLoadingSimples();
+      
+      // Mapear campos do formulário para o schema esperado pela API
+      const manifestacao = {
+        processo_numero: document.getElementById("processo").value || 'Processo não informado',
+        processo_marca: document.getElementById("marca").value || 'Marca não informada',
+        processo_classe: document.getElementById("classe").value || 'Classe não informada',
+        processo_especificacao: 'Especificação não informada', // Campo obrigatório mas não existe no formulário
+        processo_titular: document.getElementById("titular").value || 'Titular não informado',
+        recurso_numero: document.getElementById("numero_rpi").value || 'Número RPI não informado',
+        recurso_data: document.getElementById("rpi_data").value || null,
+        recorrente: document.getElementById("cliente").value || 'Cliente não informado',
+        recurso_fundamento: document.getElementById("fundamento_recorrente").value || 'Fundamento não informado',
+        marca_anterior: '',
+        processo_anterior: '',
+        classe_anterior: '',
+        especificacao_anterior: '',
+        titular_anterior: document.getElementById("titular").value || 'Titular anterior não informado',
+        fundamento_legal: document.getElementById("fundamento_legal").value || '',
+        analise_merito: '',
+        precedentes_jurisprudencia: '',
+        argumentos_tecnicos: ''
+      };
+      
+      fetch(`${API_URL}/peticoes/manifestacao-recurso`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(manifestacao)
+      })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
+      })
+      .then(resp => {
+        ocultarLoadingSimples();
+        
+        // Salvar dados da petição para edição
+        dadosItemAtual = resp;
+        tipoItemAtual = 'manifestacao_recurso';
+        
+        // Mostrar modal de edição em vez de redirecionar
+        abrirModalEdicaoAvancada('manifestacao_recurso', resp.id);
+      })
+      .catch(error => {
+        ocultarLoadingSimples();
+        console.error('Erro ao gerar petição:', error);
+        alert('Erro ao gerar petição: ' + error.message);
       });
     });
   </script>
+  
+  <script src="scripts/historico-chat.js"></script>
 </body>
 </html>

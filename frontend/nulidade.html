@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <title>Petição de Nulidade ao Registro de Marca</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body>
   <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
-  <div class="container" style="max-width:700px; margin-top:40px;">
+  <div class="container" style="max-width:600px; margin-top:40px;">
     <h2>Petição de Nulidade ao Registro de Marca</h2>
     <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
     <form id="nulidadeForm">
@@ -106,22 +107,90 @@
   </div>
   <script>
     const API_URL = window.APP_CONFIG.API_URL;
+    
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = '⏳ Processando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Enviar';
+    }
+
     document.getElementById('nulidadeForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      // Mostrar loading simples
+      mostrarLoadingSimples();
+
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());
-      fetch(`${API_URL}/nulidade/`, {
+      
+      // Mapear os campos do formulário para os campos esperados pela API
+      const apiData = {
+        numero_registro: data.numero_registro,
+        marca_registrada: data.marca_registrada,
+        classe_registro: data.classe_registro,
+        especificacao_registro: data.especificacao_registro,
+        titular_registro: data.titular_registro,
+        data_concessao: data.data_concessao,
+        marca_anterior: data.marca_anterior,
+        processo_anterior: data.processo_anterior,
+        classe_anterior: data.classe_anterior,
+        data_deposito_anterior: data.data_deposito_anterior,
+        tipo_reproducao: data.tipo_reproducao,
+        elementos_similares: data.elementos_similares,
+        analise_visual: data.analise_visual,
+        analise_fonetica: data.analise_fonetica,
+        precedentes: data.precedentes,
+        ma_fe: data.ma_fe,
+        danos_mercado: data.danos_mercado,
+        decisoes_anteriores: data.decisoes_anteriores
+      };
+      
+      fetch(`${API_URL}/peticoes/nulidade`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(apiData)
       })
-      .then(resp => resp.json())
       .then(resp => {
-        alert('Petição enviada!');
-        window.location.href = 'marca.html';
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
       })
-      .catch(() => alert('Erro ao enviar petição.'));
+      .then(resp => {
+        ocultarLoadingSimples();
+        
+        // Salvar dados da petição para edição
+        dadosItemAtual = resp;
+        tipoItemAtual = 'nulidade';
+        
+        // Mostrar modal de edição em vez de redirecionar
+        abrirModalEdicaoAvancada('nulidade', resp.id);
+      })
+      .catch(error => {
+        ocultarLoadingSimples();
+        console.error('Erro ao gerar petição:', error);
+        alert('Erro ao gerar petição: ' + error.message);
+      });
     });
   </script>
+  
+  <script src="scripts/historico-chat.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from app.config.database import Base
 
 class ContrarazaoNulidade(Base):
-    __tablename__ = "contrarazoes_nulidade"
+    __tablename__ = "contrarazao_nulidade"
 
     id = Column(Integer, primary_key=True, index=True)
     cliente = Column(String, nullable=False)

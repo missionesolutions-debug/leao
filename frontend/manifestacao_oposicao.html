@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <title>Petição de Manifestação à Oposição ao Registro de Marca</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body>
   <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
-  <div class="container" style="max-width:700px; margin-top:40px;">
+  <div class="container" style="max-width:600px; margin-top:40px;">
     <h2>Petição de Manifestação à Oposição ao Registro de Marca</h2>
     <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
     <form id="manifestacaoOposicaoForm">
@@ -130,22 +131,90 @@
   </div>
   <script>
     const API_URL = window.APP_CONFIG.API_URL;
+    
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = '⏳ Processando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Enviar';
+    }
+
     document.getElementById('manifestacaoOposicaoForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      // Mostrar loading simples
+      mostrarLoadingSimples();
+      
       const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      fetch(`${API_URL}/manifestacao_oposicao/`, {
+      const formFields = Object.fromEntries(formData.entries());
+      
+      // Mapear campos do formulário para o schema esperado pela API
+      const data = {
+        processo_numero: formFields.numero_processo || '',
+        processo_marca: formFields.marca_registrada || '',
+        processo_classe: formFields.classe_registro || '',
+        processo_especificacao: formFields.especificacao_registro || '',
+        processo_titular: formFields.titular_registro || '',
+        oposicao_rpi: formFields.rpi_oposicao || '',
+        oposicao_data_rpi: formFields.data_oposicao || '',
+        oposicao_opoente: formFields.opoente || 'Opoente não informado',
+        oposicao_fundamento: formFields.fundamento_oposicao || 'Fundamento não informado',
+        marca_anterior: formFields.marca_oposicao || '',
+        processo_anterior: formFields.processo_oposicao || '',
+        classe_anterior: '',
+        especificacao_anterior: '',
+        titular_anterior: '',
+        fundamento_legal: '',
+        analise_distintividade: formFields.distintividade_fonetica || '',
+        coexistencia_mercado: formFields.coexistencia || '',
+        precedentes: formFields.decisoes_anteriores || ''
+      };
+      
+      fetch(`${API_URL}/peticoes/manifestacao-oposicao`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(data)
       })
-      .then(resp => resp.json())
       .then(resp => {
-        alert('Manifestação enviada!');
-        window.location.href = 'marca.html';
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
       })
-      .catch(() => alert('Erro ao enviar manifestação.'));
+      .then(resp => {
+        ocultarLoadingSimples();
+        
+        // Salvar dados da petição para edição
+        dadosItemAtual = resp;
+        tipoItemAtual = 'manifestacao_oposicao';
+        
+        // Mostrar modal de edição em vez de redirecionar
+        abrirModalEdicaoAvancada('manifestacao_oposicao', resp.id);
+      })
+      .catch(error => {
+        ocultarLoadingSimples();
+        console.error('Erro ao gerar petição:', error);
+        alert('Erro ao gerar petição: ' + error.message);
+      });
     });
   </script>
+  
+  <script src="scripts/historico-chat.js"></script>
 </body>
 </html>

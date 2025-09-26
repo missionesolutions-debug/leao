@@ -40,4 +40,4 @@ class ManifestacaoOposicaoResponse(ManifestacaoOposicaoBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

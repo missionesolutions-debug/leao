@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <title>Petição de Recurso ao Indeferimento</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body>
   <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
-  <div class="container" style="max-width:700px; margin-top:40px;">
+  <div class="container" style="max-width:600px; margin-top:40px;">
     <h2>Petição de Recurso ao Indeferimento</h2>
     <p class="mb-4">Gerencie e automatize o contencioso administrativo de marcas de forma simples e eficiente.</p>
     <form id="recursoIndeferimentoForm">
@@ -86,22 +87,90 @@
   </div>
   <script>
     const API_URL = window.APP_CONFIG.API_URL;
+    
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = '⏳ Processando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Enviar';
+    }
+    
     document.getElementById('recursoIndeferimentoForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      // Mostrar loading simples
+      mostrarLoadingSimples();
+      
       const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      fetch(`${API_URL}/recurso_indeferimento/`, {
+      const formFields = Object.fromEntries(formData.entries());
+      
+      // Mapear campos do formulário para o schema esperado pela API
+      const data = {
+        processo_numero: formFields.numero_processo || '',
+        processo_marca: formFields.marca || '',
+        processo_classe: formFields.classe_nice || '',
+        processo_especificacao: formFields.especificacao || '',
+        processo_titular: formFields.titular || '',
+        data_indeferimento: formFields.data_indeferimento || '',
+        motivo_indeferimento: formFields.motivo_indeferimento || '',
+        artigo_legal: formFields.base_legal_indeferimento || '',
+        fundamentacao_inpi: formFields.base_legal_indeferimento || '',
+        marca_colidente: formFields.anterioridade_citada || '',
+        processo_colidente: '',
+        titular_colidente: '',
+        contra_argumentacao: formFields.outros_argumentos || '',
+        distintividade: formFields.elementos_distintivos || '',
+        ausencia_confundibilidade: formFields.conjunto_marcario || '',
+        coexistencia_pacifica: formFields.publico_alvo_distinto || '',
+        precedentes: formFields.precedentes_distintividade || '',
+        doutrina: ''
+      };
+      
+      fetch(`${API_URL}/peticoes/recurso-indeferimento`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(data)
       })
-      .then(resp => resp.json())
       .then(resp => {
-        alert('Recurso enviado!');
-        window.location.href = 'marca.html';
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
       })
-      .catch(() => alert('Erro ao enviar recurso.'));
+      .then(resp => {
+        ocultarLoadingSimples();
+        
+        // Salvar dados da petição para edição
+        dadosItemAtual = resp;
+        tipoItemAtual = 'recurso_indeferimento';
+        
+        // Mostrar modal de edição em vez de redirecionar
+        abrirModalEdicaoAvancada('recurso_indeferimento', resp.id);
+      })
+      .catch(error => {
+        ocultarLoadingSimples();
+        console.error('Erro ao gerar petição:', error);
+        alert('Erro ao gerar petição: ' + error.message);
+      });
     });
   </script>
+  
+  <script src="scripts/historico-chat.js"></script>
 </body>
 </html>

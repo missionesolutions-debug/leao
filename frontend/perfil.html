@@ -2,143 +2,452 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Usuários</title>
+  <title>Administração de Usuários</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <style>
+    body { 
+      padding: 20px; 
+      font-family: Arial, sans-serif;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .back-arrow {
+      font-size: 24px;
+      margin-right: 15px;
+      text-decoration: none;
+      color: #333;
+    }
+    .back-arrow:hover {
+      color: #007bff;
+    }
+    .user-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+    }
+    .user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-details h4 {
+      margin: 0 0 5px 0;
+      color: #333;
+    }
+    .user-details p {
+      margin: 0;
+      color: #666;
+    }
+    .user-actions button {
+      margin-left: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-edit {
+      background: #007bff;
+      color: white;
+    }
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-edit:hover { background: #0056b3; }
+    .btn-delete:hover { background: #c82333; }
+    .status {
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 4px;
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    /* Estilos do Modal */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .modal-bg.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: #fff;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .modal-header h4 {
+      margin: 0;
+      color: #333;
+      font-size: 1.25rem;
+    }
+    
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn-close:hover {
+      color: #333;
+    }
+    
+    .modal-body {
+      padding: 20px 24px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .optional {
+      font-weight: normal;
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    
+    .form-text {
+      display: block;
+      margin-top: 6px;
+      color: #666;
+      font-size: 0.85em;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px 24px 20px;
+      border-top: 1px solid #eee;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-  <a href="menu.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Menu">
-    &#8592;
-  </a>
-  <div class="container" style="max-width:700px; margin-top:40px;">
-    <h2>Usuários</h2>
-    <p class="mb-4">Gerencie os usuários cadastrados no sistema.</p>
-    <ul id="usuariosList" class="list-group mb-4"></ul>
+  <div class="header">
+    <a href="menu.html" class="back-arrow" title="Voltar ao Menu">← </a>
+    <h2>👥 Administração de Usuários</h2>
   </div>
 
-  <!-- Modal Editar Usuário -->
-  <div id="modalUsuario" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
-    <div class="container" style="max-width:500px; margin-top:60px; background:#fff; border-radius:8px; box-shadow:0 2px 16px rgba(0,0,0,0.15); padding:2rem;">
-      <h4 class="mb-3">Editar Usuário</h4>
-      <form id="formUsuario">
-        <input type="hidden" id="usuarioId">
-        <div class="form-group mb-2">
-          <label for="usuarioUsername">Usuário</label>
-          <input type="text" id="usuarioUsername" class="form-control" required>
+  <div id="status" class="status">Carregando usuários...</div>
+  <div id="usuariosList"></div>
+
+  <!-- Modal de Edição de Usuário -->
+  <div id="modalEdicaoUsuario" class="modal-bg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>✏️ Editar Usuário</h4>
+        <button type="button" class="btn-close" onclick="fecharModalEdicao()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <input type="hidden" id="editUserId">
+        
+        <div class="form-group">
+          <label for="editUsername">👤 Nome do Usuário</label>
+          <input type="text" id="editUsername" class="form-control" placeholder="Digite o nome completo" required>
         </div>
-        <div class="form-group mb-2">
-          <label for="usuarioEmail">Email</label>
-          <input type="email" id="usuarioEmail" class="form-control" required>
+        
+        <div class="form-group">
+          <label for="editEmail">📧 Email</label>
+          <input type="email" id="editEmail" class="form-control" placeholder="exemplo@email.com" required>
         </div>
-        <div class="form-group mb-2">
-          <label for="usuarioPassword">Senha <span style="font-weight:normal;">(deixe em branco para não alterar)</span></label>
-          <input type="password" id="usuarioPassword" class="form-control">
+        
+        <div class="form-group">
+          <label for="editPassword">🔒 Nova Senha <span class="optional">(opcional)</span></label>
+          <input type="password" id="editPassword" class="form-control" placeholder="Deixe vazio para manter a senha atual">
+          <small class="form-text">Deixe em branco se não quiser alterar a senha.</small>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Salvar</button>
-        <button type="button" class="btn btn-secondary mt-2" onclick="fecharModalUsuario()">Cancelar</button>
-      </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalEdicao()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarEdicaoUsuario()">💾 Salvar Alterações</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const API_URL = window.APP_CONFIG.API_URL; // Altere para sua URL real se necessário
+    // Usar configuração global do ambiente
+    const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : "http://127.0.0.1:8000";
 
-    // Listar todos os usuários
-    function listarUsuarios() {
-      fetch(`${API_URL}/usuarios/`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      })
-      .then(resp => {
-        if (!resp.ok) throw new Error("Erro ao buscar usuários");
-        return resp.json();
-      })
-      .then(data => {
-        const ul = document.getElementById("usuariosList");
-        ul.innerHTML = "";
-        if (data.length === 0) {
-          ul.innerHTML = '<li class="list-group-item text-center text-muted">Nenhum usuário cadastrado.</li>';
-        }
-        data.forEach(user => {
-          const li = document.createElement("li");
-          li.className = "list-group-item d-flex justify-content-between align-items-center";
-          li.innerHTML = `
-            <span>
-              <strong>${user.username || user.nome || user.email}</strong> - ${user.email}
-            </span>
-            <span>
-              <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditarUsuario('${user.id}', '${user.username || user.nome || ""}', '${user.email}')">Editar</button>
-              <button class="btn btn-sm btn-danger" onclick="excluirUsuario('${user.id}')">Excluir</button>
-            </span>
-          `;
-          ul.appendChild(li);
-        });
-      })
-      .catch(() => {
-        alert("Erro ao buscar usuários. Faça login novamente."+ err.message);
-        //window.location.href = 'index.html';
-      });
-    }
-
-    // Abrir modal para editar usuário
-    function abrirModalEditarUsuario(id, username, email) {
-      document.getElementById("usuarioId").value = id;
-      document.getElementById("usuarioUsername").value = username;
-      document.getElementById("usuarioEmail").value = email;
-      document.getElementById("usuarioPassword").value = "";
-      document.getElementById("modalUsuario").style.display = "block";
-    }
-
-    function fecharModalUsuario() {
-      document.getElementById("modalUsuario").style.display = "none";
-    }
-
-    // Salvar edição de usuário
-    document.getElementById("formUsuario").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const id = document.getElementById("usuarioId").value;
-      const username = document.getElementById("usuarioUsername").value;
-      const email = document.getElementById("usuarioEmail").value;
-      const password = document.getElementById("usuarioPassword").value;
-
-      const userData = { username, email };
-      if (password) userData.password = password;
-
-      fetch(`${API_URL}/usuarios/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(userData)
-      })
-      .then(resp => {
-        if (resp.ok) {
-          fecharModalUsuario();
-          listarUsuarios();
-          alert('Usuário atualizado com sucesso!');
-        } else {
-          return resp.json().then(data => alert(data.detail || "Erro ao salvar usuário."));
-        }
-      });
-    });
-
-    // Excluir usuário
-    function excluirUsuario(id) {
-      if (confirm("Deseja excluir este usuário?")) {
-        fetch(`${API_URL}/usuarios/${id}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        })
-        .then(resp => {
-          if (resp.ok) {
-            listarUsuarios();
-          } else {
-            alert("Erro ao excluir usuário.");
-          }
-        });
+    function updateStatus(message, isError = false) {
+      const status = document.getElementById('status');
+      if (status) {
+        status.textContent = message;
+        status.className = isError ? 'status error' : 'status';
       }
     }
 
-    document.addEventListener("DOMContentLoaded", listarUsuarios);
+    function listarUsuarios() {
+      updateStatus('Carregando usuários...');
+      
+      fetch(`${API_URL}/usuarios/`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Erro: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(usuarios => {
+          updateStatus(`${usuarios.length} usuários encontrados`);
+          
+          const container = document.getElementById('usuariosList');
+          container.innerHTML = '';
+          
+          if (usuarios.length === 0) {
+            container.innerHTML = '<p>Nenhum usuário encontrado.</p>';
+            return;
+          }
+          
+          // Ordenar usuários por ID crescente
+          usuarios.sort((a, b) => a.id - b.id);
+          
+          usuarios.forEach(usuario => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-card';
+            userDiv.innerHTML = `
+              <div class="user-info">
+                <div class="user-details">
+                  <h4>${usuario.username || 'Sem nome'}</h4>
+                  <p>📧 ${usuario.email}</p>
+                  <p><small>ID: ${usuario.id}</small></p>
+                </div>
+                <div class="user-actions">
+                  <button class="btn-edit" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}')">
+                    ✏️ Editar
+                  </button>
+                  <button class="btn-delete" onclick="excluirUsuario(${usuario.id}, '${usuario.username || usuario.email}')">
+                    🗑️ Excluir
+                  </button>
+                </div>
+              </div>
+            `;
+            container.appendChild(userDiv);
+          });
+        })
+        .catch(error => {
+          updateStatus(`Erro ao carregar usuários: ${error.message}`, true);
+        });
+    }
+
+    function editarUsuario(id, username, email) {
+      // Preencher o modal com os dados atuais
+      document.getElementById('editUserId').value = id;
+      document.getElementById('editUsername').value = username || '';
+      document.getElementById('editEmail').value = email || '';
+      document.getElementById('editPassword').value = '';
+      
+      // Mostrar o modal
+      document.getElementById('modalEdicaoUsuario').classList.add('active');
+    }
+
+    function fecharModalEdicao() {
+      document.getElementById('modalEdicaoUsuario').classList.remove('active');
+      // Limpar os campos
+      document.getElementById('editUserId').value = '';
+      document.getElementById('editUsername').value = '';
+      document.getElementById('editEmail').value = '';
+      document.getElementById('editPassword').value = '';
+    }
+
+    function salvarEdicaoUsuario() {
+      const id = document.getElementById('editUserId').value;
+      const username = document.getElementById('editUsername').value.trim();
+      const email = document.getElementById('editEmail').value.trim();
+      const password = document.getElementById('editPassword').value.trim();
+      
+      // Validações básicas
+      if (!username || !email) {
+        alert('❌ Nome e email são obrigatórios!');
+        return;
+      }
+      
+      if (!email.includes('@')) {
+        alert('❌ Email deve ser válido!');
+        return;
+      }
+      
+      // Mostrar loading
+      const botaoSalvar = document.querySelector('#modalEdicaoUsuario .btn-primary');
+      const textoOriginal = botaoSalvar.innerHTML;
+      botaoSalvar.disabled = true;
+      botaoSalvar.innerHTML = '⏳ Salvando...';
+      
+      // Preparar dados para envio
+      const dados = {
+        username: username,
+        email: email
+      };
+      
+      // Adicionar senha apenas se foi preenchida
+      if (password) {
+        dados.password = password;
+      }
+      
+      fetch(`${API_URL}/usuarios/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      })
+      .then(response => {
+        if (response.ok) {
+          // Restaurar botão
+          botaoSalvar.disabled = false;
+          botaoSalvar.innerHTML = textoOriginal;
+          
+          // Fechar modal e recarregar
+          fecharModalEdicao();
+          
+          // Mostrar feedback
+          const feedback = document.createElement('div');
+          feedback.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
+          feedback.textContent = '✅ Usuário atualizado com sucesso!';
+          document.body.appendChild(feedback);
+          setTimeout(() => feedback.remove(), 3000);
+          
+          // Recarregar lista
+          listarUsuarios();
+        } else {
+          throw new Error('Erro na resposta da API');
+        }
+      })
+      .catch(error => {
+        // Restaurar botão
+        botaoSalvar.disabled = false;
+        botaoSalvar.innerHTML = textoOriginal;
+        
+        alert('❌ Erro ao atualizar usuário: ' + error.message);
+      });
+    }
+
+    function excluirUsuario(id, nome) {
+      if (confirm(`Tem certeza que deseja excluir o usuário "${nome}"?`)) {
+        fetch(`${API_URL}/usuarios/${id}`, { method: 'DELETE' })
+          .then(response => {
+            if (response.ok) {
+              alert('✅ Usuário excluído com sucesso!');
+              listarUsuarios();
+            } else {
+              alert('❌ Erro ao excluir usuário');
+            }
+          })
+          .catch(error => {
+            alert('❌ Erro de conexão: ' + error.message);
+          });
+      }
+    }
+
+    // Carregar usuários quando a página carregar
+    document.addEventListener('DOMContentLoaded', listarUsuarios);
+
+    // Fechar modal ao clicar no fundo
+    document.getElementById('modalEdicaoUsuario').addEventListener('click', function(e) {
+      if (e.target === this) {
+        fecharModalEdicao();
+      }
+    });
+
+    // Fechar modal com tecla Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('modalEdicaoUsuario').classList.contains('active')) {
+        fecharModalEdicao();
+      }
+    });
   </script>
 </body>
 </html>

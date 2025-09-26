@@ -4,28 +4,43 @@
   <meta charset="utf-8" />
   <title>Oráculo</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body class="nk-body bg-lighter npc-default has-sidebar">
    <a href="menu.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para o início">
     &#8592;
   </a>
-  <div class="container" style="max-width:500px; margin-top:80px;">
-    <h2>Oráculo IA</h2>
+  <div class="container" style="max-width:700px; margin-top:80px;">
+    <h2>🤖 Oráculo de Propriedade Intelectual</h2>
+    <p class="mb-4">Faça perguntas sobre marcas, patentes, direitos autorais e legislação de propriedade intelectual.</p>
     <form id="oracleForm">
       <div class="form-group">
-        <label for="oraclePergunta">Pergunta para o Oráculo</label>
-        <input type="text" id="oraclePergunta" class="form-control" required>
+        <label for="oraclePergunta">Sua pergunta sobre Propriedade Intelectual</label>
+        <textarea id="oraclePergunta" class="form-control" rows="3" placeholder="Ex: Como funciona o processo de registro de marca no Brasil?" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary mt-3">Consultar</button>
+      <button type="submit" class="btn btn-primary mt-3">Consultar Oráculo</button>
     </form>
     <div id="oracleResposta" class="mt-4"></div>
-    <hr>
-    <h4>Histórico</h4>
-    <ul id="historicoPerguntas" class="list-group"></ul>
+    <hr class="my-5">
+    <h4>📝 Histórico de Consultas</h4>
+    <div id="historicoPerguntas" class="mt-3"></div>
   </div>
   <script>
-    const API_URL = window.APP_CONFIG.API_URL; // ou o endereço correto da sua API
+    const API_URL = window.APP_CONFIG.API_URL;
     const historico = [];
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = 'Consultando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Consultar';
+    }
 
     document.addEventListener("DOMContentLoaded", function () {
       const oracleForm = document.getElementById("oracleForm");
@@ -34,37 +49,52 @@
 
       oracleForm.addEventListener("submit", function (e) {
         e.preventDefault();
+        
+        // Mostrar loading simples
+        mostrarLoadingSimples();
+        
         const pergunta = document.getElementById("oraclePergunta").value;
         consultarOracle(pergunta, function(resposta) {
+          ocultarLoadingSimples();
           oracleResposta.innerHTML = `<div class="alert alert-info">${resposta}</div>`;
           historico.unshift({ pergunta, resposta });
           if (historico.length > 10) historico.pop(); // Limita a 10 itens
           atualizarHistorico();
+          document.getElementById("oraclePergunta").value = ''; // Limpar campo
         });
       });
 
       function atualizarHistorico() {
         historicoPerguntas.innerHTML = "";
-        historico.forEach(item => {
-          const li = document.createElement("li");
-          li.className = "list-group-item";
-          li.innerHTML = `<strong>Pergunta:</strong> ${item.pergunta}<br><strong>Resposta:</strong> ${item.resposta}`;
-          historicoPerguntas.appendChild(li);
+        historico.forEach((item, index) => {
+          const card = document.createElement("div");
+          card.className = "card mb-3";
+          card.innerHTML = `
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 text-muted">Consulta #${historico.length - index}</h6>
+              <p class="card-text"><strong>❓ Pergunta:</strong> ${item.pergunta}</p>
+              <p class="card-text"><strong>🤖 Resposta:</strong> ${item.resposta}</p>
+            </div>
+          `;
+          historicoPerguntas.appendChild(card);
         });
       }
     });
 
     function consultarOracle(pergunta, callback) {
-      const token = localStorage.getItem("token");
       fetch(`${API_URL}/oracle/query`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ query: pergunta }),
+        body: JSON.stringify({ query: pergunta })
       })
-      .then(response => response.json())
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
+      })
       .then(data => {
         if (data.response) {
           callback(data.response);
@@ -72,7 +102,11 @@
           callback(data.detail || "Erro na consulta Oracle");
         }
       })
-      .catch(() => callback("Erro de conexão com o servidor"));
+      .catch(error => {
+        console.error('Erro ao consultar oráculo:', error);
+        ocultarLoadingSimples();
+        callback('Erro de conexão com o servidor: ' + error.message);
+      });
     }
   </script>
 </body>

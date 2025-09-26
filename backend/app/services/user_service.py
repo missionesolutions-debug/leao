@@ -19,7 +19,7 @@ class UserService:
         user = self.user_repository.create(user_create)
         return UserResponse.from_orm(user)
 
-    def get_user(self, user_id: int) -> UserResponse:
+    def get_user_by_id(self, user_id: int) -> UserResponse:
         user = self.user_repository.get_by_id(user_id)
         if not user:
             raise HTTPException(
@@ -27,28 +27,40 @@ class UserService:
                 detail="User not found"
             )
         return UserResponse.from_orm(user)
+
+    def get_all_users(self) -> list[UserResponse]:
+        users = self.user_repository.get_all()
+        return [UserResponse.from_orm(user) for user in users]
     
     def get_user_by_email(self, email):
         return self.user_repository.get_by_email(email)
 
     def update_user(self, user_id: int, user_update: UserUpdate) -> UserResponse:
-        user = self.user_repository.get_user(user_id)
+        user = self.user_repository.get_by_id(user_id)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
             )
-        updated_user = self.user_repository.update_user(user_id, user_update)
+        # Converter para dict e remover valores None
+        update_data = user_update.dict(exclude_unset=True)
+        if 'password' in update_data:
+            from passlib.context import CryptContext
+            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            update_data['hashed_password'] = pwd_context.hash(update_data.pop('password'))
+        
+        updated_user = self.user_repository.update_user(user_id, update_data)
         return UserResponse.from_orm(updated_user)
 
-    def delete_user(self, user_id: int) -> None:
-        user = self.user_repository.get_user(user_id)
+    def delete_user(self, user_id: int) -> bool:
+        user = self.user_repository.get_by_id(user_id)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
             )
         self.user_repository.delete_user(user_id)
+        return True
 
     def authenticate_user(self, email: str, password: str):
         user = self.user_repository.get_by_email(email)

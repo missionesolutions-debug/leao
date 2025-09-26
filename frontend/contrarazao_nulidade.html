@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>Contrarrazão à Nulidade</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
 </head>
 <body>
   <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
@@ -74,22 +75,68 @@
   </div>
   <script>
     const API_URL = window.APP_CONFIG.API_URL;
+    
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
+    // Função simples para loading
+    function mostrarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.innerHTML = '⏳ Processando...';
+    }
+    
+    function ocultarLoadingSimples() {
+      const botao = document.querySelector('button[type="submit"]');
+      botao.disabled = false;
+      botao.innerHTML = 'Enviar';
+    }
+
     document.getElementById('contrarrazaoForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      // Mostrar loading simples
+      mostrarLoadingSimples();
+      
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());
-      fetch(`${API_URL}/contrarazao_nulidade/`, {
+      
+      fetch(`${API_URL}/peticoes/contrarazao-nulidade`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(data)
       })
-      .then(resp => resp.json())
       .then(resp => {
-        alert('Contrarrazão enviada!');
-        window.location.href = 'marca.html';
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
       })
-      .catch(() => alert('Erro ao enviar contrarrazão.'));
+      .then(resp => {
+        ocultarLoadingSimples();
+        
+        // Salvar dados da petição para edição
+        dadosItemAtual = resp;
+        tipoItemAtual = 'contrarazao_nulidade';
+        
+        // Mostrar modal de edição em vez de redirecionar
+        abrirModalEdicaoAvancada('contrarazao_nulidade', resp.id);
+      })
+      .catch(error => {
+        ocultarLoadingSimples();
+        console.error('Erro ao gerar petição:', error);
+        alert('Erro ao gerar petição: ' + error.message);
+      });
     });
   </script>
+  
+  <script src="scripts/historico-chat.js"></script>
 </body>
 </html>

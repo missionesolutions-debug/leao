@@ -1,0 +1,54 @@
+name: leaoai
+services:
+- name: backend
+  source_dir: /backend
+  github:
+    repo: missionesolutions-debug/leao
+    branch: NewPython-only-front
+    deploy_on_push: true
+  run_command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+  environment_slug: python
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /api
+  envs:
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: OPENAI_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: SECRET_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  health_check:
+    http_path: /
+    
+- name: frontend
+  source_dir: /frontend
+  github:
+    repo: missionesolutions-debug/leao
+    branch: NewPython-only-front
+    deploy_on_push: true
+  build_command: echo "Frontend ready"
+  run_command: echo "Serving static files"
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /
+  static_sites:
+  - name: leaoai-frontend
+    source_dir: /frontend
+    build_command: echo "Build complete"
+    output_dir: /
+    index_document: index.html
+    error_document: index.html
+    routes:
+    - path: /
+
+databases:
+- name: leaoai-db
+  engine: PG
+  version: "14"

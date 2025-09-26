@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>Marcas - CRUD Completo</title>
   <link rel="stylesheet" href="assets/css/dashlite.min.css">
+  <script src="assets/js/config.js"></script>
   <style>
     .modal-bg {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -47,6 +48,58 @@
   </div>
 
   <!-- Modais de edição (um para cada entidade) -->
+  
+  <!-- Modal de Edição Avançada -->
+  <div id="modalEdicaoAvancada" class="modal-bg">
+    <div class="modal-content" style="max-width: 900px; width: 90%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h4 id="tituloModalEdicao">Petição de Oposição Gerada</h4>
+        <button type="button" onclick="fecharModalEdicaoAvancada()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+      </div>
+      
+      <!-- Abas -->
+      <div style="margin-bottom: 20px;">
+        <button class="btn btn-outline-primary me-2" id="abaPeticao" onclick="trocarAba('peticao')" style="border-bottom: 2px solid #007bff;">Petição Gerada</button>
+        <button class="btn btn-outline-secondary" id="abaHistorico" onclick="trocarAba('historico')">Histórico do Chat</button>
+      </div>
+      
+      <!-- Conteúdo da Aba Petição Gerada -->
+      <div id="conteudoPeticao">
+        <p style="color: #666; margin-bottom: 15px;">
+          Revise o conteúdo abaixo. Caso deseje, você pode adicionar observações e reenviar para gerar um novo conteúdo baseado nisso.
+        </p>
+        
+        <!-- Editor de texto para a petição -->
+        <div style="border: 1px solid #ddd; border-radius: 4px; padding: 15px; background: #f8f9fa; margin-bottom: 15px;">
+          <div id="conteudoPeticaoTexto" style="min-height: 300px; white-space: pre-wrap; line-height: 1.6;">
+            Para elaborar uma adequada peça de oposição para um caso de possíveis confusões entre marcas, você precisa fornecer os seguintes detalhes contextuais...
+          </div>
+        </div>
+        
+        <!-- Campo de observações -->
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; margin-bottom: 5px; display: block;">Observações adicionais</label>
+          <textarea id="observacoesAdicionais" placeholder="Inclua sugestões, correções ou informações complementares..." 
+                   style="width: 100%; min-height: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+          <small style="color: #666;">Essas observações serão consideradas para gerar um novo conteúdo.</small>
+        </div>
+        
+        <!-- Botões de ação -->
+        <div style="text-align: right;">
+          <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">Reenviar com Observações</button>
+          <button type="button" class="btn btn-secondary" onclick="fecharModalEdicaoAvancada()">Fechar</button>
+        </div>
+      </div>
+      
+      <!-- Conteúdo da Aba Histórico -->
+      <div id="conteudoHistorico" style="display: none;">
+        <div id="historicoChat" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 15px;">
+          <p style="color: #666;">Histórico de conversas e modificações aparecerá aqui...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Caducidade -->
   <!-- Modal Caducidade -->
 <div id="editModalCaducidade" class="modal-bg">
@@ -243,71 +296,140 @@
   </div>
 </div>
 
+<!-- Modal para Visualização Completa da Petição -->
+<div id="modalVisualizarPeticao" class="modal-bg">
+  <div class="modal-content" style="max-width: 1000px; width: 95%; max-height: 90vh;">
+    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h4 id="tituloVisualizacao">Visualizar Petição</h4>
+      <button type="button" class="btn btn-secondary" onclick="fecharModalVisualizacao()">✕</button>
+    </div>
+    <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+      <div id="conteudoPeticaoCompleta" style="white-space: pre-wrap; line-height: 1.6; padding: 20px; background-color: #f8f9fa; border-radius: 5px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <!-- Conteúdo da petição será carregado aqui -->
+      </div>
+    </div>
+    <div class="modal-footer" style="text-align: center; margin-top: 20px;">
+      <button type="button" class="btn btn-primary" onclick="fecharModalVisualizacao()">Fechar</button>
+    </div>
+  </div>
+</div>
+
   <script>
+    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
+    // Definir um token de teste se não existir
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'test-token-for-development');
+      console.log('Token de teste definido no localStorage');
+    }
+    
     const API_URL = window.APP_CONFIG.API_URL;
     const token = localStorage.getItem("token");
 
-    // Funções de listagem (exemplo para Caducidade, repita para as outras)
+    // Funções de listagem antigas desabilitadas para melhorar performance
+    // Agora usando apenas listarPeticoesIA() que carrega todas as petições de uma vez
+    /*
     function listarCaducidade() {
       fetch(`${API_URL}/caducidade/`, { headers: { Authorization: `Bearer ${token}` } })
-        .then(resp => resp.json())
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error(`HTTP error! status: ${resp.status}`);
+          }
+          return resp.json();
+        })
         .then(data => {
           const ul = document.getElementById("caducidadeList");
-          ul.innerHTML = "";
+          if (!ul.querySelector('.bg-primary')) {
+            // Só limpar se não houver petições IA já carregadas
+            ul.innerHTML = "";
+          }
+          
+          if (data.length > 0) {
+            // Adicionar header para dados antigos
+            const headerLi = document.createElement('li');
+            headerLi.className = 'list-group-item bg-secondary text-white';
+            headerLi.innerHTML = `<strong>Registros Antigos (${data.length})</strong>`;
+            ul.appendChild(headerLi);
+          }
+          
           data.forEach(doc => {
             const li = document.createElement('li');
             li.className = 'list-group-item d-flex justify-content-between align-items-center';
             li.innerHTML = `
               <span>${doc.registro_marca || "Sem registro"}</span>
               <span>
-                <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('caducidade', ${doc.id})">Editar</button>
+                <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('caducidade', ${doc.id})">Editar</button>
                 <button class="btn btn-sm btn-danger" onclick="excluirCadastro('caducidade', ${doc.id})">Excluir</button>
               </span>
             `;
             ul.appendChild(li);
           });
+        })
+        .catch(err => {
+          console.log('Erro ao listar caducidade:', err);
+          const ul = document.getElementById("caducidadeList");
+          if (ul && !ul.querySelector('.bg-primary')) {
+            ul.innerHTML = "<li class='list-group-item text-muted'>Erro ao carregar dados antigos</li>";
+          }
         });
     }
     function listarOposicao() {
-  fetch(`${API_URL}/oposicao/`, { headers: { Authorization: `Bearer ${token}` } })
-    .then(resp => resp.json())
-    .then(data => {
-      const ul = document.getElementById("oposicaoList");
-      ul.innerHTML = "";
-      data.forEach(doc => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `
-          <span>${doc.processo_contestado || "Sem processo"}</span>
-          <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('oposicao', ${doc.id})">Editar</button>
-            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('oposicao', ${doc.id})">Excluir</button>
-          </span>
-        `;
-        ul.appendChild(li);
-      });
-    });
-}
+      fetch(`${API_URL}/oposicao/`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error(`HTTP error! status: ${resp.status}`);
+          }
+          return resp.json();
+        })
+        .then(data => {
+          const ul = document.getElementById("oposicaoList");
+          ul.innerHTML = "";
+          data.forEach(doc => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+              <span>${doc.processo_contestado || "Sem processo"}</span>
+              <span>
+                <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('oposicao', ${doc.id})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="excluirCadastro('oposicao', ${doc.id})">Excluir</button>
+              </span>
+            `;
+            ul.appendChild(li);
+          });
+        })
+        .catch(err => {
+          console.log('Erro ao listar oposição:', err);
+          document.getElementById("oposicaoList").innerHTML = "<li>Erro ao carregar dados</li>";
+        });
+    }
     function listarNulidade() {
-  fetch(`${API_URL}/nulidade/`, { headers: { Authorization: `Bearer ${token}` } })
-    .then(resp => resp.json())
-    .then(data => {
-      const ul = document.getElementById("nulidadeList");
-      ul.innerHTML = "";
-      data.forEach(doc => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `
-          <span>${doc.numero_registro || "Sem registro"}</span>
-          <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('nulidade', ${doc.id})">Editar</button>
-            <button class="btn btn-sm btn-danger" onclick="excluirCadastro('nulidade', ${doc.id})">Excluir</button>
-          </span>
-        `;
-        ul.appendChild(li);
-      });
-    });
-}
+      fetch(`${API_URL}/nulidade/`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error(`HTTP error! status: ${resp.status}`);
+          }
+          return resp.json();
+        })
+        .then(data => {
+          const ul = document.getElementById("nulidadeList");
+          ul.innerHTML = "";
+          data.forEach(doc => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+              <span>${doc.numero_registro || "Sem registro"}</span>
+              <span>
+                <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('nulidade', ${doc.id})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="excluirCadastro('nulidade', ${doc.id})">Excluir</button>
+              </span>
+            `;
+            ul.appendChild(li);
+          });
+        })
+        .catch(err => {
+          console.log('Erro ao listar nulidade:', err);
+          document.getElementById("nulidadeList").innerHTML = "<li>Erro ao carregar dados</li>";
+        });
+    }
     function listarContrarazaoNulidade() {
   fetch(`${API_URL}/contrarazao_nulidade/`, { headers: { Authorization: `Bearer ${token}` } })
     .then(resp => resp.json())  
@@ -320,7 +442,7 @@
         li.innerHTML = `
           <span>${doc.cliente || "Sem cliente"}</span>
           <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('contrarazao_nulidade', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('contrarazao_nulidade', ${doc.id})">Editar</button>
             <button class="btn btn-sm btn-danger" onclick="excluirCadastro('contrarazao_nulidade', ${doc.id})">Excluir</button>
           </span>
         `;
@@ -340,7 +462,7 @@
         li.innerHTML = `
           <span>${doc.numero_registro || "Sem numero"}</span>
           <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('manifestacao_oposicao', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('manifestacao_oposicao', ${doc.id})">Editar</button>
             <button class="btn btn-sm btn-danger" onclick="excluirCadastro('manifestacao_oposicao', ${doc.id})">Excluir</button>
           </span>
         `;
@@ -360,7 +482,7 @@
         li.innerHTML = `
           <span>${doc.cliente || "Sem cliente"}</span>
           <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('manifestacao_recurso', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('manifestacao_recurso', ${doc.id})">Editar</button>
             <button class="btn btn-sm btn-danger" onclick="excluirCadastro('manifestacao_recurso', ${doc.id})">Excluir</button>
           </span>
         `;
@@ -380,7 +502,7 @@
         li.innerHTML = `
           <span>${doc.numero_processo || "Sem número de processo"}</span>
           <span>
-            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEditar('recurso_indeferimento', ${doc.id})">Editar</button>
+            <button class="btn btn-sm btn-warning me-2" onclick="abrirModalEdicaoAvancada('recurso_indeferimento', ${doc.id})">Editar</button>
             <button class="btn btn-sm btn-danger" onclick="excluirCadastro('recurso_indeferimento', ${doc.id})">Excluir</button>
           </span>
         `;
@@ -388,16 +510,188 @@
       });
     });
 }
+    */
 
     // Função para atualizar todas as listas
     function atualizarListas() {
-      listarCaducidade();
-      listarOposicao();
-      listarNulidade();
-      listarContrarazaoNulidade();
-      listarManifestacaoOposicao();
-      listarManifestacaoRecurso();
-      listarRecursoIndeferimento();
+      // Mostrar indicador de carregamento
+      mostrarIndicadorCarregamento();
+      
+      // Usar apenas o novo sistema de listagem de petições IA
+      // que já carrega todas as petições de todos os tipos
+      listarPeticoesIA();
+    }
+    
+    // Função para mostrar indicador de carregamento
+    function mostrarIndicadorCarregamento() {
+      // Remover mensagens de erro anteriores
+      const existingError = document.querySelector('.alert-danger');
+      if (existingError) {
+        existingError.remove();
+      }
+      
+      // Adicionar indicador de carregamento
+      const loadingMessage = document.createElement('div');
+      loadingMessage.className = 'alert alert-light loading-indicator';
+      loadingMessage.style.cssText = 'border: 1px solid #dee2e6; color: #666; text-align: center;';
+      loadingMessage.innerHTML = `⏳ Carregando petições...`;
+      
+      const container = document.querySelector('.container');
+      container.insertBefore(loadingMessage, container.firstChild);
+    }
+
+    // Nova função para listar todas as petições criadas pela IA
+    function listarPeticoesIA() {
+      fetch(`${API_URL}/peticoes/`, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      })
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error(`HTTP error! status: ${resp.status}`);
+          }
+          return resp.json();
+        })
+        .then(data => {
+          // Para cada tipo de petição, limpar apenas a seção IA e recriar
+          Object.keys(data).forEach(tipo => {
+            // Ordenar petições por data de criação (mais recentes primeiro)
+            data[tipo].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const listId = getListIdForTipo(tipo);
+            if (listId) {
+              const ul = document.getElementById(listId);
+              if (ul) {
+                // Remover apenas elementos IA existentes (com class bg-primary)
+                const elementosIA = ul.querySelectorAll('.bg-primary, .peticao-ia');
+                elementosIA.forEach(el => el.remove());
+                
+                // Criar header IA
+                const headerLi = document.createElement('li');
+                headerLi.className = 'list-group-item bg-primary text-white';
+                headerLi.innerHTML = `<strong>Petições IA - ${tipo.toUpperCase()} (${data[tipo].length})</strong>`;
+                ul.insertBefore(headerLi, ul.firstChild);
+                
+                // Adicionar cada petição IA
+                data[tipo].forEach((peticao, index) => {
+                  const li = document.createElement('li');
+                  li.className = 'list-group-item d-flex justify-content-between align-items-center peticao-ia';
+                  li.innerHTML = `
+                    <div>
+                      <strong>${peticao.marca_contestada || peticao.processo_contestado || 'Sem identificação'}</strong><br>
+                      <small class="text-muted">Criado: ${peticao.created_at ? new Date(peticao.created_at).toLocaleString('pt-BR') : 'Data não informada'}</small><br>
+                      <small class="text-info">${peticao.texto_preview}</small>
+                    </div>
+                    <span class="d-flex gap-2">
+                      <button class="btn btn-info" onclick="visualizarPeticaoIA(${peticao.id})">Ver</button>
+                      <button class="btn btn-warning" onclick="editarPeticaoIA('${tipo}', ${peticao.id})">Editar</button>
+                      <button class="btn btn-danger" onclick="excluirPeticaoIA(${peticao.id})">Excluir</button>
+                    </span>
+                  `;
+                  
+                  // Inserir logo após o header - appendChild adiciona ao final da lista
+                  ul.appendChild(li);
+                });
+              }
+            }
+          });
+          
+          // Remover indicador de carregamento
+          const loadingIndicator = document.querySelector('.loading-indicator');
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao listar petições IA:', err);
+          
+          // Remover indicador de carregamento mesmo em caso de erro
+          const loadingIndicator = document.querySelector('.loading-indicator');
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+          
+          // Adicionar mensagem de erro visual para o usuário
+          const errorMessage = document.createElement('div');
+          errorMessage.className = 'alert alert-danger mt-3';
+          errorMessage.innerHTML = `
+            <strong>Erro ao carregar petições:</strong><br>
+            ${err.message || 'Não foi possível conectar com o servidor. Verifique se o backend está rodando.'}
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="atualizarListas()">Tentar novamente</button>
+          `;
+          
+          // Inserir mensagem no topo da página
+          const container = document.querySelector('.container');
+          const existingError = container.querySelector('.alert-danger');
+          if (existingError) {
+            existingError.remove();
+          }
+          container.insertBefore(errorMessage, container.firstChild);
+        });
+    }
+
+    // Função auxiliar para mapear tipos para IDs de lista
+    function getListIdForTipo(tipo) {
+      const mapping = {
+        'caducidade': 'caducidadeList',
+        'oposicao': 'oposicaoList', 
+        'nulidade': 'nulidadeList',
+        'contrarazao_nulidade': 'contrarazaoNulidadeList',
+        'manifestacao_oposicao': 'manifestacaoOposicaoList',
+        'manifestacao_recurso': 'manifestacaoRecursoList',
+        'recurso_indeferimento': 'recursoIndeferimentoList'
+      };
+      return mapping[tipo];
+    }
+
+    // Funções para ações das petições IA
+    function visualizarPeticaoIA(id) {
+      fetch(`${API_URL}/peticoes/peticao/${id}`, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          // Atualizar o título do modal com informações da petição
+          document.getElementById('tituloVisualizacao').textContent = `Petição - ${data.tipo_peticao || 'Documento'}`;
+          
+          // Exibir o conteúdo completo da petição no modal
+          const conteudoDiv = document.getElementById('conteudoPeticaoCompleta');
+          conteudoDiv.textContent = data.texto_peticao || 'Conteúdo não disponível';
+          
+          // Exibir o modal
+          document.getElementById('modalVisualizarPeticao').classList.add('active');
+          
+          // Ocultar seta de voltar enquanto modal está aberto
+          esconderSetaVoltar();
+        })
+        .catch(err => {
+          console.error('Erro ao visualizar petição:', err);
+          alert('Erro ao carregar petição. Tente novamente.');
+        });
+    }
+
+    function editarPeticaoIA(tipo, id) {
+      // Abrir modal de edição avançada (reutilizar função existente)
+      abrirModalEdicaoAvancada(tipo, id);
+    }
+
+    function excluirPeticaoIA(id) {
+      if (confirm("Deseja realmente excluir esta petição gerada pela IA?")) {
+        fetch(`${API_URL}/peticoes/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(resp => {
+            if (resp.ok) {
+              alert("Petição excluída com sucesso!");
+              atualizarListas();
+            } else {
+              throw new Error("Erro ao excluir");
+            }
+          })
+          .catch(err => {
+            console.error('Erro ao excluir petição:', err);
+            alert("Erro ao excluir petição");
+          });
+      }
     }
 
     // Chamar a função para carregar as listas ao carregar a página
@@ -610,10 +904,59 @@ function esconderSetaVoltar() {
   mostrarSetaVoltar();
 }
 
+    // Função simples e profissional para loading
+    function mostrarLoading(mensagem = 'Processando...') {
+      // Remover loading anterior se existir
+      const loadingExistente = document.getElementById('loadingGeral');
+      if (loadingExistente) {
+        loadingExistente.remove();
+      }
+      
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'loadingGeral';
+      loadingDiv.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(2px);
+      `;
+      loadingDiv.innerHTML = `
+        <div style="text-align: center; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+          <div style="width: 24px; height: 24px; margin: 0 auto 15px; border: 2px solid #f3f3f3; border-top: 2px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          <div style="color: #666; font-size: 14px; font-weight: 500;">${mensagem}</div>
+        </div>
+        <style>
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        </style>
+      `;
+      document.body.appendChild(loadingDiv);
+    }
+    
+    function ocultarLoading() {
+      const loading = document.getElementById('loadingGeral');
+      if (loading) {
+        loading.remove();
+      }
+    }
+
     // Submissão do formulário de edição (exemplo para Caducidade)
     // ...existing code...
     document.getElementById("editFormCaducidade").addEventListener("submit", function(e) {
   e.preventDefault();
+  
+  // Mostrar loading
+  mostrarLoading('Salvando dados de caducidade...');
+  
   const id = document.getElementById("editIdCaducidade").value;
   const data = {
     registro_marca: document.getElementById("edit_registro_marca").value,
@@ -637,12 +980,22 @@ function esconderSetaVoltar() {
   })
   .then(resp => resp.json())
   .then(() => {
+    ocultarLoading();
     fecharModal('Caducidade');
     listarCaducidade();
+  })
+  .catch(error => {
+    ocultarLoading();
+    console.error('Erro ao salvar caducidade:', error);
+    alert('Erro ao salvar dados. Tente novamente.');
   });
 });
     document.getElementById("editFormOposicao").addEventListener("submit", function(e) {
   e.preventDefault();
+  
+  // Mostrar loading
+  mostrarLoading('Salvando dados de oposição...');
+  
   const id = document.getElementById("editIdOposicao").value;
   const data = {
     processo_contestado: document.getElementById("edit_processo_contestado").value,
@@ -673,12 +1026,22 @@ function esconderSetaVoltar() {
   })
   .then(resp => resp.json())
   .then(() => {
+    ocultarLoading();
     fecharModal('Oposicao');
     listarOposicao();
+  })
+  .catch(error => {
+    ocultarLoading();
+    console.error('Erro ao salvar oposição:', error);
+    alert('Erro ao salvar dados. Tente novamente.');
   });
 });
     document.getElementById("editFormNulidade").addEventListener("submit", function(e) {
   e.preventDefault();
+  
+  // Mostrar loading
+  mostrarLoading('Salvando dados de nulidade...');
+  
   const id = document.getElementById("editIdNulidade").value;
   const data = {
     numero_registro: document.getElementById("edit_numero_registro").value,
@@ -713,12 +1076,22 @@ function esconderSetaVoltar() {
   })
   .then(resp => resp.json())
   .then(() => {
+    ocultarLoading();
     fecharModal('Nulidade');
     listarNulidade();
+  })
+  .catch(error => {
+    ocultarLoading();
+    console.error('Erro ao salvar nulidade:', error);
+    alert('Erro ao salvar dados. Tente novamente.');
   });
 });
     document.getElementById("editFormContrarazaoNulidade").addEventListener("submit", function(e) {
   e.preventDefault();
+  
+  // Mostrar loading
+  mostrarLoading('Salvando dados de contrarazão de nulidade...');
+  
   const id = document.getElementById("editIdContrarazaoNulidade").value;
   const data = {
     cliente: document.getElementById("edit_cliente_contrarrazao").value,
@@ -746,8 +1119,14 @@ function esconderSetaVoltar() {
   })
   .then(resp => resp.json())
   .then(() => {
+    ocultarLoading();
     fecharModal('ContrarazaoNulidade');
     listarContrarazaoNulidade();
+  })
+  .catch(error => {
+    ocultarLoading();
+    console.error('Erro ao salvar contrarazão de nulidade:', error);
+    alert('Erro ao salvar dados. Tente novamente.');
   });
 });
     document.getElementById("editFormManifestacaoOposicao").addEventListener("submit", function(e) {
@@ -865,15 +1244,380 @@ function esconderSetaVoltar() {
 
         
 
-    // Atualiza todas as listas
-    function atualizarListas() {
-      listarCaducidade();
-      listarOposicao();
-      listarNulidade();
-      listarContrarazaoNulidade();
-      listarManifestacaoOposicao();
-      listarManifestacaoRecurso();
-      listarRecursoIndeferimento();
+    // Funções para o Modal de Edição Avançada
+    let dadosItemAtual = null;
+    let tipoItemAtual = null;
+    
+    function abrirModalEdicaoAvancada(tipo, id) {
+      tipoItemAtual = tipo;
+      esconderSetaVoltar();
+      
+      // Buscar dados do item
+      fetch(`${API_URL}/peticoes/peticao/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(resp => resp.json())
+        .then(data => {
+          dadosItemAtual = data;
+          
+          // Atualizar título do modal
+          const titulos = {
+            'caducidade': 'Petição de Caducidade Gerada',
+            'oposicao': 'Petição de Oposição Gerada', 
+            'nulidade': 'Petição de Nulidade Gerada',
+            'contrarazao_nulidade': 'Contrarrazão à Nulidade Gerada',
+            'manifestacao_oposicao': 'Manifestação à Oposição Gerada',
+            'manifestacao_recurso': 'Manifestação ao Recurso Gerada',
+            'recurso_indeferimento': 'Recurso ao Indeferimento Gerado'
+          };
+          
+          document.getElementById('tituloModalEdicao').textContent = titulos[tipo] || 'Petição Gerada';
+          
+          // Gerar conteúdo da petição (simulado por enquanto)
+          gerarConteudoPeticao(tipo, data);
+          
+          // Limpar observações
+          document.getElementById('observacoesAdicionais').value = '';
+          
+          // Mostrar modal
+          document.getElementById('modalEdicaoAvancada').classList.add('active');
+          
+          // Garantir que a aba petição esteja ativa
+          trocarAba('peticao');
+        })
+        .catch(error => {
+          console.error('Erro ao buscar dados:', error);
+          alert('Erro ao carregar dados para edição');
+        });
+    }
+    
+    function gerarConteudoPeticao(tipo, dados) {
+      // Para petições já existentes, usar o texto já gerado
+      if (dados && dados.texto_peticao) {
+        document.getElementById('conteudoPeticaoTexto').textContent = dados.texto_peticao;
+        return;
+      }
+      
+      // Se não há texto existente, usar conteúdo estático como fallback
+      console.log('Usando conteúdo estático - petição sem texto gerado');
+      gerarConteudoEstatico(tipo, dados);
+    }
+    
+    function gerarConteudoEstatico(tipo, dados) {
+      let conteudo = '';
+      
+      // Gerar conteúdo baseado no tipo de petição (fallback estático)
+      switch(tipo) {
+        case 'caducidade':
+          conteudo = `EXMO(A). SR(A). DR(A). DIRETOR(A) DO INPI
+
+PETIÇÃO DE CADUCIDADE DE REGISTRO DE MARCA
+
+Registro: ${dados.registro_marca || '[NÚMERO DO REGISTRO]'}
+Marca: ${dados.marca_requerida || '[NOME DA MARCA]'}
+Classe: ${dados.classe_marca || '[CLASSE]'}
+
+${dados.nome_cliente || '[NOME DO CLIENTE]'}, empresa ${dados.marca_cliente ? 'proprietária da marca ' + dados.marca_cliente : '[QUALIFICAÇÃO]'}, vem respeitosamente perante Vossa Senhoria, requerer a CADUCIDADE do registro de marca acima identificado, pelos motivos a seguir expostos:
+
+I - DOS FATOS
+
+A marca objeto do presente pedido de caducidade foi depositada em ${dados.data_deposito || '[DATA DE DEPÓSITO]'} e registrada sob o número ${dados.registro_marca || '[NÚMERO DO REGISTRO]'}.
+
+Conforme estabelece a Lei nº 9.279/96, o registro de marca tem validade de 10 anos, podendo ser prorrogado por períodos iguais e sucessivos, mediante requerimento do interessado.
+
+II - DO DIREITO
+
+O artigo 142 da Lei 9.279/96 estabelece que o registro da marca extingue-se pela caducidade, quando não for requerida a prorrogação no prazo legal.
+
+III - DO PEDIDO
+
+Diante do exposto, requer-se:
+
+a) A declaração de caducidade do registro de marca nº ${dados.registro_marca || '[NÚMERO DO REGISTRO]'};
+b) A extinção do registro em questão;
+c) A publicação da decisão na RPI.
+
+Termos em que pede deferimento.
+
+[LOCAL], [DATA]
+
+_________________________________
+[NOME DO ADVOGADO]
+OAB/[UF] [NÚMERO]`;
+          break;
+          
+        case 'oposicao':
+          conteudo = `EXMO(A). SR(A). DR(A). DIRETOR(A) DO INPI
+
+PETIÇÃO DE OPOSIÇÃO AO REGISTRO DE MARCA
+
+Processo: ${dados.processo_contestado || '[NÚMERO DO PROCESSO]'}
+Marca Contestada: ${dados.marca_contestada || '[NOME DA MARCA]'}
+Classe: ${dados.classe_contestada || '[CLASSE]'}
+
+Vem respeitosamente à presença de Vossa Senhoria apresentar OPOSIÇÃO ao registro da marca em epígrafe, pelos fundamentos que seguem:
+
+I - DA LEGITIMIDADE
+
+O oponente é titular de direitos anteriores sobre marca similar/idêntica, conforme documentação em anexo.
+
+II - DOS FUNDAMENTOS DA OPOSIÇÃO
+
+A marca objeto da presente oposição conflita com direitos anteriores do oponente, podendo causar confusão no mercado consumidor.
+
+III - DO PEDIDO
+
+Ante o exposto, requer-se o INDEFERIMENTO do pedido de registro da marca ${dados.marca_contestada || '[MARCA]'}, processo ${dados.processo_contestado || '[PROCESSO]'}.
+
+Termos em que pede deferimento.
+
+[LOCAL], [DATA]
+
+_________________________________
+[NOME DO ADVOGADO]
+OAB/[UF] [NÚMERO]`;
+          break;
+          
+        default:
+          conteudo = `Conteúdo da petição para ${tipo} será gerado baseado nos dados fornecidos:
+
+${JSON.stringify(dados, null, 2)}
+
+Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria gerado por IA baseado nos dados específicos do formulário.
+
+[NOTA: Falha na comunicação com IA - usando template estático]`;
+      }
+      
+      document.getElementById('conteudoPeticaoTexto').textContent = conteudo;
+    }
+    
+    function trocarAba(aba) {
+      // Remover classes ativas
+      document.getElementById('abaPeticao').className = 'btn btn-outline-secondary me-2';
+      document.getElementById('abaHistorico').className = 'btn btn-outline-secondary';
+      
+      // Esconder conteúdos
+      document.getElementById('conteudoPeticao').style.display = 'none';
+      document.getElementById('conteudoHistorico').style.display = 'none';
+      
+      if (aba === 'peticao') {
+        document.getElementById('abaPeticao').className = 'btn btn-outline-primary me-2';
+        document.getElementById('abaPeticao').style.borderBottom = '2px solid #007bff';
+        document.getElementById('abaHistorico').style.borderBottom = 'none';
+        document.getElementById('conteudoPeticao').style.display = 'block';
+      } else if (aba === 'historico') {
+        document.getElementById('abaHistorico').className = 'btn btn-outline-primary';
+        document.getElementById('abaHistorico').style.borderBottom = '2px solid #007bff';
+        document.getElementById('abaPeticao').style.borderBottom = 'none';
+        document.getElementById('conteudoHistorico').style.display = 'block';
+        
+        // Carregar histórico se necessário
+        carregarHistorico();
+      }
+    }
+    
+    function carregarHistorico() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        document.getElementById('historicoChat').innerHTML = `
+          <p style="color: #666; text-align: center; padding: 20px;">
+            Nenhum histórico disponível para esta petição.
+          </p>
+        `;
+        return;
+      }
+      
+      // Mostrar loading no histórico
+      document.getElementById('historicoChat').innerHTML = `
+        <div style="text-align: center; padding: 30px; color: #666;">
+          ⏳ Carregando histórico...
+        </div>
+      `;
+      
+      // Buscar histórico real da API
+      fetch(`${API_URL}/peticoes/peticao/${dadosItemAtual.id}/historico`, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const historicoDiv = document.getElementById('historicoChat');
+          
+          if (!data.historico || data.historico.length === 0) {
+            historicoDiv.innerHTML = `
+              <div style="text-align: center; padding: 20px; color: #666;">
+                <div style="font-size: 48px; margin-bottom: 10px;">📝</div>
+                <h5>Petição Inicial</h5>
+                <p>Esta petição foi gerada com base nos dados fornecidos.<br>
+                Adicione observações para criar um histórico de conversas.</p>
+              </div>
+            `;
+            return;
+          }
+          
+          // Construir o histórico com as entradas reais
+          let historicoHtml = '';
+          
+          // Primeira entrada sempre será a criação da petição
+          historicoHtml += `
+            <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #28a745;">
+              <strong>🤖 Sistema:</strong> Petição inicial gerada com base nos dados fornecidos.
+              <br><small style="color: #666;">Petição criada</small>
+            </div>
+          `;
+          
+          // Adicionar entradas do histórico real
+          data.historico.forEach(entry => {
+            const dataFormatada = new Date(entry.created_at).toLocaleString('pt-BR');
+            
+            // Entrada do usuário
+            historicoHtml += `
+              <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px; border-left: 4px solid #2196f3;">
+                <strong>👤 Usuário:</strong> ${entry.prompt_usuario}
+                <br><small style="color: #666;">${dataFormatada}</small>
+              </div>
+            `;
+            
+            // Resposta da IA
+            historicoHtml += `
+              <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #ff9800;">
+                <strong>🤖 Sistema:</strong> Conteúdo atualizado com base nas suas observações.
+                <br><small style="color: #666;">${dataFormatada}</small>
+                <details style="margin-top: 8px;">
+                  <summary style="cursor: pointer; color: #007bff;">Ver resposta completa</summary>
+                  <div style="margin-top: 8px; padding: 8px; background: white; border-radius: 4px; white-space: pre-wrap; font-size: 0.9em; max-height: 200px; overflow-y: auto;">
+                    ${entry.resposta_ia}
+                  </div>
+                </details>
+              </div>
+            `;
+          });
+          
+          historicoDiv.innerHTML = historicoHtml;
+          
+          // Scroll para o final do histórico
+          historicoDiv.scrollTop = historicoDiv.scrollHeight;
+        })
+        .catch(error => {
+          console.error('Erro ao carregar histórico:', error);
+          document.getElementById('historicoChat').innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #dc3545;">
+              <div style="font-size: 48px; margin-bottom: 10px;">⚠️</div>
+              <h5>Erro ao Carregar Histórico</h5>
+              <p>Não foi possível carregar o histórico desta petição.</p>
+              <button onclick="carregarHistorico()" class="btn btn-sm btn-outline-primary">
+                🔄 Tentar Novamente
+              </button>
+            </div>
+          `;
+        });
+    }
+    
+    function reenviarComObservacoes() {
+      const observacoes = document.getElementById('observacoesAdicionais').value.trim();
+      
+      if (!observacoes) {
+        alert('Por favor, adicione suas observações antes de reenviar.');
+        return;
+      }
+      
+      // Mostrar loading profissional
+      mostrarLoading('Processando observações...');
+      
+      // Preparar dados para envio
+      const tipoMap = {
+        'caducidade': 'caducidade',
+        'oposicao': 'oposicao', 
+        'nulidade': 'nulidade',
+        'contrarazao_nulidade': 'contrarazao-nulidade',
+        'manifestacao_oposicao': 'manifestacao-oposicao',
+        'manifestacao_recurso': 'manifestacao-recurso',
+        'recurso_indeferimento': 'recurso-indeferimento'
+      };
+      
+      const endpointTipo = tipoMap[tipoItemAtual] || tipoItemAtual;
+      
+      // Criar objeto de dados para repost (com observações)
+      const dadosRepost = {
+        chat_id: dadosItemAtual.id,
+        prompt_anterior: dadosItemAtual.texto_peticao || dadosItemAtual.texto || document.getElementById('conteudoPeticaoTexto').textContent.replace(loadingMsg.textContent, '').trim(),
+        observacoes: observacoes
+      };
+      
+      // Chamar API de repost
+      fetch(`${API_URL}/peticoes/${endpointTipo}/repost`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(dadosRepost)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Remover loading
+        ocultarLoading();
+        
+        // Atualizar conteúdo com resposta da IA
+        if (data.nova_resposta) {
+          document.getElementById('conteudoPeticaoTexto').textContent = data.nova_resposta;
+          // Atualizar também os dados da petição atual para sincronização
+          if (dadosItemAtual) {
+            dadosItemAtual.texto_peticao = data.nova_resposta;
+          }
+        }
+        
+        // Limpar observações
+        document.getElementById('observacoesAdicionais').value = '';
+        
+        // Recarregar o histórico para mostrar a nova interação
+        if (document.getElementById('conteudoHistorico').style.display !== 'none') {
+          // Se a aba histórico estiver visível, recarregar imediatamente
+          carregarHistorico();
+        }
+        
+        // Mostrar feedback visual suave
+        const feedbackMsg = document.createElement('div');
+        feedbackMsg.className = 'alert alert-success';
+        feedbackMsg.style.position = 'fixed';
+        feedbackMsg.style.top = '20px';
+        feedbackMsg.style.right = '20px';
+        feedbackMsg.style.zIndex = '9999';
+        feedbackMsg.innerHTML = '✅ Petição atualizada com sucesso!';
+        document.body.appendChild(feedbackMsg);
+        
+        // Remover mensagem após 3 segundos
+        setTimeout(() => {
+          feedbackMsg.remove();
+        }, 3000);
+      })
+      .catch(error => {
+        console.error('Erro ao reenviar com observações:', error);
+        
+        // Remover loading
+        ocultarLoading();
+        
+        alert('Erro ao processar suas observações. Tente novamente.');
+      });
+    }
+    
+    function fecharModalEdicaoAvancada() {
+      document.getElementById('modalEdicaoAvancada').classList.remove('active');
+      mostrarSetaVoltar();
+      
+      // Atualizar a lista principal para refletir mudanças
+      atualizarListas();
+    }
+
+    function fecharModalVisualizacao() {
+      document.getElementById('modalVisualizarPeticao').classList.remove('active');
+      mostrarSetaVoltar();
     }
 
     document.addEventListener("DOMContentLoaded", atualizarListas);

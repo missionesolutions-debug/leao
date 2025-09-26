@@ -8,4 +8,7 @@ passlib
 sqlalchemy
 databases
 openai
-echo "pytest" >> requirements.txt
+slowapi
+redis
+asyncio-throttle
+psycopg2-binary
