@@ -35,6 +35,72 @@
     .petition-card:hover {
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+    
+    /* Estilos da identidade visual Leão - Preto e Cinza */
+    .peticao-ia {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+      border-left-color: #343a40 !important;
+    }
+    
+    .peticao-ia:hover {
+      background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%) !important;
+      border-left-color: #000 !important;
+    }
+    
+    .btn-group .btn {
+      border-radius: 0.375rem;
+      font-weight: 500;
+      font-size: 0.75rem;
+      padding: 0.375rem 0.5rem;
+      transition: all 0.2s ease;
+      border-color: #6c757d;
+      color: #343a40;
+    }
+    
+    .btn-outline-info:hover {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: #343a40;
+      border-color: #343a40;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(52, 58, 64, 0.3);
+    }
+    
+    .btn-outline-danger:hover {
+      background-color: #495057;
+      border-color: #495057;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(73, 80, 87, 0.3);
+    }
+    
+    .badge-white {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      color: #343a40 !important;
+      font-weight: 600;
+      border: 1px solid #dee2e6;
+    }
+    
+    /* Animação suave para carregamento */
+    .loading-indicator {
+      background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      animation: pulse 1.5s ease-in-out infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -598,15 +664,13 @@
 </div>
 
   <script>
-    // CONFIGURAÇÃO TEMPORÁRIA PARA TESTES
-    // Definir um token de teste se não existir
-    if (!localStorage.getItem('token')) {
-      localStorage.setItem('token', 'test-token-for-development');
-      console.log('Token de teste definido no localStorage');
-    }
+    // CONFIGURAÇÃO DA API - definição direta para funcionar
+    const API_URL = 'http://localhost:8000';
+    console.log('API_URL definido:', API_URL);
     
-    const API_URL = window.APP_CONFIG.API_URL;
-    const token = localStorage.getItem("token");
+    // CONFIGURAÇÃO DO TOKEN - usar o mesmo formato que funciona no curl
+    const token = 'YWRtaW4='; // Token base64 que funciona na API
+    console.log('Token definido:', token);
 
     // Funções de listagem antigas desabilitadas para melhorar performance
     // Agora usando apenas listarPeticoesIA() que carrega todas as petições de uma vez
@@ -797,8 +861,21 @@
 
     // Função para atualizar todas as listas
     function atualizarListas() {
+      console.log('=== INICIANDO ATUALIZAÇÃO DAS LISTAS ===');
+      
+      // Verificar se o DOM está pronto
+      if (document.readyState === 'loading') {
+        console.log('DOM ainda carregando, aguardando...');
+        document.addEventListener('DOMContentLoaded', atualizarListas);
+        return;
+      }
+      
       // Mostrar indicador de carregamento
-      mostrarIndicadorCarregamento();
+      try {
+        mostrarIndicadorCarregamento();
+      } catch (error) {
+        console.error('Erro ao mostrar indicador:', error);
+      }
       
       // Usar apenas o novo sistema de listagem de petições IA
       // que já carrega todas as petições de todos os tipos
@@ -813,69 +890,173 @@
         existingError.remove();
       }
       
-      // Adicionar indicador de carregamento
+      // Adicionar indicador de carregamento moderno
       const loadingMessage = document.createElement('div');
-      loadingMessage.className = 'alert alert-light loading-indicator';
-      loadingMessage.style.cssText = 'border: 1px solid #dee2e6; color: #666; text-align: center;';
-      loadingMessage.innerHTML = `⏳ Carregando petições...`;
+      loadingMessage.className = 'alert loading-indicator text-center';
+      loadingMessage.innerHTML = `
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="spinner-border spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <strong>Carregando suas petições...</strong>
+        </div>
+        <small class="d-block mt-1 opacity-75">Buscando dados da tabela de petições</small>
+      `;
       
-      const container = document.querySelector('.container');
-      container.insertBefore(loadingMessage, container.firstChild);
+      const container = document.querySelector('.nk-content') || document.querySelector('.container-fluid') || document.body;
+      if (container) {
+        container.insertBefore(loadingMessage, container.firstChild);
+      } else {
+        console.error('Não foi possível encontrar container para inserir loading');
+      }
     }
 
     // Nova função para listar todas as petições criadas pela IA
     function listarPeticoesIA() {
+      console.log('=== INICIANDO BUSCA DE PETIÇÕES ===');
+      console.log('API_URL:', API_URL);
+      console.log('Token:', token);
+      console.log('URL completa:', `${API_URL}/peticoes/`);
+      
       fetch(`${API_URL}/peticoes/`, { 
         headers: { Authorization: `Bearer ${token}` } 
       })
         .then(resp => {
+          console.log('Resposta recebida:', resp.status, resp.statusText);
           if (!resp.ok) {
             throw new Error(`HTTP error! status: ${resp.status}`);
           }
           return resp.json();
         })
         .then(data => {
+          console.log('=== DADOS RECEBIDOS ===');
+          console.log('Dados completos:', data);
+          console.log('Tipos encontrados:', Object.keys(data));
+          
           // Para cada tipo de petição, limpar apenas a seção IA e recriar
           Object.keys(data).forEach(tipo => {
+            console.log(`=== PROCESSANDO TIPO: ${tipo} ===`);
+            console.log(`Petições encontradas:`, data[tipo].length);
+            
             // Ordenar petições por data de criação (mais recentes primeiro)
             data[tipo].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             const listId = getListIdForTipo(tipo);
+            console.log(`ID da lista para ${tipo}:`, listId);
+            
             if (listId) {
               const ul = document.getElementById(listId);
+              console.log(`Elemento encontrado para ${listId}:`, ul ? 'SIM' : 'NÃO');
               if (ul) {
+                console.log(`=== RENDERIZANDO ${data[tipo].length} PETIÇÕES DO TIPO ${tipo} ===`);
                 // Remover apenas elementos IA existentes (com class bg-primary)
                 const elementosIA = ul.querySelectorAll('.bg-primary, .peticao-ia');
                 elementosIA.forEach(el => el.remove());
+                console.log(`Elementos anteriores removidos: ${elementosIA.length}`);
                 
-                // Criar header IA
+                // Criar header IA moderno - Paleta Leão
                 const headerLi = document.createElement('li');
-                headerLi.className = 'list-group-item bg-primary text-white';
-                headerLi.innerHTML = `<strong>Petições IA - ${tipo.toUpperCase()} (${data[tipo].length})</strong>`;
+                headerLi.className = 'list-group-item text-white border-0';
+                headerLi.style.cssText = 'border-radius: 0.375rem 0.375rem 0 0; background: linear-gradient(135deg, #343a40 0%, #495057 100%);';
+                
+                // Ícones para cada tipo
+                const iconMap = {
+                  'caducidade': 'ni ni-calendar-alt',
+                  'oposicao': 'ni ni-shield-exclamation', 
+                  'nulidade': 'ni ni-cross-circle',
+                  'contrarazao_nulidade': 'ni ni-reply',
+                  'manifestacao_oposicao': 'ni ni-chat-circle',
+                  'manifestacao_recurso': 'ni ni-msg',
+                  'recurso_indeferimento': 'ni ni-arrow-up-right'
+                };
+                
+                const icon = iconMap[tipo] || 'ni ni-file-docs';
+                headerLi.innerHTML = `
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                      <em class="icon ${icon} me-2"></em>
+                      <strong>Petições ${tipo.replace('_', ' ').toUpperCase()}</strong>
+                    </div>
+                    <span class="badge badge-white">${data[tipo].length} ${data[tipo].length === 1 ? 'item' : 'itens'}</span>
+                  </div>
+                `;
                 ul.insertBefore(headerLi, ul.firstChild);
                 
                 // Adicionar cada petição IA
                 data[tipo].forEach((peticao, index) => {
+                  console.log(`Criando item ${index + 1}/${data[tipo].length} para ${tipo}:`, peticao);
                   const li = document.createElement('li');
-                  li.className = 'list-group-item d-flex justify-content-between align-items-center peticao-ia';
+                  li.className = 'list-group-item peticao-ia border-0 bg-light';
+                  li.style.cssText = `
+                    transition: all 0.3s ease;
+                    border-left: 4px solid #343a40 !important;
+                    margin-bottom: 4px;
+                    border-radius: 0 0.375rem 0.375rem 0;
+                    padding: 1rem;
+                  `;
+                  
+                  // Adicionar hover effect
+                  li.onmouseenter = function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                    this.style.borderLeftColor = '#000';
+                    this.style.transform = 'translateX(2px)';
+                    this.style.boxShadow = '0 2px 8px rgba(52, 58, 64, 0.15)';
+                  };
+                  
+                  li.onmouseleave = function() {
+                    this.style.backgroundColor = '#f5f5f5';
+                    this.style.borderLeftColor = '#343a40';
+                    this.style.transform = 'translateX(0)';
+                    this.style.boxShadow = 'none';
+                  };
                   li.innerHTML = `
-                    <div>
-                      <strong>${peticao.marca_contestada || peticao.processo_contestado || 'Sem identificação'}</strong><br>
-                      <small class="text-muted">Criado: ${peticao.created_at ? new Date(peticao.created_at).toLocaleString('pt-BR') : 'Data não informada'}</small><br>
-                      <small class="text-info">${peticao.texto_preview}</small>
+                    <div class="d-flex align-items-start w-100">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-2">
+                          <em class="icon ni ni-file-docs me-2" style="color: #343a40;"></em>
+                          <h6 class="mb-0 text-dark">${peticao.marca_contestada || peticao.processo_contestado || 'Sem identificação'}</h6>
+                          <span class="badge ms-2" style="background-color: #343a40; color: white; font-size: 0.65rem;">${tipo.toUpperCase()}</span>
+                        </div>
+                        <div class="text-muted small mb-2">
+                          <em class="icon ni ni-calendar me-1"></em>
+                          Criado em: ${peticao.created_at ? new Date(peticao.created_at).toLocaleDateString('pt-BR', {
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }) : 'Data não informada'}
+                        </div>
+                        <div class="text-soft small">
+                          <em class="icon ni ni-eye me-1"></em>
+                          ${peticao.texto_preview ? peticao.texto_preview.substring(0, 80) + '...' : 'Preview não disponível'}
+                        </div>
+                      </div>
+                      <div class="ms-3">
+                        <div class="btn-group" role="group">
+                          <button class="btn btn-sm btn-outline-info" onclick="visualizarPeticaoIA(${peticao.id})" title="Visualizar petição">
+                            <em class="icon ni ni-eye"></em>
+                          </button>
+                          <button class="btn btn-sm btn-outline-primary" onclick="editarPeticaoIA('${tipo}', ${peticao.id})" title="Editar petição">
+                            <em class="icon ni ni-edit"></em>
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" onclick="excluirPeticaoIA(${peticao.id})" title="Excluir petição">
+                            <em class="icon ni ni-trash"></em>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <span class="d-flex gap-2">
-                      <button class="btn btn-info" onclick="visualizarPeticaoIA(${peticao.id})">Ver</button>
-                      <button class="btn btn-warning" onclick="editarPeticaoIA('${tipo}', ${peticao.id})">Editar</button>
-                      <button class="btn btn-danger" onclick="excluirPeticaoIA(${peticao.id})">Excluir</button>
-                    </span>
                   `;
                   
                   // Inserir logo após o header - appendChild adiciona ao final da lista
                   ul.appendChild(li);
+                  console.log(`Item adicionado à lista ${listId}, total de filhos agora:`, ul.children.length);
                 });
               }
             }
           });
+          
+          console.log('=== FINALIZANDO CARREGAMENTO DE PETIÇÕES ===');
+          console.log('Total de tipos processados:', Object.keys(data).length);
           
           // Remover indicador de carregamento
           const loadingIndicator = document.querySelector('.loading-indicator');
@@ -892,22 +1073,35 @@
             loadingIndicator.remove();
           }
           
-          // Adicionar mensagem de erro visual para o usuário
+          // Adicionar mensagem de erro visual elegante
           const errorMessage = document.createElement('div');
-          errorMessage.className = 'alert alert-danger mt-3';
+          errorMessage.className = 'alert alert-danger d-flex align-items-center mt-3';
+          errorMessage.style.cssText = 'border-radius: 0.5rem; border: none;';
           errorMessage.innerHTML = `
-            <strong>Erro ao carregar petições:</strong><br>
-            ${err.message || 'Não foi possível conectar com o servidor. Verifique se o backend está rodando.'}
-            <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="atualizarListas()">Tentar novamente</button>
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center mb-1">
+                <em class="icon ni ni-alert-circle me-2"></em>
+                <strong>Ops! Algo deu errado</strong>
+              </div>
+              <small>${err.message || 'Não foi possível conectar com o servidor. Verifique se o backend está rodando.'}</small>
+            </div>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="atualizarListas()">
+              <em class="icon ni ni-reload me-1"></em>
+              Tentar novamente
+            </button>
           `;
           
           // Inserir mensagem no topo da página
-          const container = document.querySelector('.container');
-          const existingError = container.querySelector('.alert-danger');
-          if (existingError) {
-            existingError.remove();
+          const container = document.querySelector('.nk-content') || document.querySelector('.container-fluid') || document.body;
+          if (container) {
+            const existingError = container.querySelector('.alert-danger');
+            if (existingError) {
+              existingError.remove();
+            }
+            container.insertBefore(errorMessage, container.firstChild);
+          } else {
+            console.error('Não foi possível encontrar container para inserir erro');
           }
-          container.insertBefore(errorMessage, container.firstChild);
         });
     }
 
@@ -974,8 +1168,7 @@
       }
     }
 
-    // Chamar a função para carregar as listas ao carregar a página
-    document.addEventListener("DOMContentLoaded", atualizarListas);
+    // Removido - será executado apenas uma vez no final
 
     // Função para fechar modais
     function fecharModal(tipo) {
@@ -1888,7 +2081,13 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
       document.getElementById('modalVisualizarPeticao').classList.remove('active');
     }
 
-    document.addEventListener("DOMContentLoaded", atualizarListas);
+    // Aguardar o DOM estar completamente carregado
+    if (document.readyState === 'loading') {
+      document.addEventListener("DOMContentLoaded", atualizarListas);
+    } else {
+      // DOM já está carregado
+      setTimeout(atualizarListas, 100);
+    }
   </script>
 
 	<script src="lib/jquery/dist/jquery.min.js"></script>
@@ -1903,8 +2102,10 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
 	<script src="scripts/dropdowns.js"></script>
 	<script src="scripts/uploads.js"></script>
 	<script src="scripts/main.js"></script>
+	<!-- Removido temporariamente CKEditor para evitar conflitos
 	<script src="scripts/ckeditor/ckeditor.js"></script>
 	<script src="scripts/ckeditor5/startckeditor.js"></script>
+	-->
 
 	<script type="text/javascript">
 		$(document).ready(function () {
