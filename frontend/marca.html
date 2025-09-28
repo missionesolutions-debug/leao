@@ -664,23 +664,32 @@
 </div>
 
   <script>
-    // CONFIGURAÇÃO DA API - usar config.js
-    const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
-    console.log('API_URL definido:', API_URL);
-    console.log('APP_CONFIG disponível:', !!window.APP_CONFIG);
-    console.log('Ambiente:', window.location.hostname);
+    // Variáveis globais que serão definidas após carregamento do config
+    let API_URL;
+    let token;
     
-    // CONFIGURAÇÃO DO TOKEN - verificar se existe ou usar padrão
-    let token = localStorage.getItem('authToken') || localStorage.getItem('token') || 'YWRtaW4=';
-    
-    // Se não há token válido no localStorage, usar o padrão para testes
-    if (!token || token === 'null' || token === 'undefined') {
-      token = 'YWRtaW4=';
-      console.warn('Token não encontrado no localStorage, usando token padrão');
+    // Função para inicializar configuração
+    function inicializarConfig() {
+      // CONFIGURAÇÃO DA API - usar config.js
+      API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
+      console.log('API_URL definido:', API_URL);
+      console.log('APP_CONFIG disponível:', !!window.APP_CONFIG);
+      console.log('Ambiente:', window.location.hostname);
+      
+      // CONFIGURAÇÃO DO TOKEN - verificar se existe ou usar padrão
+      token = localStorage.getItem('authToken') || localStorage.getItem('token') || 'YWRtaW4=';
+      
+      // Se não há token válido no localStorage, usar o padrão para testes
+      if (!token || token === 'null' || token === 'undefined') {
+        token = 'YWRtaW4=';
+        console.warn('Token não encontrado no localStorage, usando token padrão');
+      }
+      
+      console.log('Token definido:', token);
+      console.log('Fonte do token:', localStorage.getItem('authToken') ? 'localStorage' : 'padrão');
+      
+      return true;
     }
-    
-    console.log('Token definido:', token);
-    console.log('Fonte do token:', localStorage.getItem('authToken') ? 'localStorage' : 'padrão');
 
     // Funções de listagem antigas desabilitadas para melhorar performance
     // Agora usando apenas listarPeticoesIA() que carrega todas as petições de uma vez
@@ -924,8 +933,20 @@
     // Nova função para listar todas as petições criadas pela IA
     function listarPeticoesIA() {
       console.log('=== INICIANDO BUSCA DE PETIÇÕES ===');
+      
+      // Verificar se as configurações estão definidas
+      if (!API_URL) {
+        console.error('API_URL não está definido!');
+        return;
+      }
+      
+      if (!token) {
+        console.error('Token não está definido!');
+        return;
+      }
+      
       console.log('API_URL:', API_URL);
-      console.log('Token:', token);
+      console.log('Token:', token.substring(0, 10) + '...');  // Mostrar apenas início do token
       console.log('URL completa:', `${API_URL}/peticoes/`);
       console.log('Ambiente detectado:', {
         hostname: window.location.hostname,
@@ -2114,6 +2135,14 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
       }
       
       console.log('APP_CONFIG carregado:', window.APP_CONFIG);
+      
+      // Inicializar configurações
+      if (!inicializarConfig()) {
+        console.error('Falha ao inicializar configurações');
+        return;
+      }
+      
+      // Agora sim, atualizar as listas
       atualizarListas();
     }
     
