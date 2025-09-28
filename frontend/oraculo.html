@@ -175,8 +175,17 @@
 		</div>
 	</div>
   <script>
-    const API_URL = window.APP_CONFIG.API_URL;
+    // Variáveis globais que serão definidas após carregamento do config
+    let API_URL;
     const historico = [];
+    
+    // Função para inicializar configuração
+    function inicializarConfig() {
+      API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
+      console.log('Oráculo - API_URL definido:', API_URL);
+      console.log('Oráculo - APP_CONFIG disponível:', !!window.APP_CONFIG);
+      return true;
+    }
     
     // Função simples para loading
     function mostrarLoadingSimples() {
@@ -231,6 +240,15 @@
     });
 
     function consultarOracle(pergunta, callback) {
+      // Verificar se API_URL está definido
+      if (!API_URL) {
+        console.error('API_URL não está definido!');
+        callback('Erro: Configuração não carregada. Tente recarregar a página.');
+        return;
+      }
+      
+      console.log('Consultando oráculo com API_URL:', API_URL);
+      
       fetch(`${API_URL}/oracle/query`, {
         method: "POST",
         headers: {
@@ -257,11 +275,38 @@
         callback('Erro de conexão com o servidor: ' + error.message);
       });
     }
+    
+    // Aguardar o DOM e APP_CONFIG estarem carregados
+    function inicializar() {
+      if (!window.APP_CONFIG) {
+        console.log('Oráculo - Aguardando APP_CONFIG...');
+        setTimeout(inicializar, 100);
+        return;
+      }
+      
+      console.log('Oráculo - APP_CONFIG carregado:', window.APP_CONFIG);
+      
+      // Inicializar configurações
+      if (!inicializarConfig()) {
+        console.error('Oráculo - Falha ao inicializar configurações');
+        return;
+      }
+      
+      console.log('Oráculo - Inicialização completa!');
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener("DOMContentLoaded", inicializar);
+    } else {
+      inicializar();
+    }
   </script>
 
+	<!-- Carregar configuração primeiro -->
+	<script src="assets/js/config.js"></script>
+	
 	<script src="lib/jquery/dist/jquery.min.js"></script>
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
-	<script src="assets/js/config.js"></script>
     <script src="assets/js/scripts.js?ver=2.8.0"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
