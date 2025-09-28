@@ -664,13 +664,23 @@
 </div>
 
   <script>
-    // CONFIGURAÇÃO DA API - definição direta para funcionar
-    const API_URL = 'http://localhost:8000';
+    // CONFIGURAÇÃO DA API - usar config.js
+    const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
     console.log('API_URL definido:', API_URL);
+    console.log('APP_CONFIG disponível:', !!window.APP_CONFIG);
+    console.log('Ambiente:', window.location.hostname);
     
-    // CONFIGURAÇÃO DO TOKEN - usar o mesmo formato que funciona no curl
-    const token = 'YWRtaW4='; // Token base64 que funciona na API
+    // CONFIGURAÇÃO DO TOKEN - verificar se existe ou usar padrão
+    let token = localStorage.getItem('authToken') || localStorage.getItem('token') || 'YWRtaW4=';
+    
+    // Se não há token válido no localStorage, usar o padrão para testes
+    if (!token || token === 'null' || token === 'undefined') {
+      token = 'YWRtaW4=';
+      console.warn('Token não encontrado no localStorage, usando token padrão');
+    }
+    
     console.log('Token definido:', token);
+    console.log('Fonte do token:', localStorage.getItem('authToken') ? 'localStorage' : 'padrão');
 
     // Funções de listagem antigas desabilitadas para melhorar performance
     // Agora usando apenas listarPeticoesIA() que carrega todas as petições de uma vez
@@ -917,6 +927,11 @@
       console.log('API_URL:', API_URL);
       console.log('Token:', token);
       console.log('URL completa:', `${API_URL}/peticoes/`);
+      console.log('Ambiente detectado:', {
+        hostname: window.location.hostname,
+        protocol: window.location.protocol,
+        isProduction: !window.location.hostname.includes('localhost')
+      });
       
       fetch(`${API_URL}/peticoes/`, { 
         headers: { Authorization: `Bearer ${token}` } 
@@ -1066,6 +1081,11 @@
         })
         .catch(err => {
           console.error('Erro ao listar petições IA:', err);
+          console.error('Detalhes do erro:', {
+            message: err.message,
+            api_url: API_URL,
+            hostname: window.location.hostname
+          });
           
           // Remover indicador de carregamento mesmo em caso de erro
           const loadingIndicator = document.querySelector('.loading-indicator');
@@ -1083,7 +1103,11 @@
                 <em class="icon ni ni-alert-circle me-2"></em>
                 <strong>Ops! Algo deu errado</strong>
               </div>
-              <small>${err.message || 'Não foi possível conectar com o servidor. Verifique se o backend está rodando.'}</small>
+              <small>
+                ${err.message || 'Não foi possível conectar com o servidor.'}<br>
+                <strong>API:</strong> ${API_URL}<br>
+                <strong>Ambiente:</strong> ${window.location.hostname}
+              </small>
             </div>
             <button type="button" class="btn btn-outline-danger btn-sm" onclick="atualizarListas()">
               <em class="icon ni ni-reload me-1"></em>
@@ -2081,15 +2105,28 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
       document.getElementById('modalVisualizarPeticao').classList.remove('active');
     }
 
-    // Aguardar o DOM estar completamente carregado
+    // Aguardar o DOM e APP_CONFIG estarem carregados
+    function inicializar() {
+      if (!window.APP_CONFIG) {
+        console.log('Aguardando APP_CONFIG...');
+        setTimeout(inicializar, 100);
+        return;
+      }
+      
+      console.log('APP_CONFIG carregado:', window.APP_CONFIG);
+      atualizarListas();
+    }
+    
     if (document.readyState === 'loading') {
-      document.addEventListener("DOMContentLoaded", atualizarListas);
+      document.addEventListener("DOMContentLoaded", inicializar);
     } else {
-      // DOM já está carregado
-      setTimeout(atualizarListas, 100);
+      inicializar();
     }
   </script>
 
+	<!-- Carregar configuração primeiro -->
+	<script src="assets/js/config.js"></script>
+	
 	<script src="lib/jquery/dist/jquery.min.js"></script>
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
     <script src="assets/js/scripts.js?ver=2.8.0"></script>
