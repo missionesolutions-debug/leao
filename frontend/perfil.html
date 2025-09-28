@@ -1,75 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Administração de Usuários</title>
-  <link rel="stylesheet" href="assets/css/dashlite.min.css">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Administração de Usuários - Leão Adv</title>
+
+	<!-- StyleSheets  -->
+	<link rel="stylesheet" href="assets/css/dashlite.css?ver=2.8.0">
+	<link id="skin-default" rel="stylesheet" href="assets/css/theme.css?ver=2.8.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+	<link href="lib/chosen/chosen.css" rel="stylesheet" />
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  
   <style>
-    body { 
-      padding: 20px; 
-      font-family: Arial, sans-serif;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    .back-arrow {
-      font-size: 24px;
-      margin-right: 15px;
-      text-decoration: none;
-      color: #333;
-    }
-    .back-arrow:hover {
-      color: #007bff;
-    }
     .user-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      background: #f9f9f9;
+      border: 1px solid #e5e9f2;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    .user-card:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .user-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .user-details h4 {
+    .user-details h5 {
       margin: 0 0 5px 0;
-      color: #333;
+      color: #364a63;
     }
     .user-details p {
       margin: 0;
-      color: #666;
+      color: #8094ae;
+      font-size: 0.9rem;
     }
-    .user-actions button {
-      margin-left: 10px;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn-edit {
-      background: #007bff;
-      color: white;
-    }
-    .btn-delete {
-      background: #dc3545;
-      color: white;
-    }
-    .btn-edit:hover { background: #0056b3; }
-    .btn-delete:hover { background: #c82333; }
-    .status {
-      padding: 10px;
-      margin: 15px 0;
-      border-radius: 4px;
-      background: #e3f2fd;
-      color: #1976d2;
-    }
-    .error {
-      background: #ffebee;
-      color: #c62828;
+    .user-actions .btn {
+      margin-left: 0.5rem;
     }
 
     /* Estilos do Modal */
@@ -217,14 +190,144 @@
     }
   </style>
 </head>
-<body>
-  <div class="header">
-    <a href="menu.html" class="back-arrow" title="Voltar ao Menu">← </a>
-    <h2>👥 Administração de Usuários</h2>
-  </div>
+<body class="nk-body bg-lighter npc-default has-sidebar ">
+	<div id="global-loader"> <img src="assets/images/svgs/loader.svg" alt="loader"> </div>
+	<div class="nk-app-root">
+		<div class="nk-main ">
 
-  <div id="status" class="status">Carregando usuários...</div>
-  <div id="usuariosList"></div>
+			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+				<div class="nk-sidebar-element nk-sidebar-head">
+					<div class="nk-sidebar-brand">
+						<a href="menu.html" class="logo-link nk-sidebar-logo">
+							<img class="logo-light logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo">
+							<img class="logo-dark logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo-dark">
+							<img class="logo-small logo-img logo-img-small" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo-small">
+						</a>
+					</div>
+					<div class="nk-menu-trigger mr-n2">
+						<a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-arrow-left"></em></a>
+					</div>
+				</div>
+                <!-- Menu lateral -->
+                <div class="nk-sidebar-element">
+                    <div class="nk-sidebar-content">
+                        <div class="nk-sidebar-menu" data-simplebar>
+                            <ul class="nk-menu">
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="menu.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Dashboard</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="marca.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
+                                        <span class="nk-menu-text">Hub de Marcas</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="oraculo.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-chat-circle"></em></span>
+                                        <span class="nk-menu-text">Oráculo</span>
+                                    </a>
+                                </li>
+                                 <li class="nk-menu-item active">
+                                    <a href="perfil.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+                                        <span class="nk-menu-text">Administrativo</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+			</div>
+
+			<div class="nk-wrap ">
+                <!-- Cabeçalho -->
+				<div class="nk-header nk-header-fixed is-light" style="padding:0 !important">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-header-brand" style="width: 100%;max-width: 165px;">
+                                <a href="menu.html" class="logo-link">
+                                    <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo-dark">
+                                </a>
+                            </div>
+                            <div class="nk-menu-trigger ml-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="perfil.html"><em class="icon ni ni-user-alt"></em><span>Perfil</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="index.html"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="nk-content ">
+					<div class="container-fluid">
+						<div class="nk-content-inner">
+							<div class="nk-content-body">
+                                <div class="nk-block">
+                                    <div class="nk-block-head nk-block-head-sm">
+                                        <div class="nk-block-between">
+                                            <div class="nk-block-head-content">
+                                                <h3 class="nk-block-title page-title">👥 Administração de Usuários</h3>
+                                                <p class="text-muted">Gerencie usuários do sistema</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="status" class="alert alert-info">Carregando usuários...</div>
+                                            <div id="usuariosList"></div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="nk-footer">
+					<div class="container-fluid">
+						<div class="nk-footer-wrap">
+							<div class="nk-footer-copyright">
+								Powered by <a href="" target="_blank">TripleA</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
   <!-- Modal de Edição de Usuário -->
   <div id="modalEdicaoUsuario" class="modal-bg">
@@ -303,16 +406,16 @@
             userDiv.innerHTML = `
               <div class="user-info">
                 <div class="user-details">
-                  <h4>${usuario.username || 'Sem nome'}</h4>
+                  <h5>${usuario.username || 'Sem nome'}</h5>
                   <p>📧 ${usuario.email}</p>
-                  <p><small>ID: ${usuario.id}</small></p>
+                  <p><small class="text-muted">ID: ${usuario.id}</small></p>
                 </div>
                 <div class="user-actions">
-                  <button class="btn-edit" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}')">
-                    ✏️ Editar
+                  <button class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}')">
+                    <em class="icon ni ni-edit"></em> Editar
                   </button>
-                  <button class="btn-delete" onclick="excluirUsuario(${usuario.id}, '${usuario.username || usuario.email}')">
-                    🗑️ Excluir
+                  <button class="btn btn-sm btn-outline-danger" onclick="excluirUsuario(${usuario.id}, '${usuario.username || usuario.email}')">
+                    <em class="icon ni ni-trash"></em> Excluir
                   </button>
                 </div>
               </div>
@@ -449,5 +552,31 @@
       }
     });
   </script>
+
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="assets/js/bundle.js?ver=2.8.0"></script>
+	<script src="assets/js/config.js"></script>
+    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+	<script src="scripts/jquery/jquery.mask.min.js"></script>
+	<script src="lib/chosen/chosen.jquery.min.js"></script>
+
+	<script src="scripts/mask.js"></script>
+	<script src="scripts/dropdowns.js"></script>
+	<script src="scripts/uploads.js"></script>
+	<script src="scripts/main.js"></script>
+	<script src="scripts/ckeditor/ckeditor.js"></script>
+	<script src="scripts/ckeditor5/startckeditor.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#global-loader').fadeOut();
+		});
+
+		function updateValue(id, value) {
+			document.getElementById(id).value = value;
+		}
+	</script>
 </body>
 </html>

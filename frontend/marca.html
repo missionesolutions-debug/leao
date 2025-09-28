@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <title>Marcas - CRUD Completo</title>
-  <link rel="stylesheet" href="assets/css/dashlite.min.css">
-  <script src="assets/js/config.js"></script>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Hub de Marcas - Leão Adv</title>
+
+	<!-- StyleSheets  -->
+	<link rel="stylesheet" href="assets/css/dashlite.css?ver=2.8.0">
+	<link id="skin-default" rel="stylesheet" href="assets/css/theme.css?ver=2.8.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+	<link href="lib/chosen/chosen.css" rel="stylesheet" />
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  
   <style>
     .modal-bg {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -14,38 +24,311 @@
       background: #fff; padding: 2rem; border-radius: 8px; min-width: 300px; max-height: 90vh; overflow-y: auto;
     }
     .modal-bg.active { display: flex; }
+    
+    .petition-card {
+      margin-bottom: 1rem;
+      border: 1px solid #e5e9f2;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .petition-card:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
-<body>
-  <div class="container mt-5">
-    <h2>Caducidade</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='caducidade.html'">Acessar formulário de cadastro</button>
-    <ul id="caducidadeList" class="list-group mb-4"></ul>
+<body class="nk-body bg-lighter npc-default has-sidebar ">
+	<div id="global-loader"> <img src="assets/images/svgs/loader.svg" alt="loader"> </div>
+	<div class="nk-app-root">
+		<div class="nk-main ">
 
-    <h2>Oposição</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='oposicao.html'">Acessar formulário de cadastro</button>
-    <ul id="oposicaoList" class="list-group mb-4"></ul>
+			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+				<div class="nk-sidebar-element nk-sidebar-head">
+					<div class="nk-sidebar-brand">
+						<a href="menu.html" class="logo-link nk-sidebar-logo">
+							<img class="logo-light logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo">
+							<img class="logo-dark logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo-dark">
+							<img class="logo-small logo-img logo-img-small" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo-small">
+						</a>
+					</div>
+					<div class="nk-menu-trigger mr-n2">
+						<a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-arrow-left"></em></a>
+					</div>
+				</div>
+                <!-- Menu lateral -->
+                <div class="nk-sidebar-element">
+                    <div class="nk-sidebar-content">
+                        <div class="nk-sidebar-menu" data-simplebar>
+                            <ul class="nk-menu">
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="menu.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Dashboard</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item active">
+                                    <a href="marca.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
+                                        <span class="nk-menu-text">Hub de Marcas</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="oraculo.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-chat-circle"></em></span>
+                                        <span class="nk-menu-text">Oráculo</span>
+                                    </a>
+                                </li>
+                                 <li class="nk-menu-item">
+                                    <a href="perfil.html" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+                                        <span class="nk-menu-text">Administrativo</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+			</div>
 
-    <h2>Nulidade</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='nulidade.html'">Acessar formulário de cadastro</button>
-    <ul id="nulidadeList" class="list-group mb-4"></ul>
+			<div class="nk-wrap ">
+                <!-- Cabeçalho -->
+				<div class="nk-header nk-header-fixed is-light" style="padding:0 !important">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-header-brand" style="width: 100%;max-width: 165px;">
+                                <a href="menu.html" class="logo-link">
+                                    <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo-dark">
+                                </a>
+                            </div>
+                            <div class="nk-menu-trigger ml-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
 
-    <h2>Contrarrazão à Nulidade</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='contrarazao_nulidade.html'">Acessar formulário de cadastro</button>
-    <ul id="contrarazaoNulidadeList" class="list-group mb-4"></ul>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="perfil.html"><em class="icon ni ni-user-alt"></em><span>Perfil</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="index.html"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <h2>Manifestação à Oposição</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='manifestacao_oposicao.html'">Acessar formulário de cadastro</button>
-    <ul id="manifestacaoOposicaoList" class="list-group mb-4"></ul>
+				<div class="nk-content ">
+					<div class="container-fluid">
+						<div class="nk-content-inner">
+							<div class="nk-content-body">
+                                <div class="nk-block">
+                                    <div class="nk-block-head nk-block-head-sm">
+                                        <div class="nk-block-between">
+                                            <div class="nk-block-head-content">
+                                                <h3 class="nk-block-title page-title">Hub de Marcas</h3>
+                                                <p class="text-muted">Gerencie todas as petições de marca em um só lugar</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Caducidade -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-calendar-alt text-primary mr-2"></em>
+                                                        Caducidade
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie processos de caducidade de marcas</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='caducidade.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="caducidadeList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <h2>Manifestação ao Recurso</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='manifestacao_recurso.html'">Acessar formulário de cadastro</button>
-    <ul id="manifestacaoRecursoList" class="list-group mb-4"></ul>
+                                    <!-- Oposição -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        🛡️ <em class="icon ni ni-shield-exclamation text-warning mr-2"></em>
+                                                        Oposição
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie processos de oposição de marcas</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='oposicao.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="oposicaoList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <h2>Recurso ao Indeferimento</h2>
-    <button class="btn btn-primary mb-3" onclick="window.location.href='recurso_indeferimento.html'">Acessar formulário de cadastro</button>
-    <ul id="recursoIndeferimentoList" class="list-group mb-4"></ul>
-  </div>
+                                    <!-- Nulidade -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-cross-circle text-danger mr-2"></em>
+                                                        Nulidade
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie processos de nulidade de marcas</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='nulidade.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="nulidadeList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contrarrazão à Nulidade -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-file-text text-info mr-2"></em>
+                                                        Contrarrazão à Nulidade
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie contrarrazões de nulidade</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='contrarazao_nulidade.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="contrarazaoNulidadeList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Manifestação à Oposição -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-edit text-purple mr-2"></em>
+                                                        Manifestação à Oposição
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie manifestações de oposição</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='manifestacao_oposicao.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="manifestacaoOposicaoList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Manifestação ao Recurso -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-notes text-success mr-2"></em>
+                                                        Manifestação ao Recurso
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie manifestações de recurso</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='manifestacao_recurso.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="manifestacaoRecursoList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Recurso ao Indeferimento -->
+                                    <div class="card petition-card">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <h5 class="card-title">
+                                                        <em class="icon ni ni-arrow-up-right text-dark mr-2"></em>
+                                                        Recurso ao Indeferimento
+                                                    </h5>
+                                                    <p class="text-muted mb-0">Gerencie recursos de indeferimento</p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <button class="btn btn-outline-primary" onclick="window.location.href='recurso_indeferimento.html'">
+                                                        <em class="icon ni ni-plus"></em> Nova Petição
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <ul id="recursoIndeferimentoList" class="list-group list-group-flush"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="nk-footer">
+					<div class="container-fluid">
+						<div class="nk-footer-wrap">
+							<div class="nk-footer-copyright">
+								Powered by <a href="" target="_blank">TripleA</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
   <!-- Modais de edição (um para cada entidade) -->
   
@@ -658,9 +941,6 @@
           
           // Exibir o modal
           document.getElementById('modalVisualizarPeticao').classList.add('active');
-          
-          // Ocultar seta de voltar enquanto modal está aberto
-          esconderSetaVoltar();
         })
         .catch(err => {
           console.error('Erro ao visualizar petição:', err);
@@ -700,7 +980,6 @@
     // Função para fechar modais
     function fecharModal(tipo) {
       document.getElementById(`editModal${tipo}`).classList.remove("active");
-      mostrarSetaVoltar();
     }
 
 // Função para excluir cadastro (genérica)
@@ -713,16 +992,10 @@
       }
     }
 
-    function mostrarSetaVoltar() {
-  document.getElementById("seta-voltar").style.display = "block";
-}
-function esconderSetaVoltar() {
-  document.getElementById("seta-voltar").style.display = "none";
-}
+
     
     // Função para abrir o modal correto e preencher os campos (exemplo para Caducidade)
     function abrirModalEditar(tipo, id) {
-      esconderSetaVoltar();
       if (tipo === "caducidade") {
   fetch(`${API_URL}/caducidade/${id}`, { headers: { Authorization: `Bearer ${token}` } })
     .then(resp => resp.json())
@@ -901,7 +1174,6 @@ function esconderSetaVoltar() {
     // Função para fechar modal
    function fecharModal(tipo) {
   document.getElementById(`editModal${tipo}`).classList.remove("active");
-  mostrarSetaVoltar();
 }
 
     // Função simples e profissional para loading
@@ -1250,8 +1522,6 @@ function esconderSetaVoltar() {
     
     function abrirModalEdicaoAvancada(tipo, id) {
       tipoItemAtual = tipo;
-      esconderSetaVoltar();
-      
       // Buscar dados do item
       fetch(`${API_URL}/peticoes/peticao/${id}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(resp => resp.json())
@@ -1609,7 +1879,6 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
     
     function fecharModalEdicaoAvancada() {
       document.getElementById('modalEdicaoAvancada').classList.remove('active');
-      mostrarSetaVoltar();
       
       // Atualizar a lista principal para refletir mudanças
       atualizarListas();
@@ -1617,13 +1886,30 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
 
     function fecharModalVisualizacao() {
       document.getElementById('modalVisualizarPeticao').classList.remove('active');
-      mostrarSetaVoltar();
     }
 
     document.addEventListener("DOMContentLoaded", atualizarListas);
   </script>
+
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="assets/js/bundle.js?ver=2.8.0"></script>
+    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+	<script src="scripts/jquery/jquery.mask.min.js"></script>
+	<script src="lib/chosen/chosen.jquery.min.js"></script>
+
+	<script src="scripts/mask.js"></script>
+	<script src="scripts/dropdowns.js"></script>
+	<script src="scripts/uploads.js"></script>
+	<script src="scripts/main.js"></script>
+	<script src="scripts/ckeditor/ckeditor.js"></script>
+	<script src="scripts/ckeditor5/startckeditor.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#global-loader').fadeOut();
+		});
+	</script>
 </body>
-<a id="seta-voltar" href="menu.html" style="text-decoration:none;position:fixed;top:20px;left:20px;z-index:2000;">
-  <span style="font-size:2rem;">&#8592;</span> 
-</a>
 </html>
