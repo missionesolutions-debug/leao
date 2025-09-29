@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+	<!-- Carregar configuração primeiro -->
+	<script src="assets/js/config.js"></script>
+	
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Administração de Usuários - Leão Adv</title>
@@ -365,8 +368,17 @@
   </div>
 
   <script>
-    // Usar configuração global do ambiente
-    const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : "http://127.0.0.1:8000";
+    // Variáveis globais que serão definidas após carregamento do config
+    let API_URL;
+    
+    // Função para inicializar configuração
+    function inicializarConfig() {
+      API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
+      console.log('Perfil - API_URL definido:', API_URL);
+      console.log('Perfil - APP_CONFIG disponível:', !!window.APP_CONFIG);
+      console.log('Perfil - Ambiente:', window.location.hostname);
+      return true;
+    }
 
     function updateStatus(message, isError = false) {
       const status = document.getElementById('status');
@@ -377,6 +389,14 @@
     }
 
     function listarUsuarios() {
+      // Verificar se API_URL está definido
+      if (!API_URL) {
+        console.error('API_URL não está definido!');
+        updateStatus('Erro: Configuração não carregada. Tente recarregar a página.', true);
+        return;
+      }
+      
+      console.log('Listando usuários com API_URL:', API_URL);
       updateStatus('Carregando usuários...');
       
       fetch(`${API_URL}/usuarios/`)
@@ -535,27 +555,60 @@
       }
     }
 
-    // Carregar usuários quando a página carregar
-    document.addEventListener('DOMContentLoaded', listarUsuarios);
-
-    // Fechar modal ao clicar no fundo
-    document.getElementById('modalEdicaoUsuario').addEventListener('click', function(e) {
-      if (e.target === this) {
-        fecharModalEdicao();
+    // Aguardar o DOM e APP_CONFIG estarem carregados
+    function inicializar() {
+      if (!window.APP_CONFIG) {
+        console.log('Perfil - Aguardando APP_CONFIG...');
+        setTimeout(inicializar, 100);
+        return;
       }
-    });
-
-    // Fechar modal com tecla Escape
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && document.getElementById('modalEdicaoUsuario').classList.contains('active')) {
-        fecharModalEdicao();
+      
+      console.log('Perfil - APP_CONFIG carregado:', window.APP_CONFIG);
+      
+      // Inicializar configurações
+      if (!inicializarConfig()) {
+        console.error('Perfil - Falha ao inicializar configurações');
+        return;
       }
-    });
+      
+      // Agora sim, carregar usuários
+      listarUsuarios();
+      
+      // Configurar event listeners dos modais
+      document.getElementById('modalEdicaoUsuario').addEventListener('click', function(e) {
+        if (e.target === this) {
+          fecharModalEdicao();
+        }
+      });
+
+      // Fechar modal com tecla Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('modalEdicaoUsuario').classList.contains('active')) {
+          fecharModalEdicao();
+        }
+      });
+    }
+    
+    // Aguardar carregamento completo do DOM e configuração
+    function aguardarConfigEInicializar() {
+      if (window.APP_CONFIG) {
+        inicializarConfig();
+        inicializar();
+      } else {
+        // Tentar novamente após um pequeno delay
+        setTimeout(aguardarConfigEInicializar, 50);
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener("DOMContentLoaded", aguardarConfigEInicializar);
+    } else {
+      aguardarConfigEInicializar();
+    }
   </script>
 
 	<script src="lib/jquery/dist/jquery.min.js"></script>
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
-	<script src="assets/js/config.js"></script>
     <script src="assets/js/scripts.js?ver=2.8.0"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
