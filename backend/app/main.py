@@ -24,6 +24,8 @@ app.add_middleware(
         "http://127.0.0.1:3000",        # Desenvolvimento local
         "https://www.leaoia.com.br",    # Produção
         "http://www.leaoia.com.br",     # Produção sem HTTPS (fallback)
+        "https://leaoia.com.br",        # Produção sem www
+        "http://leaoia.com.br",         # Produção sem www e HTTPS (fallback)
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],

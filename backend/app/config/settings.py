@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     ALLOW_ORIGINS: list = [
         "https://www.leaoia.com.br", 
         "http://www.leaoia.com.br",
+        "https://leaoia.com.br", 
+        "http://leaoia.com.br",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
