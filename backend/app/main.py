@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -8,13 +8,46 @@ from app.api.routes import router as main_router
 from app.config.settings import settings
 from app.controllers.user_controller import router as user_router
 import os
+import logging
 
-app = FastAPI()
+app = FastAPI(
+    title="Leão Adv API",
+    description="Sistema de Gestão de Marcas e Propriedade Intelectual",
+    version="3.0.0",
+    docs_url=None,  # Desabilitar docs em produção por segurança
+    redoc_url=None  # Desabilitar redoc em produção por segurança
+)
+
+# Configurar logging para monitorar ataques
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Rate Limiter setup
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Middleware de segurança para bloquear tentativas suspeitas
+@app.middleware("http")
+async def security_middleware(request: Request, call_next):
+    # Lista de paths suspeitos para monitorar
+    suspicious_paths = [
+        ".env", "config", "admin", "wp-admin", "phpmyadmin", 
+        "session/properties", "sonicos", "v1/pods", "api/v1",
+        ".git", "backup", "database", "sql"
+    ]
+    
+    path = request.url.path.lower()
+    
+    # Log tentativas suspeitas
+    if any(suspicious in path for suspicious in suspicious_paths):
+        client_ip = request.client.host if request.client else "unknown"
+        logger.warning(f"Tentativa suspeita de acesso de {client_ip} para {path}")
+        # Retornar 403 Forbidden para desencorajar atacantes
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    response = await call_next(request)
+    return response
 
 # CORS middleware - Configurado para produção
 app.add_middleware(
@@ -44,3 +77,12 @@ if os.path.exists(frontend_path):
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Leão Adv API v3 !"}
+
+@app.get("/health")
+def health_check():
+    """Endpoint para verificação de saúde da aplicação"""
+    return {
+        "status": "healthy",
+        "version": "3.0.0",
+        "service": "leao-adv-api"
+    }
