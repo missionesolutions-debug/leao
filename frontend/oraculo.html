@@ -120,10 +120,27 @@
             style="padding: 0 !important"
           >
             <div class="container-fluid">
-              <div class="nk-header-wrap">
+              <div
+                class="nk-header-wrap"
+                style="
+                  position: relative;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 64px;
+                "
+              >
+                <!-- LOGO CENTRALIZADO -->
                 <div
                   class="nk-header-brand"
-                  style="width: 100%; max-width: 165px"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: auto;
+                    max-width: none;
+                    margin: 0 auto;
+                  "
                 >
                   <a href="menu.html" class="logo-link">
                     <img
@@ -131,25 +148,48 @@
                       src="/assets/images/logo.png"
                       srcset="/assets/images/logo.png"
                       alt="logo"
+                      style="height: 44px; width: auto"
                     />
                     <img
                       class="logo-dark logo-img"
                       src="/assets/images/logo.png"
                       srcset="/assets/images/logo.png"
                       alt="logo-dark"
+                      style="height: 44px; width: auto"
                     />
                   </a>
                 </div>
-                <div class="nk-menu-trigger ml-n1">
+
+                <!-- MENU (TRÊS LISTRAS) À DIREITA -->
+                <div
+                  class="nk-menu-trigger ml-n1"
+                  style="
+                    position: absolute;
+                    right: 64px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin: 0;
+                  "
+                >
                   <a
                     href="#"
                     class="nk-nav-toggle nk-quick-nav-icon"
                     data-target="sidebarMenu"
-                    ><em class="icon ni ni-menu"></em
-                  ></a>
+                  >
+                    <em class="icon ni ni-menu"></em>
+                  </a>
                 </div>
 
-                <div class="nk-header-tools">
+                <!-- BLOCO DE USUÁRIO À DIREITA -->
+                <div
+                  class="nk-header-tools"
+                  style="
+                    position: absolute;
+                    right: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                  "
+                >
                   <ul class="nk-quick-nav">
                     <li class="dropdown user-dropdown">
                       <a
@@ -169,20 +209,20 @@
                         <div class="dropdown-inner">
                           <ul class="link-list">
                             <li>
-                              <a href="perfil.html"
-                                ><em class="icon ni ni-user-alt"></em
-                                ><span>Perfil</span></a
-                              >
+                              <a href="perfil.html">
+                                <em class="icon ni ni-user-alt"></em>
+                                <span>Perfil</span>
+                              </a>
                             </li>
                           </ul>
                         </div>
                         <div class="dropdown-inner">
                           <ul class="link-list">
                             <li>
-                              <a href="index.html"
-                                ><em class="icon ni ni-signout"></em
-                                ><span>Sair</span></a
-                              >
+                              <a href="index.html">
+                                <em class="icon ni ni-signout"></em>
+                                <span>Sair</span>
+                              </a>
                             </li>
                           </ul>
                         </div>
@@ -194,6 +234,7 @@
             </div>
           </div>
 
+          <!-- Fim Cabeçalho -->
           <div class="nk-content">
             <div class="container-fluid">
               <div class="nk-content-inner">
