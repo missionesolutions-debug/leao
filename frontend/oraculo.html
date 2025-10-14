@@ -120,6 +120,7 @@
             style="padding: 0 !important"
           >
             <div class="container-fluid">
+              <!-- wrap centralizado, com posicionamento relativo para ancorar esquerda/direita -->
               <div
                 class="nk-header-wrap"
                 style="
@@ -130,6 +131,26 @@
                   min-height: 64px;
                 "
               >
+                <!-- HAMBÚRGUER (SIDEBAR) À ESQUERDA -->
+                <div
+                  class="nk-menu-trigger ml-n1"
+                  style="
+                    position: absolute;
+                    left: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin: 0;
+                  "
+                >
+                  <a
+                    href="#"
+                    class="nk-nav-toggle nk-quick-nav-icon"
+                    data-target="sidebarMenu"
+                  >
+                    <em class="icon ni ni-menu"></em>
+                  </a>
+                </div>
+
                 <!-- LOGO CENTRALIZADO -->
                 <div
                   class="nk-header-brand"
@@ -160,27 +181,7 @@
                   </a>
                 </div>
 
-                <!-- MENU (TRÊS LISTRAS) À DIREITA -->
-                <div
-                  class="nk-menu-trigger ml-n1"
-                  style="
-                    position: absolute;
-                    right: 64px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    margin: 0;
-                  "
-                >
-                  <a
-                    href="#"
-                    class="nk-nav-toggle nk-quick-nav-icon"
-                    data-target="sidebarMenu"
-                  >
-                    <em class="icon ni ni-menu"></em>
-                  </a>
-                </div>
-
-                <!-- BLOCO DE USUÁRIO À DIREITA -->
+                <!-- BOLINHA DE PERFIL À DIREITA -->
                 <div
                   class="nk-header-tools"
                   style="

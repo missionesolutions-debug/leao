@@ -11,7 +11,9 @@ class PeticaoService:
     def gerar_caducidade(self, dados):
         data_atual = datetime.now().strftime("%d/%m/%Y")
         prompt = f"""
-Elabore uma PETIÇÃO DE CADUCIDADE COMPLETA para o INPI, seguindo exatamente o modelo abaixo, apenas substituindo os dados conforme as informações fornecidas.  
+Elabore uma PETIÇÃO DE CADUCIDADE COMPLETA para o INPI,
+seguindo exatamente o modelo abaixo,
+apenas substituindo os dados conforme as informações fornecidas.
 Mantenha a estrutura, a linguagem formal e os parágrafos conforme o exemplo.
 
 MODELO DE REFERÊNCIA:
