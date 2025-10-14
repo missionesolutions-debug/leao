@@ -14,8 +14,8 @@ app = FastAPI(
     title="Leão Adv API",
     description="Sistema de Gestão de Marcas e Propriedade Intelectual",
     version="3.0.0",
-    docs_url=None,  # Desabilitar docs em produção por segurança
-    redoc_url=None  # Desabilitar redoc em produção por segurança
+    docs_url="/docs",  # Habilitar docs para desenvolvimento
+    redoc_url="/redoc"  # Habilitar redoc para desenvolvimento
 )
 
 # Configurar logging para monitorar ataques
@@ -55,6 +55,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",        # Desenvolvimento frontend
         "http://127.0.0.1:3000",        # Desenvolvimento local
+        "http://localhost:8080",        # Desenvolvimento frontend (porta 8080)
+        "http://127.0.0.1:8080",        # Desenvolvimento local (porta 8080)
         "https://www.leaoia.com.br",    # Produção
         "http://www.leaoia.com.br",     # Produção sem HTTPS (fallback)
         "https://leaoia.com.br",        # Produção sem www
