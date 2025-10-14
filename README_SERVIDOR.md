@@ -1,4 +1,4 @@
-# 🌐 CONFIGURAÇÃO SERVIDOR - www.leaoai.com.br
+# 🌐 CONFIGURAÇÃO SERVIDOR - www.leaoia.com.br
 
 ## ✅ CONFIGURAÇÕES IMPLEMENTADAS
 
@@ -11,7 +11,7 @@ window.APP_CONFIG = {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
       ? "http://localhost:8000" // 🔧 Desenvolvimento
-      : "https://www.leaoai.com.br/api", // 🌐 Produção
+      : "https://www.leaoia.com.br/api", // 🌐 Produção
 };
 ```
 
@@ -22,8 +22,8 @@ window.APP_CONFIG = {
 allow_origins=[
     "http://localhost:3000",        # Desenvolvimento frontend
     "http://127.0.0.1:3000",        # Desenvolvimento local
-    "https://www.leaoai.com.br",    # Produção HTTPS
-    "http://www.leaoai.com.br",     # Produção HTTP (fallback)
+    "https://www.leaoia.com.br",    # Produção HTTPS
+    "http://www.leaoia.com.br",     # Produção HTTP (fallback)
 ]
 ```
 
@@ -35,9 +35,9 @@ allow_origins=[
 
 ### 4. 🚀 **URLs de Produção**
 
-- **Frontend:** https://www.leaoai.com.br
-- **API:** https://www.leaoai.com.br/api
-- **Health Check:** https://www.leaoai.com.br/api/
+- **Frontend:** https://www.leaoia.com.br
+- **API:** https://www.leaoia.com.br/api
+- **Health Check:** https://www.leaoia.com.br/api/
 
 ## 🎯 COMO FAZER O DEPLOY
 
@@ -69,7 +69,7 @@ python build_production.py
 ```nginx
 server {
     listen 443 ssl;
-    server_name www.leaoai.com.br;
+    server_name www.leaoia.com.br;
 
     # Frontend
     location / {
@@ -90,7 +90,7 @@ server {
 ## 📋 CHECKLIST DE DEPLOY
 
 - [x] ✅ **Configuração automática de ambiente**
-- [x] ✅ **CORS configurado para www.leaoai.com.br**
+- [x] ✅ **CORS configurado para www.leaoia.com.br**
 - [x] ✅ **Build script criado**
 - [x] ✅ **Guia de deploy completo**
 - [ ] 🔲 **Certificado SSL configurado**
@@ -109,10 +109,10 @@ server {
 
 ## 🎉 RESULTADO FINAL
 
-Seu sistema LeaoAI estará disponível em:
+Seu sistema Leão Adv estará disponível em:
 
-- **🌐 Site:** https://www.leaoai.com.br
-- **⚡ API:** https://www.leaoai.com.br/api
+- **🌐 Site:** https://www.leaoia.com.br
+- **⚡ API:** https://www.leaoia.com.br/api
 - **👥 Suporte:** 10+ usuários simultâneos
 - **🔒 Rate Limiting:** 5 petições/min por usuário
 - **🚀 Performance:** 4 workers paralelos

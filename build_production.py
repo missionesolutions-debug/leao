@@ -49,17 +49,17 @@ def create_production_build():
     # Config para frontend
     config_js = frontend_build / "assets" / "js" / "config.js"
     with open(config_js, 'w', encoding='utf-8') as f:
-        f.write("""// Configuração de PRODUÇÃO - www.leaoai.com.br
+        f.write("""// Configuração de PRODUÇÃO - www.leaoia.com.br
 window.APP_CONFIG = {
-  API_URL: "https://www.leaoai.com.br/api"
+  API_URL: "https://www.leaoia.com.br/api"
 };
 """)
     
     # Criar .env template para backend
     env_template = backend_build / ".env.template"
     with open(env_template, 'w', encoding='utf-8') as f:
-        f.write("""# Configurações de Produção - LeaoAI
-DATABASE_URL=postgresql://user:password@localhost:5432/leaoai_prod
+        f.write("""# Configurações de Produção - Leão Adv
+DATABASE_URL=postgresql://user:password@localhost:5432/leaoadv_prod
 OPENAI_API_KEY=sk-your-openai-api-key-here
 SECRET_KEY=your-super-secret-jwt-key-minimum-32-characters-long
 DEBUG=False
@@ -71,8 +71,8 @@ DEBUG=False
         f.write("""#!/bin/bash
 # Script para iniciar LeaoAI em produção
 
-echo "🚀 Iniciando LeaoAI em modo PRODUÇÃO..."
-echo "🌐 Domínio: www.leaoai.com.br"
+echo "🚀 Iniciando Leão Adv em modo PRODUÇÃO..."
+echo "🌐 Domínio: www.leaoia.com.br"
 echo "⚡ Workers: 4 processos paralelos"
 echo "🗄️ Connection Pool: Otimizado para 10+ usuários"
 echo "----------------------------------------------------"
@@ -114,13 +114,13 @@ uvicorn app.main:app \\
     # Criar arquivo README para deploy
     readme_deploy = build_dir / "README_DEPLOY.md"
     with open(readme_deploy, 'w', encoding='utf-8') as f:
-        f.write("""# 🚀 LeaoAI - Deploy em Produção
+        f.write("""# 🚀 Leão Adv - Deploy em Produção
 
-## 📦 Este é o build de produção do LeaoAI
+## 📦 Este é o build de produção do Leão Adv
 
 ### 🎯 Configurado para:
-- **Domínio:** www.leaoai.com.br
-- **API Endpoint:** https://www.leaoai.com.br/api
+- **Domínio:** www.leaoia.com.br
+- **API Endpoint:** https://www.leaoia.com.br/api
 - **Workers:** 4 processos paralelos
 - **Rate Limiting:** 5 petições/min por usuário
 - **Connection Pool:** 20 + 30 overflow
@@ -129,18 +129,18 @@ uvicorn app.main:app \\
 
 1. **Copie os arquivos para o servidor:**
    ```bash
-   scp -r dist/* user@server:/var/www/leaoai/
+   scp -r dist/* user@server:/var/www/leaopy/
    ```
 
 2. **Configure o backend:**
    ```bash
-   cd /var/www/leaoai/backend
+   cd /var/www/leaopy/backend
    cp .env.template app/.env
    nano app/.env  # Configure DATABASE_URL e OPENAI_API_KEY
    ```
 
 3. **Configure o Nginx:**
-   - Frontend: `/var/www/leaoai/frontend`
+   - Frontend: `/var/www/leaopy/frontend`
    - API Proxy: `http://127.0.0.1:8000`
 
 4. **Inicie o servidor:**
@@ -149,9 +149,9 @@ uvicorn app.main:app \\
    ```
 
 ### 🔗 URLs de teste:
-- **Frontend:** https://www.leaoai.com.br
-- **API:** https://www.leaoai.com.br/api
-- **Health:** https://www.leaoai.com.br/api/
+- **Frontend:** https://www.leaoia.com.br
+- **API:** https://www.leaoia.com.br/api
+- **Health:** https://www.leaoia.com.br/api/
 
 ### 📞 Suporte:
 Consulte o arquivo DEPLOY_GUIDE.md para instruções detalhadas.
@@ -159,7 +159,7 @@ Consulte o arquivo DEPLOY_GUIDE.md para instruções detalhadas.
     
     print("✅ Build de produção criada com sucesso!")
     print(f"📁 Localização: {build_dir.absolute()}")
-    print(f"🌐 Configurado para: www.leaoai.com.br")
+    print(f"🌐 Configurado para: www.leaoia.com.br")
     print(f"📝 Leia o README_DEPLOY.md para instruções de deploy")
 
 if __name__ == "__main__":

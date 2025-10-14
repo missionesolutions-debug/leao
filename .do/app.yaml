@@ -1,7 +1,7 @@
-name: leaoai
+name: leaoadv
 services:
 - name: backend
-  source_dir: /backend
+  source_dir: ./backend
   github:
     repo: missionesolutions-debug/leao
     branch: NewPython-only-front
@@ -26,7 +26,7 @@ services:
     http_path: /
     
 - name: frontend
-  source_dir: /frontend
+  source_dir: ./frontend
   github:
     repo: missionesolutions-debug/leao
     branch: NewPython-only-front
@@ -39,8 +39,8 @@ services:
   routes:
   - path: /
   static_sites:
-  - name: leaoai-frontend
-    source_dir: /frontend
+  - name: leaoadv-frontend
+    source_dir: ./frontend
     build_command: echo "Build complete"
     output_dir: /
     index_document: index.html
@@ -49,6 +49,6 @@ services:
     - path: /
 
 databases:
-- name: leaoai-db
+- name: leaoadv-db
   engine: PG
   version: "14"

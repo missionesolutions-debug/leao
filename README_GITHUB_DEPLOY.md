@@ -28,7 +28,7 @@
    OPENAI_API_KEY=sk-your-key-here
    SECRET_KEY=your-jwt-secret-here
    ```
-5. **Add Domain:** `www.leaoai.com.br`
+5. **Add Domain:** `www.leaoia.com.br`
 
 #### **Opção B: Droplet + Actions**
 
@@ -48,8 +48,8 @@
 No seu provedor de domínio:
 
 ```dns
-www.leaoai.com.br    CNAME    your-app.ondigitalocean.app
-@.leaoai.com.br      A        IP-DO-SERVIDOR
+www.leaoia.com.br    CNAME    your-app.ondigitalocean.app
+@.leaoia.com.br      A        IP-DO-SERVIDOR
 ```
 
 ---
@@ -72,7 +72,7 @@ git push origin NewPython-only-front
 
 ### **Status do Deploy:**
 
-- ✅ **Sucesso:** Site atualizado em www.leaoai.com.br
+- ✅ **Sucesso:** Site atualizado em www.leaoia.com.br
 - ❌ **Erro:** Verificar logs em GitHub Actions
 
 ---
@@ -81,10 +81,10 @@ git push origin NewPython-only-front
 
 ### **URLs de Verificação:**
 
-- **🌐 Site:** https://www.leaoai.com.br
-- **⚡ API:** https://www.leaoai.com.br/api
-- **📋 Docs:** https://www.leaoai.com.br/api/docs
-- **💚 Health:** https://www.leaoai.com.br/api/
+- **🌐 Site:** https://www.leaoia.com.br
+- **⚡ API:** https://www.leaoia.com.br/api
+- **📋 Docs:** https://www.leaoia.com.br/api/docs
+- **💚 Health:** https://www.leaoia.com.br/api/
 
 ### **Logs e Status:**
 
@@ -93,7 +93,7 @@ git push origin NewPython-only-front
 ssh root@your-server-ip
 
 # Ver logs da aplicação
-journalctl -u leaoai -f
+journalctl -u leaopy -f
 
 # Status dos serviços
 systemctl status leaoai nginx
