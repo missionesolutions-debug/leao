@@ -11,17 +11,179 @@
     <form id="loginForm">
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" id="email" class="form-control" required>
+        <input type="email" id="email" class="form-control" value="jhonatan.bandidor@gmail.com" required>
       </div>
       <div class="form-group">
         <label for="password">Senha</label>
-        <input type="password" id="password" class="form-control" required>
+        <input type="password" id="password" class="form-control" value="1234" required>
       </div>
-      <button type="submit" class="btn btn-primary mt-3" onclick="window.location.href='menu.html'">Entrar</button>
-      <button type="button" class="btn btn-secondary mt-2" onclick="window.location.href='cadastro.html'">Cadastrar</button>
+      <button type="submit" class="btn btn-primary mt-3">Entrar</button>
     </form>
+    
+    <div id="loginStatus" style="margin-top: 15px;"></div>
+    
+
   </div>
+  
+  <script src="assets/js/bundle.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/scripts.js"></script>
+  
+  <script>
+    function updateLoginStatus(message, isError = false) {
+      const status = document.getElementById('loginStatus');
+      if (status) {
+        status.innerHTML = message;
+        status.className = isError ? 'alert alert-danger' : 'alert alert-success';
+      }
+    }
+
+    // Função de login
+    async function fazerLogin(email, password) {
+      const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
+      
+      updateLoginStatus('Fazendo login...', false);
+      
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.access_token) {
+            localStorage.setItem('token', data.access_token);
+            updateLoginStatus('✅ Login realizado com sucesso! Redirecionando...', false);
+            
+            setTimeout(() => {
+              window.location.href = 'menu.html';
+            }, 1500);
+          } else {
+            updateLoginStatus('❌ Erro: Resposta inválida do servidor', true);
+          }
+          
+        } else {
+          let errorMessage = 'Credenciais inválidas';
+          
+          try {
+            const errorData = await response.json();
+            
+            // Extrair mensagem de erro de diferentes formatos
+            if (typeof errorData === 'string') {
+              errorMessage = errorData;
+            } else if (errorData.detail) {
+              // FastAPI padrão
+              if (typeof errorData.detail === 'string') {
+                errorMessage = errorData.detail;
+              } else if (Array.isArray(errorData.detail)) {
+                // Erro de validação (Pydantic)
+                const validationErrors = errorData.detail.map(err => {
+                  if (err.msg) {
+                    return err.msg;
+                  } else if (err.message) {
+                    return err.message;
+                  } else if (err.ctx && err.ctx.reason) {
+                    return err.ctx.reason;
+                  } else {
+                    return 'Erro de validação';
+                  }
+                });
+                errorMessage = validationErrors.join('; ');
+              } else {
+                errorMessage = JSON.stringify(errorData.detail);
+              }
+            } else if (errorData.message) {
+              errorMessage = errorData.message;
+            } else if (errorData.error) {
+              errorMessage = errorData.error;
+            } else {
+              // Se não conseguir extrair mensagem específica
+              errorMessage = 'Erro no login. Verifique suas credenciais.';
+            }
+          } catch (parseError) {
+            // Se não conseguir fazer parse do JSON, usar texto da resposta
+            console.log('❌ Erro ao fazer parse da resposta:', parseError);
+            try {
+              const textError = await response.text();
+              errorMessage = textError || 'Erro no servidor';
+            } catch {
+              errorMessage = `Erro HTTP ${response.status}`;
+            }
+          }
+          
+            // Personalizar mensagens para o usuário
+            if (errorMessage.includes('email address must have an @-sign')) {
+              errorMessage = 'Email deve conter um @. Exemplo: usuario@email.com';
+            } else if (errorMessage.includes('value is not a valid email')) {
+              errorMessage = 'Formato de email inválido. Use: usuario@dominio.com';
+            } else if (errorMessage.includes('Invalid credentials')) {
+              errorMessage = 'Email ou senha incorretos. Verifique seus dados.';
+            }
+            
+            updateLoginStatus(`❌ ${errorMessage}`, true);
+        }
+      } catch (error) {
+        updateLoginStatus('❌ Erro de conexão com o servidor', true);
+      }
+    }
+
+    // Event listener para o formulário
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      
+      if (!email || !password) {
+        updateLoginStatus('❌ Por favor, preencha todos os campos', true);
+        return;
+      }
+      
+      fazerLogin(email, password);
+    });
+
+    // Verificar se já está logado
+    window.addEventListener('load', function() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        updateLoginStatus('Verificando login anterior...', false);
+        
+        const API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
+        
+        fetch(`${API_URL}/usuarios/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            updateLoginStatus('✅ Já logado! Redirecionando...', false);
+            setTimeout(() => {
+              window.location.href = 'menu.html';
+            }, 1000);
+          } else {
+            localStorage.removeItem('token');
+            updateLoginStatus('Sessão expirada. Faça login novamente.', false);
+          }
+        })
+        .catch(error => {
+          updateLoginStatus('Digite suas credenciais para entrar', false);
+        });
+      } else {
+        updateLoginStatus('Digite suas credenciais para entrar', false);
+      }
+    });
+
+
+  </script>
 </body>
 </html>

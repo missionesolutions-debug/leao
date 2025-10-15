@@ -137,7 +137,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="index.html"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
+                                                    <li><a href="javascript:void(0)" onclick="logout()"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -264,6 +264,7 @@
 
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
 	<script src="assets/js/config.js"></script>
+	<script src="assets/js/scripts.js"></script>
 	<script src="assets/js/charts/chart-ecommerce.js?ver=2.8.0"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
@@ -313,6 +314,24 @@
 
 		function updateValue(id, value) {
 			document.getElementById(id).value = value;
+		}
+		
+		// Função de logout
+		function logout() {
+			console.log('🚪 Fazendo logout...');
+			
+			// Remover todos os tokens possíveis
+			localStorage.removeItem('token');
+			localStorage.removeItem('authToken');
+			localStorage.removeItem('access_token');
+			
+			// Limpar sessionStorage também
+			sessionStorage.clear();
+			
+			console.log('✅ Tokens removidos, redirecionando...');
+			
+			// Redirecionar para login
+			window.location.href = 'index.html';
 		}
 	</script>
 </body>

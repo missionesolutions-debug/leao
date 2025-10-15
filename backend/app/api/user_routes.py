@@ -5,6 +5,7 @@ from app.repositories.user_repository import UserRepository
 from app.schemas.user_schema import UserCreate, UserUpdate, UserResponse
 from app.utils.auth import get_current_user
 from app.config.database import get_db
+from app.models.user_model import User
 
 router = APIRouter()
 
@@ -51,4 +52,8 @@ async def delete_user(user_id: int, db: Session = Depends(get_db), current_user:
     db.commit()
     return {"detail": "User deleted successfully"}
 
-    
+@router.get("/count")
+async def count_users(db: Session = Depends(get_db)):
+    """Contar total de usuários (público para verificar primeiro usuário)"""
+    count = db.query(User).count()
+    return {"count": count}
