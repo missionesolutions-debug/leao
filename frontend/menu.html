@@ -93,7 +93,7 @@
                                     </a>
                                 </li>
                                  <li class="nk-menu-item">
-                                    <a href="perfil.html" class="nk-menu-link">
+                                    <a href="#" onclick="verificarERedirecionarPerfil()" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
                                         <span class="nk-menu-text">Administrativo</span>
                                     </a>
@@ -132,7 +132,7 @@
                                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="perfil.html"><em class="icon ni ni-user-alt"></em><span>Perfil</span></a></li>
+                                                    <li><a href="#" onclick="verificarERedirecionarPerfil()"><em class="icon ni ni-user-alt"></em><span>Perfil</span></a></li>
                                                 </ul>
                                             </div>
                                             <div class="dropdown-inner">
@@ -210,7 +210,7 @@
                                                                         Administrativo ( em breve )
                                                                     </h4>
                                                                     <p>Acesse métricas e gerencie usuários da plataforma.</p>
-                                                                    <a href="perfil.html" class="mt-auto btn btn-outline-primary">Acessar</a>
+                                                                    <a href="#" onclick="verificarERedirecionarPerfil()" class="mt-auto btn btn-outline-primary">Acessar</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -332,6 +332,49 @@
 			
 			// Redirecionar para login
 			window.location.href = 'index.html';
+		}
+		
+		// Função para verificar autenticação e redirecionar para perfil
+		function verificarERedirecionarPerfil() {
+			console.log('🔍 Verificando autenticação antes de acessar perfil...');
+			
+			// Verificar se há token
+			const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+			console.log('Token encontrado:', token ? 'SIM' : 'NÃO');
+			
+			if (!token) {
+				console.log('❌ Sem token - redirecionando para login');
+				alert('Você precisa fazer login para acessar esta página.');
+				window.location.href = 'index.html';
+				return;
+			}
+			
+			// Verificar se o token é válido (básico)
+			try {
+				const payload = JSON.parse(atob(token.split('.')[1]));
+				const now = Date.now() / 1000;
+				
+				console.log('Token payload:', payload);
+				console.log('Token expira em:', new Date(payload.exp * 1000));
+				console.log('Agora:', new Date());
+				
+				if (payload.exp < now) {
+					console.log('❌ Token expirado - removendo e redirecionando');
+					localStorage.removeItem('token');
+					localStorage.removeItem('authToken');
+					alert('Sua sessão expirou. Faça login novamente.');
+					window.location.href = 'index.html';
+					return;
+				}
+				
+				console.log('✅ Token válido - redirecionando para perfil');
+				window.location.href = 'perfil.html';
+				
+			} catch (error) {
+				console.error('❌ Erro ao verificar token:', error);
+				alert('Erro na autenticação. Faça login novamente.');
+				window.location.href = 'index.html';
+			}
 		}
 	</script>
 </body>
