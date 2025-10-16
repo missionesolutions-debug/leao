@@ -24,6 +24,38 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+    
+    <style>
+      /* Estilos para o hamburger sidebar */
+      .nk-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .nk-sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      body.nav-shown .nk-sidebar {
+        transform: translateX(0);
+      }
+      
+      @media (max-width: 1199px) {
+        .nk-sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+      }
+    </style>
   </head>
   <body class="nk-body bg-lighter npc-default has-sidebar">
     <div id="global-loader">
@@ -116,124 +148,56 @@
 
         <div class="nk-wrap">
           <!-- Cabeçalho -->
-          <div
-            class="nk-header nk-header-fixed is-light"
-            style="padding: 0 !important"
-          >
-            <div class="container-fluid">
-              <!-- wrap centralizado, com posicionamento relativo para ancorar esquerda/direita -->
-              <div
-                class="nk-header-wrap"
-                style="
-                  position: relative;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  min-height: 64px;
-                "
-              >
-                <!-- HAMBÚRGUER (SIDEBAR) À ESQUERDA -->
-                <div
-                  class="nk-menu-trigger ml-n1"
-                  style="
-                    position: absolute;
-                    left: 16px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    margin: 0;
-                  "
-                >
-                  <a
-                    href="#"
-                    class="nk-nav-toggle nk-quick-nav-icon"
-                    data-target="sidebarMenu"
-                  >
-                    <em class="icon ni ni-menu"></em>
-                  </a>
-                </div>
-
-                <!-- LOGO CENTRALIZADO -->
-                <div
-                  class="nk-header-brand"
-                  style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: auto;
-                    max-width: none;
-                    margin: 0 auto;
-                  "
-                >
-                  <a href="menu.html" class="logo-link">
-                    <img
-                      class="logo-light logo-img"
-                      src="/assets/images/logo.png"
-                      srcset="/assets/images/logo.png"
-                      alt="logo"
-                      style="height: 44px; width: auto"
-                    />
-                    <img
-                      class="logo-dark logo-img"
-                      src="/assets/images/logo.png"
-                      srcset="/assets/images/logo.png"
-                      alt="logo-dark"
-                      style="height: 44px; width: auto"
-                    />
-                  </a>
-                </div>
-
-                <!-- BOLINHA DE PERFIL À DIREITA -->
-                <div
-                  class="nk-header-tools"
-                  style="
-                    position: absolute;
-                    right: 16px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                  "
-                >
-                  <ul class="nk-quick-nav">
-                    <li class="dropdown user-dropdown">
-                      <a
-                        href="#"
-                        class="dropdown-toggle mr-n1"
-                        data-toggle="dropdown"
-                      >
-                        <div class="user-toggle">
-                          <div class="user-avatar sm">
-                            <em class="icon ni ni-user-alt"></em>
-                          </div>
-                        </div>
-                      </a>
-                      <div
-                        class="dropdown-menu dropdown-menu-md dropdown-menu-right"
-                      >
-                        <div class="dropdown-inner">
-                          <ul class="link-list">
-                            <li>
-                              <a href="perfil.html">
-                                <em class="icon ni ni-user-alt"></em>
-                                <span>Perfil</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <div class="dropdown-inner">
-                          <ul class="link-list">
-                            <li>
-                              <a href="index.html">
-                                <em class="icon ni ni-signout"></em>
-                                <span>Sair</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
+          <div class="nk-header nk-header-fixed is-light" style="padding:0 !important">
+              <div class="container-fluid">
+                  <div class="nk-header-wrap">
+                      <div class="nk-header-brand" style="width: 100%;max-width: 165px;">
+                          <a href="menu.html" class="logo-link">
+                              <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo">
+                              <img class="logo-dark logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo.png" alt="logo-dark">
+                          </a>
                       </div>
-                    </li>
-                  </ul>
-                </div>
+                      <div class="nk-menu-trigger ml-n1">
+                          <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                      </div>
+
+                      <div class="nk-header-tools">
+                          <ul class="nk-quick-nav">
+                              <li class="dropdown user-dropdown">
+                                  <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                      <div class="user-toggle">
+                                          <div class="user-avatar sm">
+                                              <em class="icon ni ni-user-alt"></em>
+                                          </div>
+                                      </div>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                      <div class="dropdown-inner">
+                                          <ul class="link-list">
+                                              <li>
+                                                  <a href="perfil.html">
+                                                      <em class="icon ni ni-user-alt"></em>
+                                                      <span>Perfil</span>
+                                                  </a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                      <div class="dropdown-inner">
+                                          <ul class="link-list">
+                                              <li>
+                                                  <a href="index.html">
+                                                      <em class="icon ni ni-signout"></em>
+                                                      <span>Sair</span>
+                                                  </a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
 
           <!-- Fim Cabeçalho -->
@@ -320,8 +284,7 @@
         API_URL = window.APP_CONFIG
           ? window.APP_CONFIG.API_URL
           : "http://localhost:8000";
-        console.log("Oráculo - API_URL definido:", API_URL);
-        console.log("Oráculo - APP_CONFIG disponível:", !!window.APP_CONFIG);
+
         return true;
       }
 
@@ -426,7 +389,7 @@
           return;
         }
 
-        console.log("Consultando oráculo com API_URL:", API_URL);
+
 
         fetch(`${API_URL}/oracle/query`, {
           method: "POST",
@@ -449,7 +412,7 @@
             }
           })
           .catch((error) => {
-            console.error("Erro ao consultar oráculo:", error);
+
             ocultarLoadingSimples();
             callback("Erro de conexão com o servidor: " + error.message);
           });
@@ -470,7 +433,7 @@
           navigator.clipboard.writeText(textoLimpo).then(function() {
             mostrarFeedbackCopiaOraculo('Resposta copiada com sucesso!');
           }).catch(function(err) {
-            console.error('Erro ao copiar:', err);
+
             copiarTextoFallbackOraculo(textoLimpo);
           });
         } else {
@@ -497,7 +460,7 @@
             mostrarFeedbackCopiaOraculo('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
           }
         } catch (err) {
-          console.error('Erro ao copiar:', err);
+
           mostrarFeedbackCopiaOraculo('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
         } finally {
           document.body.removeChild(tempTextArea);
@@ -558,20 +521,20 @@
       // Aguardar o DOM e APP_CONFIG estarem carregados
       function inicializar() {
         if (!window.APP_CONFIG) {
-          console.log("Oráculo - Aguardando APP_CONFIG...");
+
           setTimeout(inicializar, 100);
           return;
         }
 
-        console.log("Oráculo - APP_CONFIG carregado:", window.APP_CONFIG);
+
 
         // Inicializar configurações
         if (!inicializarConfig()) {
-          console.error("Oráculo - Falha ao inicializar configurações");
+
           return;
         }
 
-        console.log("Oráculo - Inicialização completa!");
+
       }
 
       if (document.readyState === "loading") {
