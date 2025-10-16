@@ -336,16 +336,6 @@
                                                 <h3 class="nk-block-title page-title">👥 Administração de Usuários</h3>
                                                 <p class="text-muted">Gerencie usuários do sistema</p>
                                             </div>
-                                            <div class="nk-block-head-content" id="adminActions" style="display: none;">
-                                                <div class="toggle-wrap nk-block-tools-toggle">
-                                                    <div class="toggle-content">
-                                                        <button class="btn btn-primary" onclick="abrirModalCadastro()" style="padding: 8px 16px;">
-                                                            <em class="icon ni ni-user-add" style="margin-right: 5px;"></em>
-                                                            <span>Novo Usuário</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     
@@ -707,7 +697,6 @@
       // Verificar se o usuário atual é admin baseado no role
       const userRole = currentUser.role;
       const isAdmin = userRole === 'admin';
-      console.log('Debug - userRole:', userRole, 'isAdmin:', isAdmin);
       
       // Validação básica: usuários não-admin só podem ver seu próprio perfil
       if (!isAdmin && usuarios.length > 1) {
@@ -717,137 +706,37 @@
       
       // Atualizar título e ações baseado no perfil
       const titulo = document.querySelector('.nk-block-title');
-      const adminActions = document.getElementById('adminActions');
       
-      if (titulo && adminActions) {
-        console.log('Debug - Elementos encontrados. isAdmin:', isAdmin);
+      if (titulo) {
         if (isAdmin) {
-          console.log('Debug - Mostrando botão admin');
-          console.log('Debug - adminActions element:', adminActions);
-          console.log('Debug - adminActions computed style before:', window.getComputedStyle(adminActions).display);
           titulo.innerHTML = '👑 Administração de Usuários';
           
-          // Forçar exibição do botão com estilos agressivos
-          adminActions.style.cssText = `
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            z-index: 1000 !important;
-            background-color: #f8f9fa !important;
-            border: 2px solid #007bff !important;
-            border-radius: 8px !important;
-            padding: 15px !important;
-            margin: 10px 0 !important;
-            width: 100% !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-          `;
-          
-          console.log('Debug - adminActions style after:', adminActions.style.display);
-          console.log('Debug - adminActions computed style after:', window.getComputedStyle(adminActions).display);
-          
-          // Verificar se o botão existe dentro do elemento
-          const botaoExistente = adminActions.querySelector('button');
-          console.log('Debug - Botão existente:', botaoExistente);
-          
-          if (!botaoExistente) {
-            // Criar botão dinamicamente se não existir
-            console.log('Debug - Criando botão dinamicamente');
-            adminActions.innerHTML = `
-              <div class="toggle-wrap nk-block-tools-toggle">
-                <div class="toggle-content">
-                  <button class="btn btn-primary" onclick="abrirModalCadastro()" style="padding: 8px 16px;">
-                    <em class="icon ni ni-user-add" style="margin-right: 5px;"></em>
-                    <span>Novo Usuário</span>
-                  </button>
-                </div>
-              </div>
-            `;
-          } else {
-            // Forçar estilos no botão existente para garantir visibilidade
-            console.log('Debug - Forçando estilos no botão existente');
-            botaoExistente.style.cssText = `
-              display: block !important;
-              visibility: visible !important;
-              opacity: 1 !important;
-              position: relative !important;
-              z-index: 1001 !important;
-              background-color: #007bff !important;
-              color: white !important;
-              border: 2px solid #0056b3 !important;
-              border-radius: 6px !important;
-              padding: 12px 20px !important;
-              font-size: 14px !important;
-              font-weight: 500 !important;
-              cursor: pointer !important;
-              margin: 5px !important;
-              min-height: 40px !important;
-              min-width: 150px !important;
-            `;
-            
-            // Também forçar estilos nos containers pai
-            const toggleWrap = adminActions.querySelector('.toggle-wrap');
-            const toggleContent = adminActions.querySelector('.toggle-content');
-            
-            if (toggleWrap) {
-              toggleWrap.style.cssText = `
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                width: 100% !important;
-                height: auto !important;
-                overflow: visible !important;
-              `;
-            }
-            
-            if (toggleContent) {
-              toggleContent.style.cssText = `
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                width: 100% !important;
-                height: auto !important;
-                overflow: visible !important;
-              `;
-            }
-          }
-          
-          // PLANO B: Criar um botão completamente novo no topo da página
+          // Criar botão de novo usuário para admins
           const containerPrincipal = document.querySelector('.nk-block-head');
-          if (containerPrincipal && !document.getElementById('botaoNovoUsuarioCustom')) {
-            console.log('Debug - Criando botão customizado no topo');
-            const botaoCustom = document.createElement('div');
-            botaoCustom.id = 'botaoNovoUsuarioCustom';
-            botaoCustom.style.cssText = `
-              position: relative;
-              z-index: 9999;
-              background: linear-gradient(135deg, #007bff, #0056b3);
-              padding: 15px;
-              margin: 10px 0;
+          if (containerPrincipal && !document.getElementById('botaoNovoUsuario')) {
+            const botaoContainer = document.createElement('div');
+            botaoContainer.id = 'botaoNovoUsuario';
+            botaoContainer.style.cssText = `
+              background: #f8f9fa;
+              border: 1px solid #dee2e6;
               border-radius: 8px;
-              box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+              padding: 15px;
+              margin: 15px 0;
               text-align: center;
             `;
             
-            botaoCustom.innerHTML = `
-              <button onclick="abrirModalCadastro()" style="
-                background: white;
-                color: #007bff;
-                border: none;
-                padding: 12px 24px;
+            botaoContainer.innerHTML = `
+              <button onclick="abrirModalCadastro()" class="btn btn-primary" style="
+                padding: 10px 20px;
+                font-weight: 500;
                 border-radius: 6px;
-                font-weight: 600;
-                font-size: 14px;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                transition: all 0.2s ease;
-              " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                ➕ Novo Usuário
+              ">
+                <em class="icon ni ni-user-add" style="margin-right: 8px;"></em>
+                Novo Usuário
               </button>
             `;
             
-            containerPrincipal.appendChild(botaoCustom);
-            console.log('Debug - Botão customizado criado!');
+            containerPrincipal.appendChild(botaoContainer);
           }
           
           // Adicionar badge de admin
@@ -859,7 +748,6 @@
           }
         } else {
           titulo.innerHTML = '👤 Meu Perfil';
-          adminActions.style.display = 'none';
         }
       }
       
