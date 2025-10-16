@@ -34,6 +34,7 @@
         <div
           class="nk-sidebar nk-sidebar-fixed is-light"
           data-content="sidebarMenu"
+          id="sidebarMenu"
         >
           <div class="nk-sidebar-element nk-sidebar-head">
             <div class="nk-sidebar-brand">
@@ -352,7 +353,24 @@
           const pergunta = document.getElementById("oraclePergunta").value;
           consultarOracle(pergunta, function (resposta) {
             ocultarLoadingSimples();
-            oracleResposta.innerHTML = `<div class="alert alert-info">${resposta}</div>`;
+            oracleResposta.innerHTML = `
+              <div class="alert alert-info">
+                <div class="resposta-conteudo">${resposta}</div>
+                <div class="mt-3" style="text-align: right;">
+                  <button class="btn btn-success btn-sm copiar-resposta-btn" data-texto="${resposta.replace(/"/g, '&quot;')}" title="Copiar resposta">
+                    <em class="icon ni ni-copy"></em> Copiar Resposta
+                  </button>
+                </div>
+              </div>`;
+            
+            // Adicionar event listener para o botão de copiar
+            const btnCopiar = oracleResposta.querySelector('.copiar-resposta-btn');
+            if (btnCopiar) {
+              btnCopiar.addEventListener('click', function() {
+                const texto = this.getAttribute('data-texto').replace(/&quot;/g, '"');
+                copiarResposta(texto, 'resposta-atual');
+              });
+            }
             historico.unshift({ pergunta, resposta });
             if (historico.length > 10) historico.pop(); // Limita a 10 itens
             atualizarHistorico();
@@ -376,8 +394,23 @@
               <p class="card-text"><strong>🤖 Resposta:</strong> ${
                 item.resposta
               }</p>
+              <div style="text-align: right; margin-top: 10px;">
+                <button class="btn btn-success btn-sm copiar-historico-btn" data-texto="${item.resposta.replace(/"/g, '&quot;')}" title="Copiar esta resposta">
+                  <em class="icon ni ni-copy"></em> Copiar
+                </button>
+              </div>
             </div>
           `;
+            
+            // Adicionar event listener para o botão de copiar do histórico
+            const btnCopiarHistorico = card.querySelector('.copiar-historico-btn');
+            if (btnCopiarHistorico) {
+              btnCopiarHistorico.addEventListener('click', function() {
+                const texto = this.getAttribute('data-texto').replace(/&quot;/g, '"');
+                copiarResposta(texto, `historico-${index}`);
+              });
+            }
+            
             historicoPerguntas.appendChild(card);
           });
         }
@@ -422,6 +455,106 @@
           });
       }
 
+      // Função para copiar resposta do Oráculo
+      function copiarResposta(texto, origem) {
+        // Limpar o texto de possíveis caracteres de escape
+        const textoLimpo = texto.replace(/\\'/g, "'").replace(/\\"/g, '"');
+        
+        if (!textoLimpo || textoLimpo.trim() === '') {
+          mostrarFeedbackCopiaOraculo('Não há conteúdo para copiar.', 'error');
+          return;
+        }
+        
+        // Usar a API moderna de clipboard se disponível
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(textoLimpo).then(function() {
+            mostrarFeedbackCopiaOraculo('Resposta copiada com sucesso!');
+          }).catch(function(err) {
+            console.error('Erro ao copiar:', err);
+            copiarTextoFallbackOraculo(textoLimpo);
+          });
+        } else {
+          copiarTextoFallbackOraculo(textoLimpo);
+        }
+      }
+      
+      function copiarTextoFallbackOraculo(texto) {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = texto;
+        tempTextArea.style.position = 'fixed';
+        tempTextArea.style.left = '-999999px';
+        tempTextArea.style.top = '-999999px';
+        document.body.appendChild(tempTextArea);
+        
+        tempTextArea.focus();
+        tempTextArea.select();
+        
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            mostrarFeedbackCopiaOraculo('Resposta copiada com sucesso!');
+          } else {
+            mostrarFeedbackCopiaOraculo('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
+          }
+        } catch (err) {
+          console.error('Erro ao copiar:', err);
+          mostrarFeedbackCopiaOraculo('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
+        } finally {
+          document.body.removeChild(tempTextArea);
+        }
+      }
+      
+      function mostrarFeedbackCopiaOraculo(mensagem, tipo = 'success') {
+        // Criar notificação visual
+        const feedback = document.createElement('div');
+        feedback.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
+          color: white;
+          padding: 12px 20px;
+          border-radius: 4px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-family: inherit;
+          font-size: 14px;
+          animation: slideInRight 0.3s ease;
+        `;
+        
+        const icone = tipo === 'success' ? '✅' : '❌';
+        feedback.innerHTML = `${icone} ${mensagem}`;
+        
+        // Adicionar CSS de animação se não existir
+        if (!document.querySelector('#copy-feedback-styles-oraculo')) {
+          const styles = document.createElement('style');
+          styles.id = 'copy-feedback-styles-oraculo';
+          styles.textContent = `
+            @keyframes slideInRight {
+              from { transform: translateX(100%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+              from { transform: translateX(0); opacity: 1; }
+              to { transform: translateX(100%); opacity: 0; }
+            }
+          `;
+          document.head.appendChild(styles);
+        }
+        
+        document.body.appendChild(feedback);
+        
+        // Remover após 3 segundos
+        setTimeout(() => {
+          feedback.style.animation = 'slideOutRight 0.3s ease';
+          setTimeout(() => {
+            if (feedback.parentNode) {
+              feedback.parentNode.removeChild(feedback);
+            }
+          }, 300);
+        }, 3000);
+      }
+
       // Aguardar o DOM e APP_CONFIG estarem carregados
       function inicializar() {
         if (!window.APP_CONFIG) {
@@ -453,7 +586,7 @@
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="assets/js/bundle.js?ver=2.8.0"></script>
-    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+    <script src="assets/js/scripts.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
     <script src="scripts/jquery/jquery.mask.min.js"></script>
@@ -469,6 +602,35 @@
     <script type="text/javascript">
       $(document).ready(function () {
         $("#global-loader").fadeOut();
+        
+        // Implementação direta do hamburger
+        $('.nk-nav-toggle').on('click', function(e) {
+          e.preventDefault();
+          console.log('Hamburger clicado!');
+          
+          // Alternar classe no body
+          $('body').toggleClass('nav-shown');
+          
+          // Alternar classe no sidebar
+          $('.nk-sidebar').toggleClass('nk-sidebar-active');
+          
+          // Adicionar overlay se necessário
+          if ($('body').hasClass('nav-shown')) {
+            if (!$('.nk-sidebar-overlay').length) {
+              $('body').append('<div class="nk-sidebar-overlay"></div>');
+            }
+            $('.nk-sidebar-overlay').addClass('active');
+          } else {
+            $('.nk-sidebar-overlay').removeClass('active');
+          }
+        });
+        
+        // Fechar ao clicar no overlay
+        $(document).on('click', '.nk-sidebar-overlay', function() {
+          $('body').removeClass('nav-shown');
+          $('.nk-sidebar').removeClass('nk-sidebar-active');
+          $(this).removeClass('active');
+        });
       });
 
       function updateValue(id, value) {

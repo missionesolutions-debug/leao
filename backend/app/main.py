@@ -14,8 +14,8 @@ app = FastAPI(
     title="Leão Adv API",
     description="Sistema de Gestão de Marcas e Propriedade Intelectual",
     version="3.0.0",
-    docs_url=None,  # Desabilitar docs em produção por segurança
-    redoc_url=None  # Desabilitar redoc em produção por segurança
+    docs_url="/docs",  # Habilitar docs para desenvolvimento
+    redoc_url="/redoc"  # Habilitar redoc para desenvolvimento
 )
 
 # Configurar logging para monitorar ataques
@@ -53,21 +53,27 @@ async def security_middleware(request: Request, call_next):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",        # Desenvolvimento frontend
-        "http://127.0.0.1:3000",        # Desenvolvimento local
-        "https://www.leaoia.com.br",    # Produção
-        "http://www.leaoia.com.br",     # Produção sem HTTPS (fallback)
-        "https://leaoia.com.br",        # Produção sem www
-        "http://leaoia.com.br",         # Produção sem www e HTTPS (fallback)
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "https://www.leaoia.com.br",
+        "http://www.leaoia.com.br",
+        "https://leaoia.com.br",
+        "http://leaoia.com.br",
+        "*"
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Include routers
 app.include_router(main_router)
 app.include_router(user_router)
+from app.controllers.user_controller import router as user_controller_router
+app.include_router(user_controller_router)
 
 # Serve static files from frontend directory
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend")

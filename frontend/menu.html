@@ -15,13 +15,45 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	
+	<style>
+		/* Estilos para o hamburger sidebar */
+		.nk-sidebar-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			z-index: 1000;
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.3s ease;
+		}
+		
+		.nk-sidebar-overlay.active {
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		body.nav-shown .nk-sidebar {
+			transform: translateX(0);
+		}
+		
+		@media (max-width: 1199px) {
+			.nk-sidebar {
+				transform: translateX(-100%);
+				transition: transform 0.3s ease;
+			}
+		}
+	</style>
 </head>
 <body class="nk-body bg-lighter npc-default has-sidebar ">
 	<div id="global-loader"> <img src="assets/images/svgs/loader.svg" alt="loader"> </div>
 	<div class="nk-app-root">
 		<div class="nk-main ">
 
-			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu" id="sidebarMenu">
 				<div class="nk-sidebar-element nk-sidebar-head">
 					<div class="nk-sidebar-brand">
 						<a href="index.html" class="logo-link nk-sidebar-logo">
@@ -43,7 +75,7 @@
                                     <h6 class="overline-title text-primary-alt">Dashboard</h6>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="index.html" class="nk-menu-link">
+                                    <a href="menu.html" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
                                         <span class="nk-menu-text">Dashboard</span>
                                     </a>
@@ -61,7 +93,7 @@
                                     </a>
                                 </li>
                                  <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link">
+                                    <a href="perfil.html" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
                                         <span class="nk-menu-text">Administrativo</span>
                                     </a>
@@ -105,7 +137,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="index.html"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
+                                                    <li><a href="javascript:void(0)" onclick="logout()"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -178,7 +210,7 @@
                                                                         Administrativo ( em breve )
                                                                     </h4>
                                                                     <p>Acesse métricas e gerencie usuários da plataforma.</p>
-                                                                    <a href="javascript:void(0);" class="mt-auto btn btn-outline-primary">Acessar</a>
+                                                                    <a href="perfil.html" class="mt-auto btn btn-outline-primary">Acessar</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -232,7 +264,7 @@
 
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
 	<script src="assets/js/config.js"></script>
-    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+	<script src="assets/js/scripts.js"></script>
 	<script src="assets/js/charts/chart-ecommerce.js?ver=2.8.0"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
@@ -249,10 +281,57 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#global-loader').fadeOut();
+			
+			// Implementação direta do hamburger
+			$('.nk-nav-toggle').on('click', function(e) {
+				e.preventDefault();
+				console.log('Hamburger clicado!');
+				
+				// Alternar classe no body
+				$('body').toggleClass('nav-shown');
+				
+				// Alternar classe no sidebar
+				$('.nk-sidebar').toggleClass('nk-sidebar-active');
+				
+				// Adicionar overlay se necessário
+				if ($('body').hasClass('nav-shown')) {
+					if (!$('.nk-sidebar-overlay').length) {
+						$('body').append('<div class="nk-sidebar-overlay"></div>');
+					}
+					$('.nk-sidebar-overlay').addClass('active');
+				} else {
+					$('.nk-sidebar-overlay').removeClass('active');
+				}
+			});
+			
+			// Fechar ao clicar no overlay
+			$(document).on('click', '.nk-sidebar-overlay', function() {
+				$('body').removeClass('nav-shown');
+				$('.nk-sidebar').removeClass('nk-sidebar-active');
+				$(this).removeClass('active');
+			});
 		});
 
 		function updateValue(id, value) {
 			document.getElementById(id).value = value;
+		}
+		
+		// Função de logout
+		function logout() {
+			console.log('🚪 Fazendo logout...');
+			
+			// Remover todos os tokens possíveis
+			localStorage.removeItem('token');
+			localStorage.removeItem('authToken');
+			localStorage.removeItem('access_token');
+			
+			// Limpar sessionStorage também
+			sessionStorage.clear();
+			
+			console.log('✅ Tokens removidos, redirecionando...');
+			
+			// Redirecionar para login
+			window.location.href = 'index.html';
 		}
 	</script>
 </body>

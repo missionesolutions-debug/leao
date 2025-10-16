@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste de Autenticação</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #resultado { background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; margin-top: 20px; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Teste de Autenticação - LeãoPy</h1>
+    <div>
+        <button onclick="testarLogin()">🔐 Testar Login</button>
+        <button onclick="testarMe()">👤 Testar /usuarios/me</button>
+        <button onclick="testarListaUsuarios()">👥 Testar Lista Usuários</button>
+        <button onclick="limparToken()">🗑️ Limpar Token</button>
+        <button onclick="irParaPerfil()">➡️ Ir para Perfil</button>
+    </div>
+    
+    <pre id="resultado"></pre>
+    
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        function log(msg) {
+            document.getElementById('resultado').textContent += msg + '\n';
+        }
+        
+        async function testarLogin() {
+            document.getElementById('resultado').textContent = '';
+            log('🔄 Testando login...');
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'jhonatan@gmail.com',
+                        password: '1234'
+                    })
+                });
+                
+                log(`Status: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ Login bem-sucedido!');
+                    log('Token: ' + data.access_token.substring(0, 50) + '...');
+                    
+                    // Salvar token
+                    localStorage.setItem('token', data.access_token);
+                    log('💾 Token salvo no localStorage');
+                } else {
+                    const error = await response.text();
+                    log('❌ Erro no login: ' + error);
+                }
+            } catch (error) {
+                log('💥 Erro de rede: ' + error.message);
+            }
+        }
+        
+        async function testarMe() {
+            log('\n🔄 Testando /usuarios/me...');
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                log('❌ Token não encontrado. Faça login primeiro.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/usuarios/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`Status: ${response.status}`);
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    log('✅ Dados do usuário:');
+                    log(JSON.stringify(userData, null, 2));
+                    log(`👑 É admin: ${userData.role === 'admin'}`);
+                } else {
+                    const error = await response.text();
+                    log('❌ Erro: ' + error);
+                }
+            } catch (error) {
+                log('💥 Erro de rede: ' + error.message);
+            }
+        }
+        
+        async function testarListaUsuarios() {
+            log('\n🔄 Testando /usuarios/...');
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                log('❌ Token não encontrado. Faça login primeiro.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/usuarios/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`Status: ${response.status}`);
+                
+                if (response.ok) {
+                    const usuarios = await response.json();
+                    log(`✅ ${usuarios.length} usuários encontrados:`);
+                    usuarios.forEach(user => {
+                        const badge = user.role === 'admin' ? '👑' : '👤';
+                        log(`  ${badge} ${user.username} (${user.email}) - ${user.role}`);
+                    });
+                    
+                    if (usuarios.length > 1) {
+                        log('✅ Usuário é ADMIN - vê todos os usuários');
+                    } else {
+                        log('ℹ️ Usuário comum - vê apenas seus dados');
+                    }
+                } else {
+                    const error = await response.text();
+                    log('❌ Erro: ' + error);
+                }
+            } catch (error) {
+                log('💥 Erro de rede: ' + error.message);
+            }
+        }
+        
+        function limparToken() {
+            localStorage.removeItem('token');
+            log('🗑️ Token removido');
+        }
+        
+        function irParaPerfil() {
+            log('➡️ Redirecionando para perfil...');
+            window.location.href = 'perfil.html';
+        }
+        
+        // Verificar se já tem token
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                log('🔑 Token encontrado: ' + token.substring(0, 50) + '...');
+            } else {
+                log('📭 Nenhum token encontrado');
+            }
+        };
+    </script>
+</body>
+</html>

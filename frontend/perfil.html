@@ -17,6 +17,38 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	
+	<style>
+		/* Estilos para o hamburger sidebar */
+		.nk-sidebar-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			z-index: 1000;
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.3s ease;
+		}
+		
+		.nk-sidebar-overlay.active {
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		body.nav-shown .nk-sidebar {
+			transform: translateX(0);
+		}
+		
+		@media (max-width: 1199px) {
+			.nk-sidebar {
+				transform: translateX(-100%);
+				transition: transform 0.3s ease;
+			}
+		}
+	</style>
   
   <style>
     .user-card {
@@ -198,7 +230,7 @@
 	<div class="nk-app-root">
 		<div class="nk-main ">
 
-			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu" id="sidebarMenu">
 				<div class="nk-sidebar-element nk-sidebar-head">
 					<div class="nk-sidebar-brand">
 						<a href="menu.html" class="logo-link nk-sidebar-logo">
@@ -282,7 +314,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="index.html"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
+                                                    <li><a href="javascript:void(0)" onclick="logout()"><em class="icon ni ni-signout"></em><span>Sair</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -310,6 +342,9 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div id="status" class="alert alert-info">Carregando usuários...</div>
+                                            
+
+                                            
                                             <div id="usuariosList"></div>
                                         </div>
                                     </div>
@@ -332,6 +367,53 @@
 		</div>
 	</div>
 
+  <!-- Modal de Cadastro de Usuário -->
+  <div id="modalCadastroUsuario" class="modal-bg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>➕ Cadastrar Novo Usuário</h4>
+        <button type="button" class="btn-close" onclick="fecharModalCadastro()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="newUsername">👤 Nome do Usuário</label>
+          <input type="text" id="newUsername" class="form-control" placeholder="Digite o nome completo" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="newEmail">📧 Email</label>
+          <input type="email" id="newEmail" class="form-control" placeholder="exemplo@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="newRole">👑 Perfil do Usuário</label>
+          <select id="newRole" class="form-control">
+            <option value="user">👤 Usuário</option>
+            <option value="admin">👑 Administrador</option>
+          </select>
+          <small class="form-text">Escolha o nível de acesso para o novo usuário.</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="newPassword">🔒 Senha</label>
+          <input type="password" id="newPassword" class="form-control" placeholder="Digite uma senha segura" required>
+          <small class="form-text">Mínimo 4 caracteres.</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirmPassword">🔒 Confirmar Senha</label>
+          <input type="password" id="confirmPassword" class="form-control" placeholder="Digite a senha novamente" required>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalCadastro()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarNovoUsuario()">➕ Cadastrar Usuário</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal de Edição de Usuário -->
   <div id="modalEdicaoUsuario" class="modal-bg">
     <div class="modal-content">
@@ -353,6 +435,15 @@
           <input type="email" id="editEmail" class="form-control" placeholder="exemplo@email.com" required>
         </div>
         
+        <div class="form-group" id="editRoleGroup" style="display: none;">
+          <label for="editRole">👑 Perfil do Usuário</label>
+          <select id="editRole" class="form-control">
+            <option value="user">👤 Usuário</option>
+            <option value="admin">👑 Administrador</option>
+          </select>
+          <small class="form-text">Apenas administradores podem alterar perfis.</small>
+        </div>
+        
         <div class="form-group">
           <label for="editPassword">🔒 Nova Senha <span class="optional">(opcional)</span></label>
           <input type="password" id="editPassword" class="form-control" placeholder="Deixe vazio para manter a senha atual">
@@ -368,15 +459,12 @@
   </div>
 
   <script>
-    // Variáveis globais que serão definidas após carregamento do config
+    // Variáveis globais
     let API_URL;
     
     // Função para inicializar configuração
     function inicializarConfig() {
       API_URL = window.APP_CONFIG ? window.APP_CONFIG.API_URL : 'http://localhost:8000';
-      console.log('Perfil - API_URL definido:', API_URL);
-      console.log('Perfil - APP_CONFIG disponível:', !!window.APP_CONFIG);
-      console.log('Perfil - Ambiente:', window.location.hostname);
       return true;
     }
 
@@ -384,76 +472,369 @@
       const status = document.getElementById('status');
       if (status) {
         status.textContent = message;
-        status.className = isError ? 'status error' : 'status';
+        status.className = isError ? 'alert alert-danger' : 'alert alert-info';
       }
     }
-
-    function listarUsuarios() {
-      // Verificar se API_URL está definido
-      if (!API_URL) {
-        console.error('API_URL não está definido!');
-        updateStatus('Erro: Configuração não carregada. Tente recarregar a página.', true);
+    
+    // Função de logout
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('access_token');
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    }
+    
+    // Funções do Modal de Cadastro
+    async function abrirModalCadastro() {
+      // Verificar se é admin antes de abrir
+      try {
+        const currentUser = await obterUsuarioAtual();
+        if (!currentUser || currentUser.role !== 'admin') {
+          alert('❌ Acesso negado! Apenas administradores podem cadastrar usuários.');
+          return;
+        }
+      } catch (error) {
+        alert('❌ Erro ao verificar permissões. Tente novamente.');
         return;
       }
       
-      console.log('Listando usuários com API_URL:', API_URL);
-      updateStatus('Carregando usuários...');
+      // Limpar campos
+      document.getElementById('newUsername').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newRole').value = 'user';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
       
-      fetch(`${API_URL}/usuarios/`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Erro: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(usuarios => {
-          updateStatus(`${usuarios.length} usuários encontrados`);
-          
-          const container = document.getElementById('usuariosList');
-          container.innerHTML = '';
-          
-          if (usuarios.length === 0) {
-            container.innerHTML = '<p>Nenhum usuário encontrado.</p>';
-            return;
-          }
-          
-          // Ordenar usuários por ID crescente
-          usuarios.sort((a, b) => a.id - b.id);
-          
-          usuarios.forEach(usuario => {
-            const userDiv = document.createElement('div');
-            userDiv.className = 'user-card';
-            userDiv.innerHTML = `
-              <div class="user-info">
-                <div class="user-details">
-                  <h5>${usuario.username || 'Sem nome'}</h5>
-                  <p>📧 ${usuario.email}</p>
-                  <p><small class="text-muted">ID: ${usuario.id}</small></p>
-                </div>
-                <div class="user-actions">
-                  <button class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}')">
-                    <em class="icon ni ni-edit"></em> Editar
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger" onclick="excluirUsuario(${usuario.id}, '${usuario.username || usuario.email}')">
-                    <em class="icon ni ni-trash"></em> Excluir
-                  </button>
-                </div>
-              </div>
-            `;
-            container.appendChild(userDiv);
-          });
-        })
-        .catch(error => {
-          updateStatus(`Erro ao carregar usuários: ${error.message}`, true);
-        });
+      // Mostrar modal
+      document.getElementById('modalCadastroUsuario').classList.add('active');
     }
 
-    function editarUsuario(id, username, email) {
+    function fecharModalCadastro() {
+      document.getElementById('modalCadastroUsuario').classList.remove('active');
+    }
+
+    async function salvarNovoUsuario() {
+      const username = document.getElementById('newUsername').value.trim();
+      const email = document.getElementById('newEmail').value.trim();
+      const role = document.getElementById('newRole').value;
+      const password = document.getElementById('newPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+      
+      // Validações
+      if (!username || !email || !password) {
+        alert('❌ Todos os campos obrigatórios devem ser preenchidos!');
+        return;
+      }
+      
+      if (!email.includes('@')) {
+        alert('❌ Email deve ser válido!');
+        return;
+      }
+      
+      if (password.length < 4) {
+        alert('❌ Senha deve ter pelo menos 4 caracteres!');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        alert('❌ Senhas não coincidem!');
+        return;
+      }
+      
+      // Mostrar loading
+      const botaoSalvar = document.querySelector('#modalCadastroUsuario .btn-primary');
+      const textoOriginal = botaoSalvar.innerHTML;
+      botaoSalvar.disabled = true;
+      botaoSalvar.innerHTML = '⏳ Cadastrando...';
+      
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token de autenticação não encontrado');
+        }
+        
+        const response = await fetch(`${API_URL}/usuarios/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+            role: role
+          })
+        });
+        
+        if (response.ok) {
+          const novoUsuario = await response.json();
+          
+          // Fechar modal
+          fecharModalCadastro();
+          
+          // Mostrar feedback
+          const feedback = document.createElement('div');
+          feedback.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
+          feedback.textContent = `✅ Usuário ${username} cadastrado com sucesso!`;
+          document.body.appendChild(feedback);
+          setTimeout(() => feedback.remove(), 4000);
+          
+          // Recarregar lista
+          await listarUsuarios();
+          
+        } else {
+          // Tratar erros de cadastro
+          let errorMessage = 'Erro no cadastro';
+          
+          try {
+            const errorData = await response.json();
+            if (errorData.detail) {
+              if (typeof errorData.detail === 'string') {
+                errorMessage = errorData.detail;
+              } else if (Array.isArray(errorData.detail)) {
+                errorMessage = errorData.detail.map(err => err.msg || err.message || 'Erro').join('; ');
+              }
+            }
+          } catch {
+            errorMessage = `Erro HTTP ${response.status}`;
+          }
+          
+          alert('❌ ' + errorMessage);
+        }
+        
+      } catch (error) {
+        alert('❌ Erro de conexão: ' + error.message);
+      } finally {
+        // Restaurar botão
+        botaoSalvar.disabled = false;
+        botaoSalvar.innerHTML = textoOriginal;
+      }
+    }
+    
+
+    
+
+
+    function obterUsuarioAtual() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return Promise.resolve(null);
+      }
+      
+      return fetch(`${API_URL}/usuarios/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return null;
+      })
+      .catch(error => {
+        console.error('Erro ao obter usuário atual:', error);
+        return null;
+      });
+    }
+
+    async function listarUsuarios() {
+      updateStatus('Carregando usuários...');
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        updateStatus('Token não encontrado', true);
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${API_URL}/usuarios/`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const usuarios = await response.json();
+          updateStatus(`${usuarios.length} usuário(s) encontrado(s)`);
+          await mostrarUsuarios(usuarios);
+        } else if (response.status === 401) {
+          localStorage.removeItem('token');
+          alert('Sessão expirada. Redirecionando para login...');
+          window.location.href = 'index.html';
+        } else {
+          throw new Error(`Erro ${response.status}`);
+        }
+      } catch (error) {
+        updateStatus('Erro ao carregar usuários: ' + error.message, true);
+      }
+    }
+    
+    async function mostrarUsuarios(usuarios) {
+      const container = document.getElementById('usuariosList');
+      container.innerHTML = '';
+      
+      if (usuarios.length === 0) {
+        container.innerHTML = '<p>Nenhum usuário encontrado.</p>';
+        return;
+      }
+      
+      // Ordenar usuários por ID crescente
+      usuarios.sort((a, b) => a.id - b.id);
+      
+      // Primeiro, obter dados do usuário atual
+      const currentUser = await obterUsuarioAtual();
+      if (!currentUser) {
+        console.error('❌ Erro ao obter usuário atual');
+        updateStatus('Erro ao verificar permissões do usuário', true);
+        return;
+      }
+      
+      // Verificar se o usuário atual é admin baseado no role
+      const userRole = currentUser.role;
+      const isAdmin = userRole === 'admin';
+      
+      // Validação básica: usuários não-admin só podem ver seu próprio perfil
+      if (!isAdmin && usuarios.length > 1) {
+        updateStatus('Erro: Acesso negado.', true);
+        return;
+      }
+      
+      // Atualizar título e ações baseado no perfil
+      const titulo = document.querySelector('.nk-block-title');
+      
+      if (titulo) {
+        if (isAdmin) {
+          titulo.innerHTML = '👑 Administração de Usuários';
+          
+          // Criar botão de novo usuário para admins
+          const containerPrincipal = document.querySelector('.nk-block-head');
+          if (containerPrincipal && !document.getElementById('botaoNovoUsuario')) {
+            const botaoContainer = document.createElement('div');
+            botaoContainer.id = 'botaoNovoUsuario';
+            botaoContainer.style.cssText = `
+              background: #f8f9fa;
+              border: 1px solid #dee2e6;
+              border-radius: 8px;
+              padding: 15px;
+              margin: 15px 0;
+              text-align: center;
+            `;
+            
+            botaoContainer.innerHTML = `
+              <button onclick="abrirModalCadastro()" class="btn btn-primary" style="
+                padding: 10px 20px;
+                font-weight: 500;
+                border-radius: 6px;
+              ">
+                <em class="icon ni ni-user-add" style="margin-right: 8px;"></em>
+                Novo Usuário
+              </button>
+            `;
+            
+            containerPrincipal.appendChild(botaoContainer);
+          }
+          
+          // Adicionar badge de admin
+          const badge = document.createElement('span');
+          badge.className = 'badge badge-success ml-2';
+          badge.textContent = 'Administrador';
+          if (!titulo.querySelector('.badge')) {
+            titulo.appendChild(badge);
+          }
+        } else {
+          titulo.innerHTML = '👤 Meu Perfil';
+        }
+      }
+      
+      usuarios.forEach(usuario => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-card';
+        
+        // Definir badge de role
+        const roleBadge = usuario.role === 'admin' 
+          ? '<span class="badge badge-primary">👑 Admin</span>' 
+          : '<span class="badge badge-secondary">👤 Usuário</span>';
+        
+        // Definir ações baseadas nas permissões
+        let actionsHtml = '';
+        
+        if (isAdmin) {
+          // Admin pode editar todos os usuários e excluir outros (não a si mesmo)
+          actionsHtml = `
+            <button class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}', '${usuario.role}')">
+              <em class="icon ni ni-edit"></em> Editar
+            </button>
+          `;
+          
+          // Permitir excluir apenas se não for o usuário atual
+          if (usuario.id !== currentUser.id) {
+            actionsHtml += `
+              <button class="btn btn-sm btn-outline-danger" onclick="excluirUsuario(${usuario.id}, '${usuario.username || usuario.email}')">
+                <em class="icon ni ni-trash"></em> Excluir
+              </button>
+            `;
+          } else {
+            // Indicar que é o usuário atual
+            actionsHtml += `<span class="badge badge-success ml-2">👤 Você</span>`;
+          }
+        } else {
+          // Usuário comum só pode editar seus próprios dados
+          if (usuario.id === currentUser.id) {
+            actionsHtml = `
+              <button class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${usuario.id}, '${usuario.username}', '${usuario.email}', '${usuario.role}')">
+                <em class="icon ni ni-edit"></em> Editar Meu Perfil
+              </button>
+              <span class="badge badge-info ml-2">👤 Meu Perfil</span>
+            `;
+          } else {
+            // Este caso não deveria acontecer para usuários não-admin
+            actionsHtml = `<span class="text-muted">Sem permissão</span>`;
+          }
+        }
+        
+        userDiv.innerHTML = `
+          <div class="user-info">
+            <div class="user-details">
+              <h5>${usuario.username || 'Sem nome'} ${roleBadge}</h5>
+              <p>📧 ${usuario.email}</p>
+              <p><small class="text-muted">ID: ${usuario.id}</small></p>
+            </div>
+            <div class="user-actions">
+              ${actionsHtml}
+            </div>
+          </div>
+        `;
+        container.appendChild(userDiv);
+      });
+    }
+
+    async function editarUsuario(id, username, email, role) {
       // Preencher o modal com os dados atuais
       document.getElementById('editUserId').value = id;
       document.getElementById('editUsername').value = username || '';
       document.getElementById('editEmail').value = email || '';
       document.getElementById('editPassword').value = '';
+      
+      // Verificar se o usuário atual é admin
+      try {
+        const usuarioAtual = await obterUsuarioAtual();
+        const roleGroup = document.getElementById('editRoleGroup');
+        const roleSelect = document.getElementById('editRole');
+        
+        if (usuarioAtual && usuarioAtual.role === 'admin') {
+          roleGroup.style.display = 'block';
+          roleSelect.value = role || 'user';
+        } else {
+          roleGroup.style.display = 'none';
+        }
+      } catch (error) {
+        document.getElementById('editRoleGroup').style.display = 'none';
+      }
       
       // Mostrar o modal
       document.getElementById('modalEdicaoUsuario').classList.add('active');
@@ -502,9 +883,28 @@
         dados.password = password;
       }
       
+      // Adicionar role se o campo estiver visível (usuário admin)
+      const roleGroup = document.getElementById('editRoleGroup');
+      if (roleGroup.style.display !== 'none') {
+        dados.role = document.getElementById('editRole').value;
+      }
+      
+      // Obter token de autenticação
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('❌ Token de autenticação não encontrado. Faça login novamente.');
+        botaoSalvar.disabled = false;
+        botaoSalvar.innerHTML = textoOriginal;
+        window.location.href = 'index.html';
+        return;
+      }
+      
       fetch(`${API_URL}/usuarios/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(dados)
       })
       .then(response => {
@@ -539,9 +939,30 @@
     }
 
     function excluirUsuario(id, nome) {
-      if (confirm(`Tem certeza que deseja excluir o usuário "${nome}"?`)) {
-        fetch(`${API_URL}/usuarios/${id}`, { method: 'DELETE' })
+      if (confirm(`Tem certeza que deseja excluir o usuário "${nome}"?\n\nEsta ação não pode ser desfeita!`)) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('❌ Token de autenticação não encontrado. Faça login novamente.');
+          window.location.href = 'index.html';
+          return;
+        }
+        
+        fetch(`${API_URL}/usuarios/${id}`, { 
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
           .then(response => {
+            if (response.status === 403) {
+              alert('❌ Acesso negado. Apenas administradores podem excluir usuários.');
+              return;
+            }
+            if (response.status === 400) {
+              alert('❌ Você não pode excluir sua própria conta.');
+              return;
+            }
             if (response.ok) {
               alert('✅ Usuário excluído com sucesso!');
               listarUsuarios();
@@ -555,47 +976,110 @@
       }
     }
 
-    // Aguardar o DOM e APP_CONFIG estarem carregados
-    function inicializar() {
+    // Verificar autenticação
+    async function verificarAutenticacao() {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        updateStatus('Token não encontrado. Redirecionando para login...', true);
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+        return false;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/usuarios/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          return userData;
+        } else if (response.status === 401) {
+          localStorage.removeItem('token');
+          updateStatus('Sessão expirada. Redirecionando para login...', true);
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 3000);
+          return false;
+        } else {
+          updateStatus('Erro na verificação de autenticação', true);
+          return false;
+        }
+      } catch (error) {
+        updateStatus('Erro de conexão com o servidor', true);
+        return false;
+      }
+    }
+
+    // Aguardar carregamento e inicializar
+    async function inicializar() {
       if (!window.APP_CONFIG) {
-        console.log('Perfil - Aguardando APP_CONFIG...');
         setTimeout(inicializar, 100);
         return;
       }
       
-      console.log('Perfil - APP_CONFIG carregado:', window.APP_CONFIG);
-      
-      // Inicializar configurações
       if (!inicializarConfig()) {
-        console.error('Perfil - Falha ao inicializar configurações');
         return;
       }
       
-      // Agora sim, carregar usuários
-      listarUsuarios();
+      const usuarioAtual = await verificarAutenticacao();
+      if (usuarioAtual) {
+        await listarUsuarios();
+      }
       
       // Configurar event listeners dos modais
+      
+      // Modal de Edição
       document.getElementById('modalEdicaoUsuario').addEventListener('click', function(e) {
         if (e.target === this) {
           fecharModalEdicao();
         }
       });
+      
+      // Modal de Cadastro
+      document.getElementById('modalCadastroUsuario').addEventListener('click', function(e) {
+        if (e.target === this) {
+          fecharModalCadastro();
+        }
+      });
 
-      // Fechar modal com tecla Escape
+      // Fechar modais com tecla Escape
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && document.getElementById('modalEdicaoUsuario').classList.contains('active')) {
-          fecharModalEdicao();
+        if (e.key === 'Escape') {
+          if (document.getElementById('modalEdicaoUsuario').classList.contains('active')) {
+            fecharModalEdicao();
+          }
+          if (document.getElementById('modalCadastroUsuario').classList.contains('active')) {
+            fecharModalCadastro();
+          }
         }
       });
     }
     
+
+
     // Aguardar carregamento completo do DOM e configuração
     function aguardarConfigEInicializar() {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        updateStatus('❌ Nenhum token de autenticação encontrado. Você precisa fazer login primeiro.', true);
+        const status = document.getElementById('status');
+        if (status) {
+          status.innerHTML += '<br><br><button class="btn btn-primary" onclick="window.location.href=\'index.html\'">Ir para Login</button>';
+        }
+        return;
+      }
+      
       if (window.APP_CONFIG) {
         inicializarConfig();
         inicializar();
       } else {
-        // Tentar novamente após um pequeno delay
         setTimeout(aguardarConfigEInicializar, 50);
       }
     }
@@ -609,7 +1093,7 @@
 
 	<script src="lib/jquery/dist/jquery.min.js"></script>
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
-    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+	<script src="assets/js/scripts.js"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 	<script src="scripts/jquery/jquery.mask.min.js"></script>
@@ -625,6 +1109,35 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#global-loader').fadeOut();
+			
+			// Implementação direta do hamburger
+			$('.nk-nav-toggle').on('click', function(e) {
+				e.preventDefault();
+				console.log('Hamburger clicado!');
+				
+				// Alternar classe no body
+				$('body').toggleClass('nav-shown');
+				
+				// Alternar classe no sidebar
+				$('.nk-sidebar').toggleClass('nk-sidebar-active');
+				
+				// Adicionar overlay se necessário
+				if ($('body').hasClass('nav-shown')) {
+					if (!$('.nk-sidebar-overlay').length) {
+						$('body').append('<div class="nk-sidebar-overlay"></div>');
+					}
+					$('.nk-sidebar-overlay').addClass('active');
+				} else {
+					$('.nk-sidebar-overlay').removeClass('active');
+				}
+			});
+			
+			// Fechar ao clicar no overlay
+			$(document).on('click', '.nk-sidebar-overlay', function() {
+				$('body').removeClass('nav-shown');
+				$('.nk-sidebar').removeClass('nk-sidebar-active');
+				$(this).removeClass('active');
+			});
 		});
 
 		function updateValue(id, value) {

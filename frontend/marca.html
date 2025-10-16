@@ -108,7 +108,7 @@
 	<div class="nk-app-root">
 		<div class="nk-main ">
 
-			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+			<div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu" id="sidebarMenu">
 				<div class="nk-sidebar-element nk-sidebar-head">
 					<div class="nk-sidebar-brand">
 						<a href="menu.html" class="logo-link nk-sidebar-logo">
@@ -421,7 +421,46 @@
         <!-- Editor de texto para a petição -->
         <div style="border: 1px solid #ddd; border-radius: 4px; padding: 15px; background: #f8f9fa; margin-bottom: 15px;">
           <div id="conteudoPeticaoTexto" style="min-height: 300px; white-space: pre-wrap; line-height: 1.6;">
-            Para elaborar uma adequada peça de oposição para um caso de possíveis confusões entre marcas, você precisa fornecer os seguintes detalhes contextuais...
+PETIÇÃO DE OPOSIÇÃO - EXEMPLO DE DEMONSTRAÇÃO
+
+Excelentíssimo Senhor Diretor do Instituto Nacional da Propriedade Industrial - INPI,
+
+Vem respeitosamente à presença de Vossa Excelência, [NOME DO OPOENTE], [NACIONALIDADE], [ESTADO CIVIL], [PROFISSÃO], portador da Cédula de Identidade RG nº [NÚMERO], CPF nº [NÚMERO], residente e domiciliado na [ENDEREÇO COMPLETO], por intermédio de seus advogados infra-assinados, com escritório profissional na [ENDEREÇO DO ESCRITÓRIO], onde recebe intimações, apresentar OPOSIÇÃO ao pedido de registro da marca [MARCA OBJETO DA OPOSIÇÃO], depositada sob o nº [NÚMERO DO PROCESSO], em classe(s) [CLASSE(S)], de titularidade de [NOME DO DEPOSITANTE], pelas razões de fato e de direito que passa a expor:
+
+1. DO DIREITO DE OPOSIÇÃO
+
+O direito de oposição está previsto no artigo 158 da Lei nº 9.279/96, que estabelece: "O depositante ou qualquer interessado poderá apresentar, no prazo de 60 (sessenta) dias contados da data da publicação do pedido, oposição fundamentada ao deferimento do pedido de registro de marca."
+
+2. DA LEGITIMIDADE ATIVA
+
+O Opoente possui legitimidade para apresentar a presente oposição, uma vez que é titular de marca anteriormente registrada e/ou depositada, que guarda similitude com a marca objeto do presente pedido.
+
+3. DOS FUNDAMENTOS DA OPOSIÇÃO
+
+3.1. COLIDÊNCIA COM MARCA ANTERIOR
+
+A marca objeto do presente pedido colide frontalmente com a marca [MARCA DO OPOENTE], de titularidade do Opoente, registrada/depositada sob o nº [NÚMERO DO REGISTRO/DEPÓSITO], em classe(s) [CLASSE(S)], conforme certidão em anexo.
+
+3.2. RISCO DE CONFUSÃO E ASSOCIAÇÃO
+
+A convivência das marcas em conflito no mercado acarretará indubitável risco de confusão e associação entre os consumidores, ferindo o princípio da especificidade das marcas previsto no artigo 124, inciso XIX, da Lei nº 9.279/96.
+
+4. DO PEDIDO
+
+Diante do exposto, requer-se:
+
+a) O recebimento da presente oposição;
+b) O indeferimento do pedido de registro da marca [MARCA OBJETO DA OPOSIÇÃO], processo nº [NÚMERO DO PROCESSO];
+c) A intimação da parte contrária para apresentar manifestação;
+d) Ao final, o arquivamento definitivo do pedido impugnado.
+
+Termos em que,
+Pede deferimento.
+
+[LOCAL], [DATA]
+
+[ASSINATURA DO ADVOGADO]
+OAB/[ESTADO] nº [NÚMERO]
           </div>
         </div>
         
@@ -435,6 +474,9 @@
         
         <!-- Botões de ação -->
         <div style="text-align: right;">
+          <button type="button" class="btn btn-success me-2" onclick="copiarPeticao()" title="Copiar todo o conteúdo da petição">
+            <em class="icon ni ni-copy"></em> Copiar Petição
+          </button>
           <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">Reenviar com Observações</button>
           <button type="button" class="btn btn-secondary" onclick="fecharModalEdicaoAvancada()">Fechar</button>
         </div>
@@ -2022,6 +2064,114 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
         });
     }
     
+    function copiarPeticao() {
+      const conteudoPeticao = document.getElementById('conteudoPeticaoTexto');
+      
+      if (!conteudoPeticao || !conteudoPeticao.textContent.trim()) {
+        alert('Não há conteúdo de petição para copiar.');
+        return;
+      }
+      
+      // Obter o texto do conteúdo da petição
+      const textoParaCopiar = conteudoPeticao.textContent.trim();
+      
+      // Usar a API moderna de clipboard se disponível
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textoParaCopiar).then(function() {
+          // Mostrar feedback de sucesso
+          mostrarFeedbackCopia('Petição copiada com sucesso!');
+        }).catch(function(err) {
+          console.error('Erro ao copiar:', err);
+          // Fallback para método tradicional
+          copiarTextoFallback(textoParaCopiar);
+        });
+      } else {
+        // Fallback para navegadores antigos
+        copiarTextoFallback(textoParaCopiar);
+      }
+    }
+    
+    function copiarTextoFallback(texto) {
+      // Criar elemento temporário para copiar
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = texto;
+      tempTextArea.style.position = 'fixed';
+      tempTextArea.style.left = '-999999px';
+      tempTextArea.style.top = '-999999px';
+      document.body.appendChild(tempTextArea);
+      
+      // Selecionar e copiar
+      tempTextArea.focus();
+      tempTextArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          mostrarFeedbackCopia('Petição copiada com sucesso!');
+        } else {
+          mostrarFeedbackCopia('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao copiar:', err);
+        mostrarFeedbackCopia('Erro ao copiar. Tente selecionar o texto manualmente.', 'error');
+      } finally {
+        // Remover elemento temporário
+        document.body.removeChild(tempTextArea);
+      }
+    }
+    
+    function mostrarFeedbackCopia(mensagem, tipo = 'success') {
+      // Criar notificação visual
+      const feedback = document.createElement('div');
+      feedback.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-family: inherit;
+        font-size: 14px;
+        animation: slideInRight 0.3s ease;
+      `;
+      
+      // Adicionar ícone
+      const icone = tipo === 'success' ? '✅' : '❌';
+      feedback.innerHTML = `${icone} ${mensagem}`;
+      
+      // Adicionar CSS de animação se não existir
+      if (!document.querySelector('#copy-feedback-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'copy-feedback-styles';
+        styles.textContent = `
+          @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(styles);
+      }
+      
+      document.body.appendChild(feedback);
+      
+      // Remover após 3 segundos
+      setTimeout(() => {
+        feedback.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (feedback.parentNode) {
+            feedback.parentNode.removeChild(feedback);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
     function reenviarComObservacoes() {
       const observacoes = document.getElementById('observacoesAdicionais').value.trim();
       
@@ -2158,7 +2308,7 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
 	
 	<script src="lib/jquery/dist/jquery.min.js"></script>
 	<script src="assets/js/bundle.js?ver=2.8.0"></script>
-    <script src="assets/js/scripts.js?ver=2.8.0"></script>
+	<script src="assets/js/scripts.js"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 	<script src="scripts/jquery/jquery.mask.min.js"></script>
@@ -2176,6 +2326,35 @@ Este é um exemplo de como o conteúdo seria estruturado. O conteúdo real seria
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#global-loader').fadeOut();
+			
+			// Implementação direta do hamburger
+			$('.nk-nav-toggle').on('click', function(e) {
+				e.preventDefault();
+				console.log('Hamburger clicado!');
+				
+				// Alternar classe no body
+				$('body').toggleClass('nav-shown');
+				
+				// Alternar classe no sidebar
+				$('.nk-sidebar').toggleClass('nk-sidebar-active');
+				
+				// Adicionar overlay se necessário
+				if ($('body').hasClass('nav-shown')) {
+					if (!$('.nk-sidebar-overlay').length) {
+						$('body').append('<div class="nk-sidebar-overlay"></div>');
+					}
+					$('.nk-sidebar-overlay').addClass('active');
+				} else {
+					$('.nk-sidebar-overlay').removeClass('active');
+				}
+			});
+			
+			// Fechar ao clicar no overlay
+			$(document).on('click', '.nk-sidebar-overlay', function() {
+				$('body').removeClass('nav-shown');
+				$('.nk-sidebar').removeClass('nk-sidebar-active');
+				$(this).removeClass('active');
+			});
 		});
 	</script>
 </body>

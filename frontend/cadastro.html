@@ -21,11 +21,108 @@
         <label for="cadastroPassword">Senha</label>
         <input type="password" id="cadastroPassword" class="form-control" required>
       </div>
+      
+      <!-- Campo para definir role (apenas visível para primeiro usuário ou admins) -->
+      <div class="form-group" id="roleGroup" style="display: none;">
+        <label for="cadastroRole">Tipo de usuário</label>
+        <select id="cadastroRole" class="form-control">
+          <option value="USER">Usuário</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+        <small class="text-muted">⚠️ Apenas para o primeiro usuário ou criação por admin</small>
+      </div>
+      
       <button type="submit" class="btn btn-success mt-3">Cadastrar</button>
       <button type="button" class="btn btn-secondary mt-2" onclick="window.location.href='index.html'">Voltar para login</button>
     </form>
   </div>
+  <script src="assets/js/bundle.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/scripts.js"></script>
+  
+  <script>
+    // Verificar se é o primeiro usuário ou admin logado
+    async function verificarPermissaoRole() {
+      try {
+        const token = localStorage.getItem('token');
+        
+        // Se não tem token, verificar se é o primeiro usuário
+        if (!token) {
+    const response = await fetch('http://localhost:8000/usuarios/count');
+          const data = await response.json();
+          
+          // Se não há usuários, permitir criar admin
+          if (data.count === 0) {
+            document.getElementById('roleGroup').style.display = 'block';
+            document.getElementById('cadastroRole').value = 'ADMIN';
+            document.querySelector('#roleGroup small').textContent = '👑 Primeiro usuário será administrador';
+            return;
+          }
+        } else {
+          // Verificar se é admin
+          const userResponse = await fetch('http://localhost:8000/usuarios/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            if (userData.role === 'ADMIN') {
+              document.getElementById('roleGroup').style.display = 'block';
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao verificar permissões:', error);
+      }
+    }
+    
+    // Cadastrar usuário
+    document.getElementById('cadastroForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('cadastroUsername').value;
+      const email = document.getElementById('cadastroEmail').value;
+      const password = document.getElementById('cadastroPassword').value;
+      const role = document.getElementById('cadastroRole').value || 'USER';
+      
+      try {
+  const response = await fetch('http://localhost:8000/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            role
+          })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          alert('✅ Cadastro realizado com sucesso!');
+          
+          // Se é o primeiro admin, fazer login automaticamente
+          if (role === 'ADMIN') {
+            localStorage.setItem('token', data.access_token);
+            window.location.href = 'menu.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        } else {
+          const error = await response.json();
+          alert(`❌ Erro no cadastro: ${error.detail}`);
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro de conexão');
+      }
+    });
+    
+    // Verificar permissões ao carregar a página
+    verificarPermissaoRole();
+  </script>
 </body>
 </html>
