@@ -2,8 +2,7 @@
 <html lang="pt-br">
 <head>
 	<meta charset="utf-8" />
-	<meta name                                     <img class="logo-light logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo">
-                                     <img class="logo-dark logo-img" src="assets/images/logo.png" srcset="assets/images/logo.png" alt="logo-dark">viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Leão Adv</title>
 
 	<!-- StyleSheets  -->
@@ -17,7 +16,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 	
 	<style>
-		/* Estilos para o hamburger sidebar */
+		/* Estilos para o hamburger sidebar - FORÇAR FUNCIONAMENTO CORRETO */
 		.nk-sidebar-overlay {
 			position: fixed;
 			top: 0;
@@ -36,15 +35,15 @@
 			visibility: visible;
 		}
 		
-		body.nav-shown .nk-sidebar {
-			transform: translateX(0);
+		/* CSS Simplificado para WEB - Comportamento Desktop */
+		.nk-sidebar {
+			transition: transform 0.3s ease !important;
 		}
 		
-		@media (max-width: 1199px) {
-			.nk-sidebar {
-				transform: translateX(-100%);
-				transition: transform 0.3s ease;
-			}
+		/* Sidebar visível quando nav-shown ou ativa */
+		body.nav-shown .nk-sidebar,
+		.nk-sidebar.nk-sidebar-active {
+			transform: translateX(0) !important;
 		}
 	</style>
 </head>
@@ -262,10 +261,10 @@
 		</div>
 	</div>
 
-	<script src="assets/js/bundle.js?ver=2.8.0"></script>
 	<script src="assets/js/config.js"></script>
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="assets/js/bundle.js?ver=2.8.0"></script>
 	<script src="assets/js/scripts.js"></script>
-	<script src="assets/js/charts/chart-ecommerce.js?ver=2.8.0"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 	<script src="scripts/jquery/jquery.mask.min.js"></script>
@@ -282,24 +281,30 @@
 		$(document).ready(function () {
 			$('#global-loader').fadeOut();
 			
-			// Implementação direta do hamburger
+			// Implementação do menu hamburger para WEB
 			$('.nk-nav-toggle').on('click', function(e) {
 				e.preventDefault();
-				console.log('Hamburger clicado!');
 				
-				// Alternar classe no body
-				$('body').toggleClass('nav-shown');
+				var $body = $('body');
+				var $sidebar = $('.nk-sidebar');
 				
-				// Alternar classe no sidebar
-				$('.nk-sidebar').toggleClass('nk-sidebar-active');
+				// Verificar estado visual da sidebar
+				var sidebarLeft = $sidebar.offset().left;
+				var isVisuallyOpen = sidebarLeft >= 0;
 				
-				// Adicionar overlay se necessário
-				if ($('body').hasClass('nav-shown')) {
+				if (!isVisuallyOpen) {
+					// Abrir menu
+					$body.addClass('nav-shown');
+					$sidebar.addClass('nk-sidebar-active');
+					
 					if (!$('.nk-sidebar-overlay').length) {
 						$('body').append('<div class="nk-sidebar-overlay"></div>');
 					}
 					$('.nk-sidebar-overlay').addClass('active');
 				} else {
+					// Fechar menu
+					$body.removeClass('nav-shown');
+					$sidebar.removeClass('nk-sidebar-active');
 					$('.nk-sidebar-overlay').removeClass('active');
 				}
 			});
