@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.repositories.user_repository import UserRepository
 from app.schemas.user_schema import UserCreate, UserUpdate, UserResponse
-from app.utils.auth import get_current_user
+from app.utils.auth import get_current_user, get_current_user_from_db
 from app.config.database import get_db
 from app.models.user_model import User
 
@@ -14,6 +14,11 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     user_repository = UserRepository(db)
     created_user = user_repository.create(user)
     return created_user
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_info(current_user = Depends(get_current_user_from_db)):
+    """Retorna informações do usuário atual baseado no token JWT"""
+    return current_user
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(user_id: int, db: Session = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):

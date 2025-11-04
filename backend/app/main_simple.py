@@ -21,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Include routers
 app.include_router(main_router)
 
@@ -35,13 +34,8 @@ if os.path.exists(frontend_path):
 
 # Rotas básicas para as páginas HTML
 @app.get("/")
-async def root():
-    return FileResponse(os.path.join(frontend_path, "menu.html"))
-
-@app.get("/index")
-@app.get("/index.html")
 async def index():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
+    return FileResponse(os.path.join(frontend_path, "menu.html"))
 
 @app.get("/menu")
 @app.get("/menu.html")
@@ -62,46 +56,6 @@ async def oraculo():
 @app.get("/perfil.html")
 async def perfil():
     return FileResponse(os.path.join(frontend_path, "perfil.html"))
-
-@app.get("/cadastro")
-@app.get("/cadastro.html")
-async def cadastro():
-    return FileResponse(os.path.join(frontend_path, "cadastro.html"))
-
-@app.get("/caducidade")
-@app.get("/caducidade.html")
-async def caducidade():
-    return FileResponse(os.path.join(frontend_path, "caducidade.html"))
-
-@app.get("/contrarazao_nulidade")
-@app.get("/contrarazao_nulidade.html")
-async def contrarazao_nulidade():
-    return FileResponse(os.path.join(frontend_path, "contrarazao_nulidade.html"))
-
-@app.get("/manifestacao_oposicao")
-@app.get("/manifestacao_oposicao.html")
-async def manifestacao_oposicao():
-    return FileResponse(os.path.join(frontend_path, "manifestacao_oposicao.html"))
-
-@app.get("/manifestacao_recurso")
-@app.get("/manifestacao_recurso.html")
-async def manifestacao_recurso():
-    return FileResponse(os.path.join(frontend_path, "manifestacao_recurso.html"))
-
-@app.get("/nulidade")
-@app.get("/nulidade.html")
-async def nulidade():
-    return FileResponse(os.path.join(frontend_path, "nulidade.html"))
-
-@app.get("/oposicao")
-@app.get("/oposicao.html")
-async def oposicao():
-    return FileResponse(os.path.join(frontend_path, "oposicao.html"))
-
-@app.get("/recurso_indeferimento")
-@app.get("/recurso_indeferimento.html")
-async def recurso_indeferimento():
-    return FileResponse(os.path.join(frontend_path, "recurso_indeferimento.html"))
 
 @app.get("/config.js")
 async def config_js():
