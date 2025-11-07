@@ -7,7 +7,7 @@
   <script src="config.js"></script>
 </head>
 <body>
-  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+  <a href="marca" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
   <div class="container" style="max-width:600px; margin-top:40px;">
@@ -387,6 +387,188 @@
       document.getElementById('modalEdicaoAvancada').classList.remove('active');
     }
 
+    // ===== FUNÇÕES DE SALVAMENTO =====
+    
+    function salvarPeticao() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhuma petição para salvar.');
+        return;
+      }
+      
+      // Mostrar loading
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Salvando...';
+      botao.disabled = true;
+      
+      // Dados para salvar
+      const dadosSalvamento = {
+        id: dadosItemAtual.id,
+        tipo: tipoItemAtual,
+        titulo: `Petição ${tipoItemAtual} - ${new Date().toLocaleDateString('pt-BR')}`,
+        conteudo: document.getElementById('conteudoPeticaoTexto').textContent,
+        data_salvamento: new Date().toISOString()
+      };
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/salvar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dadosSalvamento)
+      })
+      .then(response => response.json())
+      .then(data => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        
+        if (data.success) {
+          alert('✅ Petição salva com sucesso!');
+        } else {
+          alert('Erro ao salvar petição: ' + (data.message || 'Erro desconhecido'));
+        }
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao salvar:', error);
+        alert('Erro ao salvar petição. Tente novamente.');
+      });
+    }
+    
+    function baixarPeticao() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhuma petição para baixar.');
+        return;
+      }
+      
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Gerando PDF...';
+      botao.disabled = true;
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/pdf`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erro ao gerar PDF');
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `peticao_${tipoItemAtual}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        alert('✅ PDF baixado com sucesso!');
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao baixar PDF:', error);
+        alert('Erro ao gerar PDF. Tente novamente.');
+      });
+    }
+    
+    function salvarConversa() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhuma conversa para salvar.');
+        return;
+      }
+      
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Salvando...';
+      botao.disabled = true;
+      
+      const dadosConversa = {
+        id: dadosItemAtual.id,
+        tipo: tipoItemAtual,
+        titulo: `Conversa ${tipoItemAtual} - ${new Date().toLocaleDateString('pt-BR')}`,
+        historico: document.getElementById('historicoChat').innerHTML,
+        data_salvamento: new Date().toISOString()
+      };
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/salvar-conversa`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dadosConversa)
+      })
+      .then(response => response.json())
+      .then(data => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        
+        if (data.success) {
+          alert('✅ Conversa salva com sucesso!');
+        } else {
+          alert('Erro ao salvar conversa: ' + (data.message || 'Erro desconhecido'));
+        }
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao salvar conversa:', error);
+        alert('Erro ao salvar conversa. Tente novamente.');
+      });
+    }
+    
+    function exportarHistorico() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhum histórico para exportar.');
+        return;
+      }
+      
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Exportando...';
+      botao.disabled = true;
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/exportar-historico`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erro ao exportar histórico');
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `historico_${tipoItemAtual}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        alert('✅ Histórico exportado com sucesso!');
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao exportar:', error);
+        alert('Erro ao exportar histórico. Tente novamente.');
+      });
+    }
+
   </script>
 
   <!-- Modal de Edição Avançada -->
@@ -426,7 +608,15 @@
         
         <!-- Botões de ação -->
         <div style="text-align: right;">
-          <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">Reenviar com Observações</button>
+          <button type="button" class="btn btn-success me-2" onclick="salvarPeticao()">
+            <em class="icon ni ni-save"></em> Salvar Petição
+          </button>
+          <button type="button" class="btn btn-primary me-2" onclick="baixarPeticao()">
+            <em class="icon ni ni-download"></em> Baixar PDF
+          </button>
+          <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">
+            <em class="icon ni ni-repeat"></em> Reenviar com Observações
+          </button>
           <button type="button" class="btn btn-secondary" onclick="fecharModalEdicaoAvancada()">Fechar</button>
         </div>
       </div>
@@ -435,6 +625,16 @@
       <div id="conteudoHistorico" style="display: none;">
         <div id="historicoChat" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 15px;">
           <p style="color: #666;">Histórico de conversas aparecerá aqui...</p>
+        </div>
+        
+        <!-- Botões para histórico -->
+        <div style="text-align: right; margin-top: 15px;">
+          <button type="button" class="btn btn-success me-2" onclick="salvarConversa()">
+            <em class="icon ni ni-save"></em> Salvar Conversa
+          </button>
+          <button type="button" class="btn btn-primary me-2" onclick="exportarHistorico()">
+            <em class="icon ni ni-download"></em> Exportar Histórico
+          </button>
         </div>
       </div>
     </div>

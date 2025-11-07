@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarCaducidade(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -607,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarContrarazaoNulidade(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -629,7 +629,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarManifestacaoOposicao(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -651,7 +651,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarManifestacaoRecurso(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -671,7 +671,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarNulidade(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -692,7 +692,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarOposicao(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }
@@ -714,7 +714,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const resp = await criarRecursoIndeferimento(data);
       if (resp.id) {
         alert("Cadastrado com sucesso!");
-        window.location.href = "marca.html";
+        window.location.href = "marca";
       } else {
         alert("Erro ao cadastrar!");
       }

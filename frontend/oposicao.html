@@ -7,7 +7,7 @@
   <script src="config.js"></script>
 </head>
 <body>
-  <a href="marca.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
+  <a href="marca" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 2rem;" title="Voltar para Marcas">
     &#8592;
   </a>
   <div class="container" style="max-width:600px; margin-top:40px;">
@@ -472,7 +472,15 @@
         
         <!-- Botões de ação -->
         <div style="text-align: right;">
-          <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">Reenviar com Observações</button>
+                    <button type="button" class="btn btn-success me-2" onclick="salvarPeticao()">
+            <em class="icon ni ni-save"></em> Salvar Petição
+          </button>
+          <button type="button" class="btn btn-primary me-2" onclick="baixarPeticao()">
+            <em class="icon ni ni-download"></em> Baixar PDF
+          </button>
+          <button type="button" class="btn btn-info me-2" onclick="reenviarComObservacoes()">
+            <em class="icon ni ni-repeat"></em> Reenviar com Observações
+          </button>
           <button type="button" class="btn btn-secondary" onclick="fecharModalEdicaoAvancada()">Fechar</button>
         </div>
       </div>
@@ -497,7 +505,97 @@
     .modal-bg.active { display: flex; }
   </style>
   
-  <script src="scripts/historico-chat.js"></script>
+  <script src="scripts/historico-chat.js">
+    // ===== FUNÇÕES DE SALVAMENTO =====
+    
+    function salvarPeticao() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhuma petição para salvar.');
+        return;
+      }
+      
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Salvando...';
+      botao.disabled = true;
+      
+      const dadosSalvamento = {
+        id: dadosItemAtual.id,
+        tipo: tipoItemAtual,
+        titulo: `Petição ${tipoItemAtual} - ${new Date().toLocaleDateString('pt-BR')}`,
+        conteudo: document.getElementById('conteudoPeticaoTexto') ? document.getElementById('conteudoPeticaoTexto').textContent : 'Conteúdo não encontrado',
+        data_salvamento: new Date().toISOString()
+      };
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/salvar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dadosSalvamento)
+      })
+      .then(response => response.json())
+      .then(data => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        
+        if (data.success) {
+          alert('✅ Petição salva com sucesso!');
+        } else {
+          alert('Erro ao salvar petição: ' + (data.message || 'Erro desconhecido'));
+        }
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao salvar:', error);
+        alert('Erro ao salvar petição. Tente novamente.');
+      });
+    }
+    
+    function baixarPeticao() {
+      if (!dadosItemAtual || !dadosItemAtual.id) {
+        alert('Nenhuma petição para baixar.');
+        return;
+      }
+      
+      const botao = event.target;
+      const textoOriginal = botao.innerHTML;
+      botao.innerHTML = '<em class="icon ni ni-loader"></em> Gerando PDF...';
+      botao.disabled = true;
+      
+      fetch(`${API_URL}/peticoes/${dadosItemAtual.id}/pdf`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erro ao gerar PDF');
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `peticao_${tipoItemAtual}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        alert('✅ PDF baixado com sucesso!');
+      })
+      .catch(error => {
+        botao.innerHTML = textoOriginal;
+        botao.disabled = false;
+        console.error('Erro ao baixar PDF:', error);
+        alert('Erro ao gerar PDF. Tente novamente.');
+      });
+    }</script>
 
 </body>
 </html>

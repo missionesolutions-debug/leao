@@ -107,7 +107,7 @@
           // Se é o primeiro admin, fazer login automaticamente
           if (role === 'ADMIN') {
             localStorage.setItem('token', data.access_token);
-            window.location.href = 'menu.html';
+            window.location.href = 'menu';
           } else {
             window.location.href = 'index.html';
           }

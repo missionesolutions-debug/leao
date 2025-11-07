@@ -64,7 +64,7 @@
             updateLoginStatus('✅ Login realizado com sucesso! Redirecionando...', false);
             
             setTimeout(() => {
-              window.location.href = 'menu.html';
+              window.location.href = 'menu';
             }, 1500);
           } else {
             updateLoginStatus('❌ Erro: Resposta inválida do servidor', true);
@@ -168,7 +168,7 @@
           if (response.ok) {
             updateLoginStatus('✅ Já logado! Redirecionando...', false);
             setTimeout(() => {
-              window.location.href = 'menu.html';
+              window.location.href = 'menu';
             }, 1000);
           } else {
             localStorage.removeItem('token');

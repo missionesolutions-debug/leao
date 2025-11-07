@@ -8,7 +8,7 @@ window.APP_CONFIG = {
   API_URL:
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
-      ? "http://localhost:8000" // Desenvolvimento
+      ? "http://localhost:8001" // Desenvolvimento
       : "https://www.leaoia.com.br", // Produção
 };
 
@@ -69,7 +69,7 @@ function getPageName() {
   const path = window.location.pathname;
   const pageMap = {
     "menu.html": "Dashboard",
-    "marca.html": "Hub de Marcas",
+    marca: "Hub de Marcas",
     "perfil.html": "Administração de Usuários",
     "oraculo.html": "Assistente IA",
     "caducidade.html": "Caducidade",
